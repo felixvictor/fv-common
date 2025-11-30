@@ -1,12 +1,13 @@
 // src/file.ts
+import { readFileSync, writeFile, writeFileSync } from "atomically";
 import fs from "fs";
 import fsPromises from "fs/promises";
 import path from "path";
-import { readFileSync, writeFile, writeFileSync } from "atomically";
-var isNodeError = (error) => error instanceof Error;
 var putError = (error) => {
-  console.error("Request failed -->", error);
+  const message = error instanceof Error ? error.message : String(error);
+  console.error("Request failed -->", message);
 };
+var isNodeError = (error) => error instanceof Error && "code" in error;
 var makeDirectoryAsync = async (directory) => {
   try {
     await fsPromises.mkdir(directory, { recursive: true });
@@ -17,7 +18,7 @@ var makeDirectoryAsync = async (directory) => {
 var removeFileSync = (fileName) => {
   fs.rmSync(fileName, { force: true });
 };
-var removeFileASync = async (fileName) => {
+var removeFileAsync = async (fileName) => {
   try {
     await fsPromises.rm(fileName, { force: true });
   } catch (error) {
@@ -31,6 +32,10 @@ var fileExists = (fileName) => {
   } catch {
     return false;
   }
+};
+var fileEmpty = (fileName) => {
+  const stat = fs.statSync(fileName, { throwIfNoEntry: false });
+  return stat?.size === 0;
 };
 var fileExistsAsync = async (fileName) => {
   try {
@@ -67,20 +72,41 @@ var readTextFileSync = (fileName) => {
     return readFileSync(fileName, { encoding: "utf8" });
   } catch (error) {
     if (isNodeError(error) && error.code === "ENOENT") {
-      console.error("File", fileName, "not found");
+      putError(`File ${fileName} not found`);
     } else {
-      putError(`Cannot read ${fileName}
-Error: ${error}`);
+      putError(error);
     }
+    return void 0;
   }
 };
 var readJsonSync = (fileName) => {
   try {
     const json = readTextFileSync(fileName);
+    return json === void 0 ? void 0 : JSON.parse(json);
+  } catch (error) {
+    putError(error);
+    return void 0;
+  }
+};
+var readTextFileAsync = async (fileName) => {
+  try {
+    return await fsPromises.readFile(fileName, { encoding: "utf8" });
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") {
+      putError(`File ${fileName} not found`);
+    } else {
+      putError(error);
+    }
+    return void 0;
+  }
+};
+var readJsonAsync = async (fileName) => {
+  try {
+    const json = await readTextFileAsync(fileName);
     return json == void 0 ? void 0 : JSON.parse(json);
   } catch (error) {
-    putError(`Cannot parse ${fileName}
-Error: ${error}`);
+    putError(error);
+    return void 0;
   }
 };
 var pathFormat = (t) => path.resolve(String(process.env.PWD), "src", path.format(t));
@@ -100,7 +126,7 @@ var parseSortArgument = (property) => {
   const propertyString = String(property);
   const desc = propertyString.startsWith("-");
   const key = desc ? propertyString.slice(1) : propertyString;
-  return { key, desc };
+  return { desc, key };
 };
 var compareStrings = (a, b) => a.localeCompare(b, void 0, { numeric: true, sensitivity: "base" });
 var isNullish = (value) => value == void 0;
@@ -128,7 +154,7 @@ var compareValues = (a, b) => {
 };
 var sortBy = (propertyNames) => (a, b) => {
   for (const property of propertyNames) {
-    const { key, desc } = parseSortArgument(property);
+    const { desc, key } = parseSortArgument(property);
     const result = compareValues(a[key], b[key]);
     if (result !== 0) {
       return desc ? -result : result;
@@ -148,6 +174,7 @@ var simpleStringSort = (a, b) => {
 };
 export {
   changeExtension,
+  fileEmpty,
   fileExists,
   fileExistsAsync,
   isNodeError,
@@ -155,9 +182,11 @@ export {
   makeDirectoryAsync,
   pathFormat,
   putError,
+  readJsonAsync,
   readJsonSync,
+  readTextFileAsync,
   readTextFileSync,
-  removeFileASync,
+  removeFileAsync,
   removeFileSync,
   saveJson,
   saveJsonAsync,

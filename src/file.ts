@@ -1,8 +1,7 @@
+import { readFileSync, writeFile, writeFileSync } from "atomically"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 import path from "node:path"
-
-import { readFileSync, writeFile, writeFileSync } from "atomically"
 
 export const isNodeError = (error: unknown): error is NodeJS.ErrnoException => error instanceof Error
 export const putError = (error: string): void => {

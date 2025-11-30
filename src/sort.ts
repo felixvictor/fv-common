@@ -2,16 +2,16 @@
  * Sort argument type.
  * keyof T for ascending, `-${string & keyof T}` for descending.
  */
-export type SortArgument<T> = keyof T | `-${string & keyof T}`
+export type SortArgument<T> = `-${keyof T & string}` | keyof T
 
 /**
  * Parses a SortArgument string to extract the property key and sort direction.
  */
-const parseSortArgument = <T extends object>(property: SortArgument<T>): { key: keyof T; desc: boolean } => {
+const parseSortArgument = <T extends object>(property: SortArgument<T>): { desc: boolean; key: keyof T } => {
     const propertyString = String(property)
     const desc = propertyString.startsWith("-")
     const key = (desc ? propertyString.slice(1) : propertyString) as keyof T
-    return { key, desc }
+    return { desc, key }
 }
 
 /**
@@ -80,7 +80,7 @@ export const sortBy =
     <T extends object>(propertyNames: SortArgument<T>[]) =>
     (a: T, b: T): number => {
         for (const property of propertyNames) {
-            const { key, desc } = parseSortArgument(property)
+            const { desc, key } = parseSortArgument(property)
             const result = compareValues(a[key], b[key])
 
             if (result !== 0) {
@@ -93,7 +93,7 @@ export const sortBy =
 /**
  * Simple number comparison with null/undefined handling (pushes nullish values to the end).
  */
-export const simpleNumberSort = (a: number | undefined | null, b: number | undefined | null): number => {
+export const simpleNumberSort = (a: null | number | undefined, b: null | number | undefined): number => {
     const nullishResult = compareNullish(a, b)
     if (nullishResult !== undefined) return nullishResult
 
@@ -105,7 +105,7 @@ export const simpleNumberSort = (a: number | undefined | null, b: number | undef
 /**
  * Simple string comparison with null/undefined handling (pushes nullish values to the end).
  */
-export const simpleStringSort = (a: string | undefined | null, b: string | undefined | null): number => {
+export const simpleStringSort = (a: null | string | undefined, b: null | string | undefined): number => {
     const nullishResult = compareNullish(a, b)
     if (nullishResult !== undefined) return nullishResult
 

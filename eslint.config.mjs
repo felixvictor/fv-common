@@ -1,6 +1,7 @@
 import eslint from "@eslint/js"
 import eslintConfigPrettier from "eslint-config-prettier"
 import nodePlugin from "eslint-plugin-n"
+import perfectionist from "eslint-plugin-perfectionist"
 import eslintPluginUnicorn from "eslint-plugin-unicorn"
 import globals from "globals"
 import typescriptEslint from "typescript-eslint"
@@ -11,6 +12,7 @@ export default typescriptEslint.config(
     ...typescriptEslint.configs.stylisticTypeChecked,
     eslintPluginUnicorn.configs["flat/recommended"],
     nodePlugin.configs["flat/recommended"],
+    perfectionist.configs["recommended-natural"],
     eslintConfigPrettier,
     { ignores: [".gitignore", "eslint.config.mjs", "dist/"] },
     {

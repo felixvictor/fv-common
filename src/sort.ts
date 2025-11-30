@@ -12,56 +12,8 @@ export const sortBy =
             const propertyString = String(property)
             const desc = propertyString.startsWith("-")
             const key = (desc ? propertyString.slice(1) : propertyString) as keyof T
-            const valueA = a[key]
-            const valueB = b[key]
 
-            // Quick equality check
-            if (valueA === valueB) {
-                continue
-            }
-
-            // Null/undefined handling
-            if (valueA == undefined) {
-                return desc ? -1 : 1
-            }
-            if (valueB == undefined) {
-                return desc ? 1 : -1
-            }
-
-            const typeA = typeof valueA
-            const typeB = typeof valueB
-            let result = 0
-
-            // Same primitive types
-            if (typeA === typeB) {
-                switch (typeA) {
-                    case "number": {
-                        result = simpleNumberSort(valueA as number, valueB as number)
-
-                        break
-                    }
-                    case "boolean": {
-                        result = (valueA as boolean) ? 1 : -1
-
-                        break
-                    }
-                    case "string": {
-                        result = simpleStringSort(valueA as string, valueB as string)
-
-                        break
-                    }
-                    // No default
-                }
-            } else {
-                // Different types - try numeric comparison
-                const numberA = Number(valueA)
-                const numberB = Number(valueB)
-                result =
-                    !Number.isNaN(numberA) && !Number.isNaN(numberB)
-                        ? simpleNumberSort(numberA, numberB)
-                        : simpleStringSort(String(valueA), String(valueB))
-            }
-
+            const result = compareValues(a[key], b[key])
             if (result !== 0) {
                 return desc ? -result : result
             }
@@ -69,7 +21,86 @@ export const sortBy =
         return 0
     }
 
-export const simpleNumberSort = (a: number | null | undefined, b: number | null | undefined): number => {
+/**
+ * Locale-aware string comparison with numeric sorting
+ */
+const compareStrings = (a: string, b: string): number => {
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+}
+
+/**
+ * Safely convert value to string for comparison
+ */
+const toComparableString = (value: unknown): string => {
+    if (typeof value === "string") {
+        return value
+    }
+    if (typeof value === "number" || typeof value === "boolean") {
+        return String(value)
+    }
+    if (value == undefined) {
+        return ""
+    }
+
+    // For objects, use JSON.stringify or return empty string for non-serializable objects
+    try {
+        return JSON.stringify(value)
+    } catch {
+        return ""
+    }
+}
+
+/**
+ * Compare two values with proper null/undefined handling and type coercion
+ */
+const compareValues = (a: unknown, b: unknown): number => {
+    // Quick equality check
+    if (a === b) {
+        return 0
+    }
+
+    // Null/undefined handling (treat as equal to each other, less than everything else)
+    if (a == undefined && b == undefined) {
+        return 0
+    }
+    if (a == undefined) {
+        return 1
+    }
+    if (b == undefined) {
+        return -1
+    }
+
+    const typeA = typeof a
+    const typeB = typeof b
+
+    // Same primitive types - use type-specific comparison
+    if (typeA === typeB) {
+        if (typeA === "number") {
+            return (a as number) - (b as number)
+        }
+        if (typeA === "boolean") {
+            return (a as boolean) ? 1 : -1
+        }
+        if (typeA === "string") {
+            return compareStrings(a as string, b as string)
+        }
+    }
+
+    // Different types - try numeric comparison, fallback to string
+    const numberA = Number(a)
+    const numberB = Number(b)
+
+    if (!Number.isNaN(numberA) && !Number.isNaN(numberB)) {
+        return numberA - numberB
+    }
+
+    return compareStrings(toComparableString(a), toComparableString(b))
+}
+
+/**
+ * Simple number comparison with null/undefined handling
+ */
+export const simpleNumberSort = (a: number | undefined, b: number | undefined): number => {
     if (a == undefined && b == undefined) {
         return 0
     }
@@ -82,7 +113,10 @@ export const simpleNumberSort = (a: number | null | undefined, b: number | null 
     return a - b
 }
 
-export const simpleStringSort = (a: string | null | undefined, b: string | null | undefined): number => {
+/**
+ * Simple string comparison with null/undefined handling
+ */
+export const simpleStringSort = (a: string | undefined, b: string | undefined): number => {
     if (a == undefined && b == undefined) {
         return 0
     }
@@ -92,5 +126,5 @@ export const simpleStringSort = (a: string | null | undefined, b: string | null 
     if (b == undefined) {
         return -1
     }
-    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+    return compareStrings(a, b)
 }

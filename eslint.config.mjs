@@ -28,7 +28,7 @@ export default typescriptEslint.config(
             "@typescript-eslint/no-extraneous-class": "off",
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
-            curly: ["error", "all"],
+            curly: ["error", "multi-line"],
             "n/no-missing-import": "off",
             "n/no-unpublished-import": "off",
             "prefer-template": "error",

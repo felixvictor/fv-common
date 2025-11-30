@@ -27,6 +27,20 @@ const compareStrings = (a: string, b: string): number =>
 const isNullish = (value: unknown): value is null | undefined => value == undefined
 
 /**
+ * Compare two values with nullish handling.
+ * Returns 0 if both are nullish, 1 if only a is nullish, -1 if only b is nullish, undefined otherwise.
+ */
+const compareNullish = (a: unknown, b: unknown): number | undefined => {
+    const aIsNullish = isNullish(a)
+    const bIsNullish = isNullish(b)
+
+    if (aIsNullish && bIsNullish) return 0
+    if (aIsNullish) return 1
+    if (bIsNullish) return -1
+    return undefined
+}
+
+/**
  * Compare two values with explicit null/undefined handling and type coercion.
  * - null/undefined are treated as equal to each other, but greater than all non-null/undefined values (pushing them to the end).
  * - Tries numeric comparison first if both are numbers/convertible to numbers.
@@ -34,23 +48,11 @@ const isNullish = (value: unknown): value is null | undefined => value == undefi
  */
 const compareValues = (a: unknown, b: unknown): number => {
     // 1. Quick equality check
-    if (a === b) {
-        return 0
-    }
+    if (a === b) return 0
 
     // 2. Null/undefined handling (pushes them to the end)
-    const aIsNullish = isNullish(a)
-    const bIsNullish = isNullish(b)
-
-    if (aIsNullish && bIsNullish) {
-        return 0
-    }
-    if (aIsNullish) {
-        return 1
-    }
-    if (bIsNullish) {
-        return -1
-    }
+    const nullishResult = compareNullish(a, b)
+    if (nullishResult !== undefined) return nullishResult
 
     // 3. Try number comparison
     const numberA = Number(a)
@@ -92,30 +94,22 @@ export const sortBy =
  * Simple number comparison with null/undefined handling (pushes nullish values to the end).
  */
 export const simpleNumberSort = (a: number | undefined | null, b: number | undefined | null): number => {
-    if (isNullish(a) && isNullish(b)) {
-        return 0
-    }
-    if (isNullish(a)) {
-        return 1
-    }
-    if (isNullish(b)) {
-        return -1
-    }
-    return a - b
+    const nullishResult = compareNullish(a, b)
+    if (nullishResult !== undefined) return nullishResult
+
+    // After compareNullish returns undefined, both a and b are guaranteed to be numbers
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return a! - b!
 }
 
 /**
  * Simple string comparison with null/undefined handling (pushes nullish values to the end).
  */
 export const simpleStringSort = (a: string | undefined | null, b: string | undefined | null): number => {
-    if (isNullish(a) && isNullish(b)) {
-        return 0
-    }
-    if (isNullish(a)) {
-        return 1
-    }
-    if (isNullish(b)) {
-        return -1
-    }
-    return compareStrings(a, b)
+    const nullishResult = compareNullish(a, b)
+    if (nullishResult !== undefined) return nullishResult
+
+    // After compareNullish returns undefined, both a and b are guaranteed to be strings
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return compareStrings(a!, b!)
 }

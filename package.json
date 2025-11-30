@@ -10,9 +10,9 @@
         "dist"
     ],
     "scripts": {
-        "build": "run-p typecheck \"build-only {@}\" --",
-        "build:push": "git push",
-        "build-only": "tsup src/index.ts --format esm --dts",
+        "build": "run-s typecheck build:gen build:push",
+        "build:push": "git add dist/ && git commit -m 'build' && git push",
+        "build:gen": "tsup src/index.ts --format esm --dts",
         "dev": "tsup src/index.ts --format esm --dts --watch",
         "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",

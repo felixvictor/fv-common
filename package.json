@@ -19,7 +19,7 @@
         "lint": "run-s lint:js pretty-print pretty-print-package",
         "lint:js": "eslint . --fix",
         "main:prod": "run-s gen:load gen:data deploy:cloudflare",
-        "main:release": "run-s release push",
+        "main:release": "run-s build release push",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
         "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",

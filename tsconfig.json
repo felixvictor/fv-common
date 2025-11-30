@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "nodeNext",
+        "moduleResolution": "nodeNext",
+        "declaration": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "outDir": "./dist",
+        "lib": ["ESNext"],
+        "noFallthroughCasesInSwitch": false,
+        "noImplicitAny": false,
+        "noImplicitThis": true,
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "strictBindCallApply": false,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": false,
+        "useDefineForClassFields": true
+    },
+    "extends": "@tsconfig/node24/tsconfig.json"
+}

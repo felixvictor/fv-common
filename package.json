@@ -1,0 +1,65 @@
+{
+  "name": "fv-common",
+  "version": "1.0.0",
+  "description": "Common helper functions",
+  "license": "SEE LICENSE IN licence.md",
+  "repository": "https://fj.byrtz.de/ibey/fv-common.git",
+  "type": "module",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "run-p typecheck \"build-only {@}\" --",
+    "build:push": "git push",
+    "build-only": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
+    "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
+    "lint": "run-s lint:js pretty-print pretty-print-package",
+    "lint:js": "eslint . --fix",
+    "main:prod": "run-s gen:load gen:data deploy:cloudflare",
+    "main:release": "run-s release push dev:deploy",
+    "pnpm:dedupe": "pnpm dedupe",
+    "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
+    "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",
+    "pretty-print": "prettier --config .prettierrc.json --log-level error --write .",
+    "pretty-print-package": "pnpm prettier-package-json --write ./package.json",
+    "push": "git push",
+    "release": "release-it --ci",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@commitlint/types": "^20.0.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.1",
+    "@release-it/conventional-changelog": "^10.0.2",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
+    "@tsconfig/node24": "^24.0.3",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-unicorn": "^62.0.0",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "^3.6.2",
+    "prettier-package-json": "^2.8.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "release-it": "^19.0.6",
+    "tsup": "^8.5.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.47.0"
+  },
+  "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

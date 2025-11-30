@@ -1,6 +1,6 @@
 {
   "name": "fv-common",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Common helper functions",
   "license": "SEE LICENSE IN licence.md",
   "repository": "https://fj.byrtz.de/ibey/fv-common.git",
@@ -62,11 +62,11 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ],
-      "overrides": {
-          "@types/parse-path@7.1.0": "-",
-          "conventional-changelog-conventionalcommits": "^9.1.0",
-          "glob": "^9"
-      }
+    "overrides": {
+      "@types/parse-path@7.1.0": "-",
+      "conventional-changelog-conventionalcommits": "^9.1.0",
+      "glob": "^9"
+    }
   },
   "release-it": {
     "git": {

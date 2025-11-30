@@ -41,6 +41,11 @@ export const fileExists = (fileName: string): boolean => {
     }
 }
 
+export const fileEmpty = (fileName: string): boolean => {
+    const stat = fs.statSync(fileName, { throwIfNoEntry: false })
+    return stat?.size === 0
+}
+
 export const fileExistsAsync = async (fileName: string): Promise<boolean> => {
     try {
         const stats = await fsPromises.stat(fileName)

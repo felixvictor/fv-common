@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0](///compare/1.2.0...1.3.0) (2025-11-30)
+
+### Features
+
+* perfectionist eslint-plugin-perfectionist a2e63f4
+
 ## [1.2.0](///compare/1.1.0...1.2.0) (2025-11-30)
 
 ### Features

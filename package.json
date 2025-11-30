@@ -19,7 +19,7 @@
     "lint": "run-s lint:js pretty-print pretty-print-package",
     "lint:js": "eslint . --fix",
     "main:prod": "run-s gen:load gen:data deploy:cloudflare",
-    "main:release": "run-s release push dev:deploy",
+    "main:release": "run-s release push",
     "pnpm:dedupe": "pnpm dedupe",
     "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
     "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",
@@ -41,6 +41,7 @@
     "@release-it/conventional-changelog": "^10.0.2",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@tsconfig/node24": "^24.0.3",
+    "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^17.23.1",
@@ -60,6 +61,32 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+      "overrides": {
+          "@types/parse-path@7.1.0": "-",
+          "conventional-changelog-conventionalcommits": "^9.1.0",
+          "glob": "^9"
+      }
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release v${version}",
+      "push": false
+    },
+    "github": {
+      "release": false
+    },
+    "gitlab": {
+      "release": false
+    },
+    "npm": {
+      "publish": false
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "infile": "CHANGELOG.md",
+        "preset": "conventionalcommits"
+      }
+    }
   }
 }

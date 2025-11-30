@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.0](///compare/1.3.0...1.4.0) (2025-11-30)
+
+### Features
+
+* file/fileEmpty 5c17627
+
 ## [1.3.0](///compare/1.2.0...1.3.0) (2025-11-30)
 
 ### Features

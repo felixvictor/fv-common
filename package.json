@@ -31,7 +31,9 @@
     },
     "sideEffects": false,
     "types": "./dist/index.d.ts",
-    "dependencies": {},
+    "dependencies": {
+        "atomically": "^2.1.0"
+    },
     "devDependencies": {
         "@commitlint/cli": "^20.1.0",
         "@commitlint/config-conventional": "^20.0.0",

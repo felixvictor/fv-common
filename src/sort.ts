@@ -93,7 +93,9 @@ export const sortBy =
 /**
  * Simple number comparison with null/undefined handling (pushes nullish values to the end).
  */
-export const simpleNumberSort = (a: null | number | undefined, b: null | number | undefined): number => {
+export function simpleNumberSort(a: number, b: number): number
+export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number
+export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number {
     const nullishResult = compareNullish(a, b)
     if (nullishResult !== undefined) return nullishResult
 
@@ -105,7 +107,9 @@ export const simpleNumberSort = (a: null | number | undefined, b: null | number 
 /**
  * Simple string comparison with null/undefined handling (pushes nullish values to the end).
  */
-export const simpleStringSort = (a: null | string | undefined, b: null | string | undefined): number => {
+export function simpleStringSort(a: string, b: string): number
+export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number
+export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number {
     const nullishResult = compareNullish(a, b)
     if (nullishResult !== undefined) return nullishResult
 

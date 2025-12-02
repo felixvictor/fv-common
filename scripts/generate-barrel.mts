@@ -66,8 +66,10 @@ const generateExportStatements = (file: SourceFile): string => {
     const relativePath = normalizeRelativePath(file.getFilePath())
     let out = ""
 
-    if (values.length > 0) out += `export { ${values.join(", ")} } from '${relativePath}';\n`
-    if (types.length > 0) out += `export type { ${types.join(", ")} } from '${relativePath}';\n`
+    if (values.length > 0) out += `export { ${values.toSorted().join(", ")} } from '${relativePath}';\n`
+    if (types.length > 0) {
+        out += `export type { ${types.toSorted().join(", ")} } from '${relativePath}';\n`
+    }
 
     return out
 }

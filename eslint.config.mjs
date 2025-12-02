@@ -5,6 +5,13 @@ import perfectionist from "eslint-plugin-perfectionist"
 import eslintPluginUnicorn from "eslint-plugin-unicorn"
 import globals from "globals"
 import typescriptEslint from "typescript-eslint"
+import requireFreshBarrel from "./eslint-rules/require-barrel.mts"
+
+const localPlugin = {
+    rules: {
+        "require-barrel": requireFreshBarrel,
+    },
+}
 
 export default typescriptEslint.config(
     eslint.configs.recommended,
@@ -14,7 +21,9 @@ export default typescriptEslint.config(
     nodePlugin.configs["flat/recommended"],
     perfectionist.configs["recommended-natural"],
     eslintConfigPrettier,
-    { ignores: [".gitignore", "eslint.config.mjs", "dist/"] },
+    {
+        ignores: [".gitignore", "eslint.config.mjs", "dist/**", "node_modules/**"],
+    },
     {
         languageOptions: {
             globals: {
@@ -22,7 +31,7 @@ export default typescriptEslint.config(
                 ...globals.node,
             },
             parserOptions: {
-                project: true,
+                project: "./tsconfig.eslint.json",
                 tsconfigRootDir: import.meta.dirname,
             },
         },
@@ -34,6 +43,17 @@ export default typescriptEslint.config(
             "n/no-missing-import": "off",
             "n/no-unpublished-import": "off",
             "prefer-template": "error",
+        },
+    },
+    {
+        files: ["src/index.ts"],
+        plugins: {
+            local: localPlugin,
+        },
+        rules: {
+            "local/require-barrel": "error",
+            // Disable rules that might conflict with auto-generated code
+            "@typescript-eslint/no-unused-vars": "off",
         },
     },
 )

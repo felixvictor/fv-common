@@ -6,14 +6,22 @@
     "repository": "https://fj.byrtz.de/ibey/fv-common.git",
     "type": "module",
     "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
     "files": [
         "dist"
     ],
     "scripts": {
         "build": "run-s typecheck build:gen build:push",
         "build:push": "git add dist/ && git diff --quiet || git commit -m 'build' && git push",
-        "build:gen": "tsup src/index.ts --format esm --dts",
-        "dev": "tsup src/index.ts --format esm --dts --watch",
+        "build:gen": "tsc",
+        "dev": "tsc --watch",
+        "barrel": "tsx scripts/generate-barrel.mts",
         "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "run-s lint:js pretty-print pretty-print-package",
@@ -29,8 +37,10 @@
         "release": "release-it --ci",
         "typecheck": "tsc --noEmit"
     },
+    "engines": {
+        "node": ">= 24"
+    },
     "sideEffects": false,
-    "types": "./dist/index.d.ts",
     "dependencies": {
         "atomically": "^2.1.0"
     },
@@ -54,7 +64,9 @@
         "prettier": "^3.6.2",
         "prettier-package-json": "^2.8.0",
         "release-it": "^19.0.6",
-        "tsup": "^8.5.1",
+        "tsx": "^4.7.0",
+        "ts-morph": "^27.0.2",
+        "atomically": "^2.0.0",
         "typescript": "^5.5.3",
         "typescript-eslint": "^8.47.0"
     },

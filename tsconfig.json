@@ -5,20 +5,15 @@
         "module": "nodeNext",
         "moduleResolution": "nodeNext",
         "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "outDir": "./dist",
-        "lib": ["ESNext"],
-        "noFallthroughCasesInSwitch": false,
-        "noImplicitAny": false,
-        "noImplicitThis": true,
-        "removeComments": true,
-        "resolveJsonModule": true,
-        "strictBindCallApply": false,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": false,
-        "useDefineForClassFields": true
+        "forceConsistentCasingInFileNames": true
     },
+    "exclude": ["commitlint.config.ts", "dist", "eslint-rules", "node_modules", "scripts", "**/*.test.ts"],
     "extends": "@tsconfig/node24/tsconfig.json"
 }

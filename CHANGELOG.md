@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](///compare/1.4.1...1.5.0) (2025-12-02)
+
+### Features
+
+* generate barrel file plus eslint rule b701410
+
+### Bug Fixes
+
+* generate barrel file with sorted exports and function overload 53aaa7d
+
 ## [1.4.1](///compare/1.4.0...1.4.1) (2025-11-30)
 
 ## [1.4.0](///compare/1.3.0...1.4.0) (2025-11-30)

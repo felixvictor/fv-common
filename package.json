@@ -18,7 +18,7 @@
     ],
     "scripts": {
         "build": "run-s typecheck build:gen build:push",
-        "build:push": "git add dist/ && git diff --quiet || git commit -m 'build' && git push",
+        "build:push": "git add dist/ && git diff --quiet || git commit -m 'build: dist' && git push",
         "build:gen": "tsc",
         "dev": "tsc --watch",
         "barrel": "tsx scripts/generate-barrel.mts",

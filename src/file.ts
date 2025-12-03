@@ -126,7 +126,7 @@ export const readJsonAsync = async <T = unknown>(fileName: string): Promise<T | 
 }
 
 export const pathFormat = (t: path.FormatInputPathObject): string =>
-    path.resolve(String(process.env.PWD), "src", path.format(t))
+    path.resolve(String(process.env["PWD"]), "src", path.format(t))
 
 export const changeExtension = (pathInput: string, extension: string): string => {
     const pathParsed = path.parse(pathInput)

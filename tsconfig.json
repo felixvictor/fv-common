@@ -1,18 +1,42 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "target": "ESNext",
+        // File Layout
+        "outDir": "./dist",
+        "rootDir": "./src",
+
+        // Environment Settings
+        "lib": ["esnext"],
         "module": "nodeNext",
         "moduleResolution": "nodeNext",
+        "target": "esNext",
+        "types": ["node"],
+
+        // Other Outputs
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "strict": true,
-        "esModuleInterop": true,
+
+        // Stricter Typechecking Options
+        "exactOptionalPropertyTypes": true,
+        "noUncheckedIndexedAccess": true,
+
+        // Style Options
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        // Recommended Options
+        "isolatedModules": true,
+        "moduleDetection": "force",
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "verbatimModuleSyntax": true
     },
     "exclude": ["commitlint.config.ts", "dist", "eslint-rules", "node_modules", "scripts", "**/*.test.ts"],
     "extends": "@tsconfig/node24/tsconfig.json"

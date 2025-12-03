@@ -51,7 +51,7 @@ const analyzeFileExports = (file: SourceFile) => {
 
         const decl = declarations[0]
 
-        const kind = decl.getKind()
+        const kind = decl?.getKind() ?? SyntaxKind.Unknown
         if (isRuntimeValueKind(kind)) values.push(name)
         else types.push(name)
     }

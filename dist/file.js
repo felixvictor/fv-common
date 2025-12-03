@@ -121,7 +121,7 @@ export const readJsonAsync = async (fileName) => {
         return undefined;
     }
 };
-export const pathFormat = (t) => path.resolve(String(process.env.PWD), "src", path.format(t));
+export const pathFormat = (t) => path.resolve(String(process.env["PWD"]), "src", path.format(t));
 export const changeExtension = (pathInput, extension) => {
     const pathParsed = path.parse(pathInput);
     const pathOutput = {

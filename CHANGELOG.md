@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](///compare/1.5.0...1.6.0) (2025-12-11)
+
+### Features
+
+* colour 1fb175a
+* colour b251f8e
+
 ## [1.5.0](///compare/1.4.1...1.5.0) (2025-12-02)
 
 ### Features

@@ -23,8 +23,8 @@ export declare class ColourUtility {
     colourMixin(mixColour: HslColour | string, mixAmount?: number): HslColour;
     getBaseTintedColour(colourHex: string): HslColour;
     getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral?: boolean): HslColour;
-    getHarmonisedColour(colourHex: string, mixAmount?: number): void;
-    getHarmonisedColourNeutral(colourHex: string): void;
+    getHarmonisedColour(colourHex: string, mixAmount?: number): HslColour;
+    getHarmonisedColourNeutral(colourHex: string): HslColour;
     getTint(colour: HslColour, tone: number, backgroundColour?: HslColour, neutral?: boolean): HslColour;
     mixColours(color1: HslColour, color2: HslColour, weightPercentage?: number): HslColour;
 }

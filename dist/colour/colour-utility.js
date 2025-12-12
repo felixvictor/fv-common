@@ -57,11 +57,11 @@ export class ColourUtility {
     }
     getHarmonisedColour(colourHex, mixAmount) {
         const harmonized = this.colourMixin(new HslColour(colourHex), mixAmount);
-        this.getTint(harmonized, this.#baseTint);
+        return this.getTint(harmonized, this.#baseTint);
     }
     getHarmonisedColourNeutral(colourHex) {
         const harmonized = this.colourMixin(new HslColour(colourHex), ColourUtility.neutralHarmonizationMix);
-        this.getTint(harmonized, this.#baseTint, this.#onLight, true);
+        return this.getTint(harmonized, this.#baseTint, this.#onLight, true);
     }
     getTint(colour, tone, backgroundColour = this.#onLight, neutral = false) {
         return this.getColourAtTint(tone, colour, backgroundColour, neutral);

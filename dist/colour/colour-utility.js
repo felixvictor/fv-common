@@ -41,7 +41,7 @@ export class ColourUtility {
         return this.mixColours(harmonizedBase, targetColour, ColourUtility.percentageScale - mixAmount);
     }
     getBaseTintedColour(colourHex) {
-        this.getTint(new HslColour(colourHex), this.#baseTint);
+        return this.getTint(new HslColour(colourHex), this.#baseTint);
     }
     getColourAtTint(tone, colour, background, neutral = false) {
         const invertedTone = ColourUtility.maxTone - tone;
@@ -64,7 +64,7 @@ export class ColourUtility {
         this.getTint(harmonized, this.#baseTint, this.#onLight, true);
     }
     getTint(colour, tone, backgroundColour = this.#onLight, neutral = false) {
-        this.getColourAtTint(tone, colour, backgroundColour, neutral);
+        return this.getColourAtTint(tone, colour, backgroundColour, neutral);
     }
     mixColours(color1, color2, weightPercentage = this.#baseTint) {
         const weightScale = weightPercentage / ColourUtility.percentageScale;

@@ -49,7 +49,7 @@ export class ColourUtility {
     }
 
     getBaseTintedColour(colourHex: string) {
-        this.getTint(new HslColour(colourHex), this.#baseTint)
+        return this.getTint(new HslColour(colourHex), this.#baseTint)
     }
 
     getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral = false) {
@@ -83,7 +83,7 @@ export class ColourUtility {
     }
 
     getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false) {
-        this.getColourAtTint(tone, colour, backgroundColour, neutral)
+        return this.getColourAtTint(tone, colour, backgroundColour, neutral)
     }
 
     mixColours(color1: HslColour, color2: HslColour, weightPercentage = this.#baseTint) {

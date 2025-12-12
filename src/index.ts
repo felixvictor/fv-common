@@ -8,14 +8,11 @@ export { ColourUtility } from "./colour/colour-utility.js"
 export { HslColour } from "./colour/hsl-colour.js"
 export { clamp } from "./common.js"
 export {
-    changeExtension,
     fileEmpty,
     fileExists,
     fileExistsAsync,
     isNodeError,
-    joinPaths,
     makeDirectoryAsync,
-    pathFormat,
     putError,
     readJsonAsync,
     readJsonSync,

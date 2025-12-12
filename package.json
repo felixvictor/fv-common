@@ -17,9 +17,10 @@
         "dist"
     ],
     "scripts": {
-        "build": "run-s typecheck build:gen build:push",
-        "build:push": "git add dist/ && git diff --quiet || git commit -m 'build: dist' && git push",
+        "build": "run-s typecheck build:gen build:commit",
+        "build:commit": "git add dist/ && git diff --staged --quiet || git commit -m 'build: dist'",
         "build:gen": "tsc",
+        "build:push": "git push",
         "dev": "tsc --watch",
         "barrel": "tsx scripts/generate-barrel.mts",
         "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
@@ -27,7 +28,7 @@
         "lint": "run-s lint:js pretty-print pretty-print-package",
         "lint:js": "eslint . --fix",
         "main:prod": "run-s gen:load gen:data deploy:cloudflare",
-        "main:release": "run-s build release push",
+        "main:release": "run-s build build:push release",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
         "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",

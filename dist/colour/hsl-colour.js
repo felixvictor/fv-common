@@ -18,9 +18,12 @@ export class HslColour {
     }
     set h(value) {
         const h = Number(value);
-        if (!Number.isNaN(h)) {
-            this.#colour.h = ((h % HslColour.hueMax) + HslColour.hueMax) % HslColour.hueMax;
+        if (Number.isNaN(h)) {
+            console.warn(`${HslColour.name}: Cannot set hue to invalid value "${value}" (${h}), ` +
+                `keeping current value "${this.#colour.h}"`);
+            return;
         }
+        this.#colour.h = ((h % HslColour.hueMax) + HslColour.hueMax) % HslColour.hueMax;
     }
     get hex() {
         return this.#colour.to(HslColour.outputColorSpace).toString({ format: HslColour.hexFormat });
@@ -30,18 +33,24 @@ export class HslColour {
     }
     set l(value) {
         const l = Number(value);
-        if (!Number.isNaN(l)) {
-            this.#colour.l = clamp(l, HslColour.lightnessMin, HslColour.lightnessMax);
+        if (Number.isNaN(l)) {
+            console.warn(`${HslColour.name}: Cannot set lightness to invalid value "${value}" (${l}), ` +
+                `keeping current value "${this.#colour.l}"`);
+            return;
         }
+        this.#colour.l = clamp(l, HslColour.lightnessMin, HslColour.lightnessMax);
     }
     get s() {
         return this.#colour.s ?? HslColour.saturationMin;
     }
     set s(value) {
         const s = Number(value);
-        if (!Number.isNaN(s)) {
-            this.#colour.s = clamp(s, HslColour.saturationMin, HslColour.saturationMax);
+        if (Number.isNaN(s)) {
+            console.warn(`${HslColour.name}: Cannot set saturation to invalid value "${value}" (${s}), ` +
+                `keeping current value "${this.#colour.s}"`);
+            return;
         }
+        this.#colour.s = clamp(s, HslColour.saturationMin, HslColour.saturationMax);
     }
     #colour;
     constructor(argument) {

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.0](///compare/1.6.4...1.7.0) (2025-12-13)
+
+### Features
+
+* hsl-colour setter with NaN warning 3e0c61a
+
 ## [1.6.4](///compare/1.6.3...1.6.4) (2025-12-12)
 
 ### Bug Fixes

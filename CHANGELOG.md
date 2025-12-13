@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.0](///compare/1.7.0...1.8.0) (2025-12-13)
+
+### Features
+
+* more file functions cd9e35c
+
 ## [1.7.0](///compare/1.6.4...1.7.0) (2025-12-13)
 
 ### Features

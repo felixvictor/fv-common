@@ -7,6 +7,10 @@ export { ColourMath } from "./colour/colour-math.js";
 export { ColourUtility } from "./colour/colour-utility.js";
 export { HslColour } from "./colour/hsl-colour.js";
 export { clamp } from "./common.js";
-export { appendToFileName, changeExtension, changeFileName, fileEmpty, fileExists, fileExistsAsync, isNodeError, makeDirectoryAsync, makeDirectorySync, putError, readDirectorySync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectorySync, removeFileAsync, removeFileSync, saveBinaryFile, saveImage, saveJson, saveJsonAsync, saveTextFileAsync, saveTextFileSync, } from "./file.js";
+export { makeDirectoryAsync, makeDirectorySync, readDirectorySync, removeDirectorySync } from "./fs/directory.js";
+export { errorCodes, isNodeError, putError } from "./fs/error.js";
+export { readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFile, saveImage, saveJson, saveJsonAsync, saveTextFileAsync, saveTextFileSync, } from "./fs/file-io.js";
+export { fileEmpty, fileExists, fileExistsAsync, removeFileAsync, removeFileSync } from "./fs/file-ops.js";
+export { appendToFileName, changeExtension, changeFileName } from "./fs/path.js";
 export { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js";
 //# sourceMappingURL=index.js.map

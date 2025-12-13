@@ -1,0 +1,14 @@
+export const cDashEm = String.fromCodePoint(0x20_14);
+export const cDashEn = String.fromCodePoint(0x20_13);
+export const cDashFigure = String.fromCodePoint(0x20_12);
+export const cMinus = String.fromCodePoint(0x22_12);
+export const cPlus = String.fromCodePoint(0x00_2b);
+export const cPlusSmall = String.fromCodePoint(0xfe_62);
+export const cSpaceFigure = String.fromCodePoint(0x20_07);
+export const cSpaceNarrowNoBreaking = String.fromCodePoint(0x20_2f);
+export const cSpaceNoBreak = String.fromCodePoint(0x00_a0);
+export const cSpacePunctuation = String.fromCodePoint(0x20_08);
+export const cSpaceThin = String.fromCodePoint(0x20_09);
+export const cSpaceZeroWidthBreaking = String.fromCodePoint(0xfe_ff);
+export const cCombiningDiaeresis = String.fromCodePoint(0x03_08);
+//# sourceMappingURL=unicode.js.map

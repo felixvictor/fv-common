@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.10.0](///compare/1.9.0...1.10.0) (2025-12-13)
+
+### Features
+
+* separate node entry 802143d
+
 ## [1.9.0](///compare/1.8.1...1.9.0) (2025-12-13)
 
 ### Features

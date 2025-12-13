@@ -2,23 +2,35 @@ import type { Rule } from "eslint"
 
 import { execSync } from "node:child_process"
 import fs from "node:fs"
+import path from "node:path"
 
 export default {
     create(context: Rule.RuleContext): Rule.RuleListener {
         const filename = context.filename
-        // Normalize both paths to forward slashes for cross-platform reliability
         const normalized = filename.replaceAll("\\", "/")
-        if (!normalized.endsWith("src/index.ts")) return {}
+
+        // 1. Check if the file is one of our generated barrels
+        if (!normalized.endsWith("src/index.ts") && !normalized.endsWith("src/node.ts")) {
+            return {}
+        }
 
         return {
             Program(node): void {
                 try {
                     const cwd = context.cwd
-                    const expected = execSync("tsx --no-warnings scripts/generate-barrel.mts --dry-run", {
-                        cwd,
-                        encoding: "utf8",
-                        stdio: ["pipe", "pipe", "ignore"],
-                    }).trim()
+                    // 2. Determine which target we are checking (index.ts or node.ts)
+                    const targetFile = path.basename(normalized)
+
+                    // 3. Pass the --target flag to the script
+                    const expected = execSync(
+                        `tsx --no-warnings scripts/generate-barrel.mts --dry-run --target=${targetFile}`,
+                        {
+                            cwd,
+                            encoding: "utf8",
+                            stdio: ["pipe", "pipe", "ignore"],
+                        },
+                    ).trim()
+
                     const actual = fs.readFileSync(filename, "utf8").trim()
 
                     if (expected !== actual) {
@@ -27,7 +39,8 @@ export default {
                                 const sourceCode = context.sourceCode
                                 return fixer.replaceTextRange([0, sourceCode.text.length], expected)
                             },
-                            message: "src/index.ts is stale. Run npm run barrel.",
+                            // 4. Update message to be generic
+                            message: `${targetFile} is stale. Run npm run barrel.`,
                             node,
                         })
                     }
@@ -39,7 +52,7 @@ export default {
     },
     meta: {
         docs: {
-            description: "Ensure src/index.ts is freshly generated",
+            description: "Ensure barrel files are freshly generated",
         },
         fixable: "code",
         schema: [],

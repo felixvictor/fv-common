@@ -11,6 +11,10 @@
         ".": {
             "types": "./dist/index.d.ts",
             "import": "./dist/index.js"
+        },
+        "./node": {
+            "types": "./dist/node.d.ts",
+            "import": "./dist/node.js"
         }
     },
     "files": [
@@ -27,7 +31,6 @@
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "run-s lint:js pretty-print pretty-print-package",
         "lint:js": "eslint . --fix",
-        "main:prod": "run-s gen:load gen:data deploy:cloudflare",
         "main:release": "run-s build build:push release",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",

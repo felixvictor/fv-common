@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.12.0](///compare/1.11.0...1.12.0) (2025-12-13)
+
+### Features
+
+* separate node entry 716ea7e
+
 ## [1.11.0](///compare/1.10.0...1.11.0) (2025-12-13)
 
 ### Features

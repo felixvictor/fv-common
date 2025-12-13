@@ -6,38 +6,37 @@
         "rootDir": "./src",
 
         // Environment Settings
-        "lib": ["esNext", "DOM"],
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "module": "nodeNext",
         "moduleResolution": "nodeNext",
-        "target": "esNext",
-        "types": ["node"],
+        "target": "ESNext",
 
         // Other Outputs
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
 
-        // Stricter Typechecking Options
-        "exactOptionalPropertyTypes": true,
-        "noUncheckedIndexedAccess": true,
-
-        // Style Options
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
+        "esModuleInterop": true,
+        "exactOptionalPropertyTypes": true,
         "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "libReplacement": false,
+        "moduleDetection": "force",
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-
-        // Recommended Options
-        "isolatedModules": true,
-        "moduleDetection": "force",
+        "resolveJsonModule": true,
         "skipLibCheck": true,
+        "strict": true,
+        "useDefineForClassFields": true,
         "verbatimModuleSyntax": true
     },
-    "exclude": ["commitlint.config.ts", "dist", "eslint-rules", "node_modules", "scripts", "**/*.test.ts"],
-    "extends": "@tsconfig/node24/tsconfig.json"
+    "exclude": ["commitlint.config.ts", "dist", "eslint-rules", "node_modules", "scripts", "**/*.test.ts", "src/fs/**"]
 }

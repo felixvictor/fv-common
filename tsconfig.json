@@ -6,7 +6,7 @@
         "rootDir": "./src",
 
         // Environment Settings
-        "lib": ["esnext"],
+        "lib": ["esNext", "DOM"],
         "module": "nodeNext",
         "moduleResolution": "nodeNext",
         "target": "esNext",

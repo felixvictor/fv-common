@@ -38,5 +38,13 @@
         "useDefineForClassFields": true,
         "verbatimModuleSyntax": true
     },
-    "exclude": ["commitlint.config.ts", "dist", "eslint-rules", "node_modules", "scripts", "**/*.test.ts", "src/fs/**"]
+    "exclude": [
+        "commitlint.config.ts",
+        "tsdown.config.ts",
+        "dist",
+        "eslint-rules",
+        "node_modules",
+        "scripts",
+        "src/fs/**"
+    ]
 }

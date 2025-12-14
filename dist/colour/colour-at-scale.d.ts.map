@@ -1,1 +1,0 @@
-{"version":3,"file":"colour-at-scale.d.ts","sourceRoot":"","sources":["../../src/colour/colour-at-scale.ts"],"names":[],"mappings":"AAIA,OAAO,EAAE,SAAS,EAAE,MAAM,iBAAiB,CAAA;AAE3C;;;;;GAKG;AAEH,qBAAa,oBAAoB;;gBAOjB,cAAc,EAAE,MAAM,EAAE,OAAO,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,WAAW,EAAE,MAAM;IAQ9G,aAAa,CAAC,WAAW,EAAE,MAAM,GAAG,SAAS;CA4ChD"}

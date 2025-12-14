@@ -6,6 +6,7 @@
     "repository": "https://fj.byrtz.de/ibey/fv-common.git",
     "type": "module",
     "main": "./dist/index.js",
+    "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
@@ -13,8 +14,8 @@
             "import": "./dist/index.js"
         },
         "./node": {
-            "types": "./dist/node.d.ts",
-            "import": "./dist/node.js"
+            "types": "./dist/node.d.mts",
+            "import": "./dist/node.mjs"
         }
     },
     "files": [
@@ -23,7 +24,7 @@
     "scripts": {
         "build": "run-s typecheck build:gen build:commit",
         "build:commit": "git add dist/ && git diff --staged --quiet || git commit -m 'build: dist'",
-        "build:gen": "tsc",
+        "build:gen": "tsdown",
         "build:push": "git push",
         "dev": "tsc --watch",
         "barrel": "tsx scripts/generate-barrel.mts",
@@ -68,6 +69,7 @@
         "globals": "^16.5.0",
         "husky": "^9.1.7",
         "npm-run-all2": "^8.0.4",
+        "tsdown": "^0.17.4",
         "prettier": "^3.7.4",
         "prettier-package-json": "^2.8.0",
         "release-it": "^19.1.0",

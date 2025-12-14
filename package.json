@@ -47,9 +47,9 @@
     "sideEffects": false,
     "dependencies": {
         "atomically": "^2.1.0",
+        "colorjs.io": "^0.6.0-beta.3",
         "dayjs": "^1.11.19",
-        "svg-path-commander": "^2.1.11",
-        "colorjs.io": "^0.6.0-beta.3"
+        "svg-path-commander": "^2.1.11"
     },
     "devDependencies": {
         "@commitlint/cli": "^20.2.0",
@@ -59,7 +59,7 @@
         "@eslint/js": "^9.39.2",
         "@release-it/conventional-changelog": "^10.0.3",
         "@tsconfig/node24": "^24.0.3",
-        "@types/node": "^25.0.1",
+        "@types/node": "^25.0.2",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-n": "^17.23.1",

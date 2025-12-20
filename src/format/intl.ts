@@ -1,5 +1,5 @@
+import { getLocale } from "../locale.js"
 import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "../unicode.js"
-import { getLocale } from "./config.js"
 import { beautifySuffix } from "./helpers.js"
 
 /**

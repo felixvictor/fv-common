@@ -21,3 +21,8 @@ export const formatPercent = (value: number, decimals = 1, options: Intl.NumberF
 export const formatSignPercent = (value: number, decimals = 1): string => {
     return formatPercent(value, decimals, { signDisplay: "always" })
 }
+
+/**
+ * Format percentage point
+ */
+export const formatPP = (x: number, f = 0): string => formatPercent(x, f).replace("%", "pp")

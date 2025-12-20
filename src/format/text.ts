@@ -1,21 +1,25 @@
-/**
- * Capitalizes the first letter of a string.
- * @link https://stackoverflow.com/a/1026087
- * @example capitalizeFirstLetter("hello") → "Hello"
- */
-export const capitalizeFirstLetter = (text: string): string => {
-    return text.charAt(0).toUpperCase() + text.slice(1)
-}
+import { getLocale } from "../locale.js"
+import { getCardinalRules } from "./cardinal.js"
 
-const cardinalRules = new Intl.PluralRules("en", { type: "cardinal" })
+/**
+ * Capitalizes the first letter of a string using locale-aware rules.
+ * @example capitalizeFirstLetter("hello") → "Hello"
+ * @example capitalizeFirstLetter("istanbul") → "İstanbul" (in Turkish locale)
+ */
+export const capitalizeFirstLetter = (text: string, locale?: string): string => {
+    if (!text) return text
+    const effectiveLocale = locale ?? getLocale()
+    return text.charAt(0).toLocaleUpperCase(effectiveLocale) + text.slice(1)
+}
 
 /**
  * Returns the appropriate singular or plural form based on count.
- * Uses Intl.PluralRules for locale-aware pluralization.
+ * Uses Intl.PluralRules for locale-aware pluralisation.
  * @example pluralise(1, "item", "items") → "item"
  * @example pluralise(5, "item", "items") → "items"
  */
 export const pluralise = (count: number, wordSingle: string, wordPlural: string): string => {
+    const cardinalRules = getCardinalRules(getLocale())
     const rule = cardinalRules.select(count)
     return rule === "one" ? wordSingle : wordPlural
 }

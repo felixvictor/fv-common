@@ -1,4 +1,5 @@
-import { cSpaceFigure, cSpacePunctuation } from "../unicode.js"
+import { cSpaceFigure, cSpaceNarrowNoBreaking, cSpacePunctuation } from "../unicode.js"
+import { formatUnit } from "./helpers.js"
 import { formatWithIntl } from "./intl.js"
 
 /**
@@ -53,6 +54,13 @@ export const formatFloatFixed = (value: number, decimals = 2): string => {
         .replaceAll(/\.(\d)0$/g, `.$1${cSpaceFigure}`)
 }
 
+export const formatFloatWithUnit = (x: number, u: string): string =>
+    `${formatSiFloat(x)}${cSpaceNarrowNoBreaking}${formatUnit(u)}`
+
+export const formatReales = (x: number): string => `${formatUnit("R")}${cSpaceNarrowNoBreaking}${formatSiFloat(x)}`
+
+export const formatWeight = (x: number): string => formatFloatWithUnit(x, "t")
+
 /**
  * Rounds a number to specified decimal places.
  * @example round(3.14159, 2) → 3.14
@@ -82,3 +90,9 @@ export const formatInt = (value: number, options: Intl.NumberFormatOptions = {})
 export const formatSignInt = (value: number): string => {
     return formatInt(value, { signDisplay: "always" })
 }
+
+/**
+ * Format integer
+ */
+export const formatSiInt = (x: number, max = 2, options = {} as Intl.NumberFormatOptions): string =>
+    formatNumber(x, 0, { ...options, maximumSignificantDigits: max })

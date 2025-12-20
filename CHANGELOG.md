@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](/fj.byrtz.de/ibey/fv-common/compare/1.12.1...1.13.0) (2025-12-20)
+
+### Features
+
+* dayjs with intl support ([81dc9b3](/fj.byrtz.de/ibey/fv-common/commit/81dc9b3d399d005846a694a837c9a903894afde2))
+* format locale ([af90c5f](/fj.byrtz.de/ibey/fv-common/commit/af90c5f7962632b1dd03e4d544a4c3517c920a6e))
+* more format function with intl support ([bbf7507](/fj.byrtz.de/ibey/fv-common/commit/bbf7507614d0727b9ca4b7d6cc836b754d7893ea))
+
+### Bug Fixes
+
+* eslint ([2f670e7](/fj.byrtz.de/ibey/fv-common/commit/2f670e7d5bbe9528529ad074501e6c4d871c5538))
+
 ## [1.12.1](///compare/1.12.0...1.12.1) (2025-12-14)
 
 ## [1.12.0](///compare/1.11.0...1.12.0) (2025-12-13)

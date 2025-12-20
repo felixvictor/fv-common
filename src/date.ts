@@ -3,58 +3,61 @@ import "dayjs/locale/de"
 import "dayjs/locale/en"
 import relativeTime from "dayjs/plugin/relativeTime.js"
 
+import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "./locale.js"
+
 dayjs.extend(relativeTime)
 
-// Default locale
-let currentLocale = "de"
-
-/**
- * Sets the active locale for date formatting.
- * @param locale - ISO locale code ('de' or 'en')
- */
-export const setLocale = (locale: "de" | "en"): void => {
-    currentLocale = locale
+// Wrapper to sync dayjs locale with library locale
+export const setDateLocale = (locale: string): void => {
+    setLibraryLocale(locale)
     dayjs.locale(locale)
 }
 
-/**
- * Gets the current active locale.
- */
-export const getLocale = (): string => currentLocale
+// Sync dayjs locale on any locale changes
+onLocaleChange(() => {
+    dayjs.locale(getLocale())
+})
 
 // Initialise with default
-setLocale("de")
+setDateLocale("en-GB")
 
 /**
  * Formats date with locale-specific formatting.
+ * @param date - Date string to format
+ * @param locale - Optional locale override
  * @example getFormattedDate('2024-01-15') → "Montag, 15. Januar, 14.30" (de)
+ * @example getFormattedDate('2024-01-15', 'en') → "Monday, 15. January, 14.30"
  */
-export const getFormattedDate = (date: string): string => {
-    return dayjs(date).format("dddd, D. MMMM, H.mm")
+export const getFormattedDate = (date: string, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return dayjs(date).locale(effectiveLocale).format("dddd, D. MMMM, H.mm")
 }
 
 /**
  * Short date format with day, month, and time.
  * @example getFormattedDateShort('2024-01-15') → "15.1. 14.30"
  */
-export const getFormattedDateShort = (date: number | string): string => {
-    return dayjs(date).format("D.M. H.mm")
+export const getFormattedDateShort = (date: number | string, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return dayjs(date).locale(effectiveLocale).format("D.M. H.mm")
 }
 
 /**
  * Date format with seconds included.
  * @example getFormattedDateShortSeconds('2024-01-15') → "15. Januar 14.30.45"
  */
-export const getFormattedDateShortSeconds = (date: number | string): string => {
-    return dayjs(date).format("D. MMMM H.mm.ss")
+export const getFormattedDateShortSeconds = (date: number | string, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return dayjs(date).locale(effectiveLocale).format("D. MMMM H.mm.ss")
 }
 
 /**
  * Returns relative time string (e.g., "vor 2 Stunden" or "2 hours ago").
  * Uses currently active locale.
  */
-export const getDateDistance = (date: string): string => {
-    return dayjs(date).fromNow()
+export const getDateDistance = (date: string, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return dayjs(date).locale(effectiveLocale).fromNow()
 }
 
 /**

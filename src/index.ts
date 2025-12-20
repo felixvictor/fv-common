@@ -13,25 +13,32 @@ export {
     getFormattedDate,
     getFormattedDateShort,
     getFormattedDateShortSeconds,
-    getLocale,
     isFutureDate,
-    setLocale,
+    setDateLocale,
 } from "./date.js"
 export { delay } from "./delay.js"
+export { getCardinalRules } from "./format/cardinal.js"
+export { addSpan, beautifySuffix, formatUnit } from "./format/helpers.js"
 export { formatWithIntl } from "./format/intl.js"
 export {
     formatFloat,
     formatFloatFixed,
+    formatFloatWithUnit,
     formatInt,
+    formatReales,
     formatSiFloat,
     formatSignFloat,
     formatSignInt,
+    formatSiInt,
+    formatWeight,
     round,
     roundToThousands,
 } from "./format/number.js"
-export { formatPercent, formatSignPercent } from "./format/percent.js"
+export { getOrdinal } from "./format/ordinal.js"
+export { formatPercent, formatPP, formatSignPercent } from "./format/percent.js"
 export { capitalizeFirstLetter, pluralise } from "./format/text.js"
 export { getElementWidth } from "./html.js"
+export { getLocale, onLocaleChange, setLocale } from "./locale.js"
 export { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js"
 export type { SortArgument } from "./sort.js"
 export { drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine } from "./svg/draw.js"

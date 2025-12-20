@@ -98,35 +98,30 @@ declare class ColourUtility {
 declare const clamp: (x: number | string, min: number | string, max: number | string) => number;
 //#endregion
 //#region src/date.d.ts
-/**
- * Sets the active locale for date formatting.
- * @param locale - ISO locale code ('de' or 'en')
- */
-declare const setLocale: (locale: "de" | "en") => void;
-/**
- * Gets the current active locale.
- */
-declare const getLocale: () => string;
+declare const setDateLocale: (locale: string) => void;
 /**
  * Formats date with locale-specific formatting.
+ * @param date - Date string to format
+ * @param locale - Optional locale override
  * @example getFormattedDate('2024-01-15') → "Montag, 15. Januar, 14.30" (de)
+ * @example getFormattedDate('2024-01-15', 'en') → "Monday, 15. January, 14.30"
  */
-declare const getFormattedDate: (date: string) => string;
+declare const getFormattedDate: (date: string, locale?: string) => string;
 /**
  * Short date format with day, month, and time.
  * @example getFormattedDateShort('2024-01-15') → "15.1. 14.30"
  */
-declare const getFormattedDateShort: (date: number | string) => string;
+declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
 /**
  * Date format with seconds included.
  * @example getFormattedDateShortSeconds('2024-01-15') → "15. Januar 14.30.45"
  */
-declare const getFormattedDateShortSeconds: (date: number | string) => string;
+declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
 /**
  * Returns relative time string (e.g., "vor 2 Stunden" or "2 hours ago").
  * Uses currently active locale.
  */
-declare const getDateDistance: (date: string) => string;
+declare const getDateDistance: (date: string, locale?: string) => string;
 /**
  * Checks if the given date is in the future.
  */
@@ -140,7 +135,21 @@ declare const closestDateIndex: (datesString: string[]) => number | undefined;
 //#region src/delay.d.ts
 declare const delay: (ms: number) => Promise<unknown>;
 //#endregion
-//#region src/format/intl-helpers.d.ts
+//#region src/format/cardinal.d.ts
+declare const getCardinalRules: (locale: string) => Intl.PluralRules;
+//#endregion
+//#region src/format/helpers.d.ts
+/**
+ * Adds styled span/tspan wrapper for compact notation suffixes.
+ */
+declare const addSpan: (suffix: string, svg: boolean) => string;
+/**
+ * Beautifies compact notation suffixes (K, M) with styling and spacing.
+ */
+declare const beautifySuffix: (suffix: string, svg: boolean) => string;
+declare const formatUnit: (u: string, svg?: boolean) => string;
+//#endregion
+//#region src/format/intl.d.ts
 /**
  * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
  * Applies thin spaces, proper minus signs, and styled compact notation.
@@ -171,6 +180,9 @@ declare const formatSiFloat: (value: number, svg?: boolean) => string;
  * @example formatFloatFixed(42.1, 2) → "42.1 " (with one figure space)
  */
 declare const formatFloatFixed: (value: number, decimals?: number) => string;
+declare const formatFloatWithUnit: (x: number, u: string) => string;
+declare const formatReales: (x: number) => string;
+declare const formatWeight: (x: number) => string;
 /**
  * Rounds a number to specified decimal places.
  * @example round(3.14159, 2) → 3.14
@@ -191,6 +203,22 @@ declare const formatInt: (value: number, options?: Intl.NumberFormatOptions) => 
  * @example formatSignInt(42) → "+42"
  */
 declare const formatSignInt: (value: number) => string;
+/**
+ * Format integer
+ */
+declare const formatSiInt: (x: number, max?: number, options?: Intl.NumberFormatOptions) => string;
+//#endregion
+//#region src/format/ordinal.d.ts
+/**
+ * Format ordinal number with appropriate suffix.
+ * @param n - Integer
+ * @param sup - True if superscript suffixes needed
+ * @param locale - Optional locale override
+ * @example getOrdinal(1) → "1ˢᵗ"
+ * @example getOrdinal(2, false) → "2nd"
+ * @example getOrdinal(3) → "3ʳᵈ"
+ */
+declare const getOrdinal: (n: number, sup?: boolean, locale?: string) => string;
 //#endregion
 //#region src/format/percent.d.ts
 /**
@@ -205,17 +233,21 @@ declare const formatPercent: (value: number, decimals?: number, options?: Intl.N
  * @example formatSignPercent(0.42, 1) → "+42.0 %"
  */
 declare const formatSignPercent: (value: number, decimals?: number) => string;
+/**
+ * Format percentage point
+ */
+declare const formatPP: (x: number, f?: number) => string;
 //#endregion
 //#region src/format/text.d.ts
 /**
- * Capitalizes the first letter of a string.
- * @link https://stackoverflow.com/a/1026087
+ * Capitalizes the first letter of a string using locale-aware rules.
  * @example capitalizeFirstLetter("hello") → "Hello"
+ * @example capitalizeFirstLetter("istanbul") → "İstanbul" (in Turkish locale)
  */
-declare const capitalizeFirstLetter: (text: string) => string;
+declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
 /**
  * Returns the appropriate singular or plural form based on count.
- * Uses Intl.PluralRules for locale-aware pluralization.
+ * Uses Intl.PluralRules for locale-aware pluralisation.
  * @example pluralise(1, "item", "items") → "item"
  * @example pluralise(5, "item", "items") → "items"
  */
@@ -223,6 +255,15 @@ declare const pluralise: (count: number, wordSingle: string, wordPlural: string)
 //#endregion
 //#region src/html.d.ts
 declare const getElementWidth: (element: HTMLElement | SVGElement) => number;
+//#endregion
+//#region src/locale.d.ts
+declare const setLocale: (locale: string) => void;
+declare const getLocale: () => string;
+/**
+ * Register a callback to be called whenever the locale changes.
+ * @param callback - Function to call on locale change
+ */
+declare const onLocaleChange: (callback: () => void) => void;
 //#endregion
 //#region src/sort.d.ts
 /**
@@ -271,5 +312,5 @@ declare const cSpaceThin: string;
 declare const cSpaceZeroWidthBreaking: string;
 declare const cCombiningDiaeresis: string;
 //#endregion
-export { ColourMath, ColourScaleGenerator, ColourUtility, HslColour, type SortArgument, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, clamp, closestDateIndex, delay, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine, formatFloat, formatFloatFixed, formatInt, formatPercent, formatSiFloat, formatSignFloat, formatSignInt, formatSignPercent, formatWithIntl, getDateDistance, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocale, isFutureDate, optimisePath, pluralise, round, roundToThousands, setLocale, simpleNumberSort, simpleStringSort, sortBy };
+export { ColourMath, ColourScaleGenerator, ColourUtility, HslColour, type SortArgument, addSpan, beautifySuffix, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, clamp, closestDateIndex, delay, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine, formatFloat, formatFloatFixed, formatFloatWithUnit, formatInt, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getDateDistance, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocale, getOrdinal, isFutureDate, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
 //# sourceMappingURL=index.d.ts.map

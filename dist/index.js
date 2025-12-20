@@ -242,49 +242,69 @@ var ColourUtility = class ColourUtility {
 };
 
 //#endregion
+//#region src/locale.ts
+let currentLocale = "en-GB";
+const localeChangeCallbacks = [];
+const setLocale = (locale) => {
+	if (currentLocale !== locale) {
+		currentLocale = locale;
+		for (const callback of localeChangeCallbacks) callback();
+	}
+};
+const getLocale = () => currentLocale;
+/**
+* Register a callback to be called whenever the locale changes.
+* @param callback - Function to call on locale change
+*/
+const onLocaleChange = (callback) => {
+	localeChangeCallbacks.push(callback);
+};
+
+//#endregion
 //#region src/date.ts
 dayjs.extend(relativeTime);
-let currentLocale = "de";
-/**
-* Sets the active locale for date formatting.
-* @param locale - ISO locale code ('de' or 'en')
-*/
-const setLocale = (locale) => {
-	currentLocale = locale;
+const setDateLocale = (locale) => {
+	setLocale(locale);
 	dayjs.locale(locale);
 };
-/**
-* Gets the current active locale.
-*/
-const getLocale = () => currentLocale;
-setLocale("de");
+onLocaleChange(() => {
+	dayjs.locale(getLocale());
+});
+setDateLocale("en-GB");
 /**
 * Formats date with locale-specific formatting.
+* @param date - Date string to format
+* @param locale - Optional locale override
 * @example getFormattedDate('2024-01-15') → "Montag, 15. Januar, 14.30" (de)
+* @example getFormattedDate('2024-01-15', 'en') → "Monday, 15. January, 14.30"
 */
-const getFormattedDate = (date) => {
-	return dayjs(date).format("dddd, D. MMMM, H.mm");
+const getFormattedDate = (date, locale) => {
+	const effectiveLocale = locale ?? getLocale();
+	return dayjs(date).locale(effectiveLocale).format("dddd, D. MMMM, H.mm");
 };
 /**
 * Short date format with day, month, and time.
 * @example getFormattedDateShort('2024-01-15') → "15.1. 14.30"
 */
-const getFormattedDateShort = (date) => {
-	return dayjs(date).format("D.M. H.mm");
+const getFormattedDateShort = (date, locale) => {
+	const effectiveLocale = locale ?? getLocale();
+	return dayjs(date).locale(effectiveLocale).format("D.M. H.mm");
 };
 /**
 * Date format with seconds included.
 * @example getFormattedDateShortSeconds('2024-01-15') → "15. Januar 14.30.45"
 */
-const getFormattedDateShortSeconds = (date) => {
-	return dayjs(date).format("D. MMMM H.mm.ss");
+const getFormattedDateShortSeconds = (date, locale) => {
+	const effectiveLocale = locale ?? getLocale();
+	return dayjs(date).locale(effectiveLocale).format("D. MMMM H.mm.ss");
 };
 /**
 * Returns relative time string (e.g., "vor 2 Stunden" or "2 hours ago").
 * Uses currently active locale.
 */
-const getDateDistance = (date) => {
-	return dayjs(date).fromNow();
+const getDateDistance = (date, locale) => {
+	const effectiveLocale = locale ?? getLocale();
+	return dayjs(date).locale(effectiveLocale).fromNow();
 };
 /**
 * Checks if the given date is in the future.
@@ -308,6 +328,18 @@ const closestDateIndex = (datesString) => {
 const delay = async (ms) => await new Promise((resolve) => setTimeout(resolve, ms));
 
 //#endregion
+//#region src/format/cardinal.ts
+const cardinalRulesCache = /* @__PURE__ */ new Map();
+const getCardinalRules = (locale) => {
+	let rules = cardinalRulesCache.get(locale);
+	if (!rules) {
+		rules = new Intl.PluralRules(locale, { type: "cardinal" });
+		cardinalRulesCache.set(locale, rules);
+	}
+	return rules;
+};
+
+//#endregion
 //#region src/unicode.ts
 const cDashEm = String.fromCodePoint(8212);
 const cDashEn = String.fromCodePoint(8211);
@@ -324,7 +356,7 @@ const cSpaceZeroWidthBreaking = String.fromCodePoint(65279);
 const cCombiningDiaeresis = String.fromCodePoint(776);
 
 //#endregion
-//#region src/format/intl-helpers.ts
+//#region src/format/helpers.ts
 /**
 * Adds styled span/tspan wrapper for compact notation suffixes.
 */
@@ -333,28 +365,35 @@ const addSpan = (suffix, svg) => svg ? `<tspan class="caps">${suffix}</tspan>` :
 * Beautifies compact notation suffixes (K, M) with styling and spacing.
 */
 const beautifySuffix = (suffix, svg) => cSpaceThin + suffix.replace("K", addSpan("k", svg)).replace("M", addSpan("m", svg));
+const formatUnit = (u, svg = false) => {
+	if (u === u.toLowerCase()) return u;
+	const tag = svg ? "tspan" : "span";
+	if (u.length > 1) return `<${tag} class="caps">${u}</${tag}>`;
+	return `<${tag} style="font-variant-caps: all-small-caps">${u}</${tag}>`;
+};
+
+//#endregion
+//#region src/format/intl.ts
 /**
 * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
 * Applies thin spaces, proper minus signs, and styled compact notation.
 */
-const formatWithIntl = (value, options, svg = false) => {
-	return new Intl.NumberFormat("de", options).formatToParts(value).map((part) => {
-		switch (part.type) {
-			case "compact": return beautifySuffix(part.value, svg);
-			case "currency": return part.value;
-			case "decimal": return part.value;
-			case "fraction": return part.value;
-			case "group": return cSpaceThin;
-			case "integer": return part.value;
-			case "literal": return part.value;
-			case "minusSign": return `${cMinus}${cSpaceNarrowNoBreaking}`;
-			case "percentSign": return `${cSpaceNarrowNoBreaking}%`;
-			case "plusSign": return `${cPlus}${cSpaceNarrowNoBreaking}`;
-			case "unit": return part.value;
-		}
-		return part.value;
-	}).join("");
-};
+const formatWithIntl = (value, options, svg = false) => new Intl.NumberFormat(getLocale(), options).formatToParts(value).map((part) => {
+	switch (part.type) {
+		case "compact": return beautifySuffix(part.value, svg);
+		case "currency": return part.value;
+		case "decimal": return part.value;
+		case "fraction": return part.value;
+		case "group": return cSpaceThin;
+		case "integer": return part.value;
+		case "literal": return part.value;
+		case "minusSign": return `${cMinus}${cSpaceNarrowNoBreaking}`;
+		case "percentSign": return `${cSpaceNarrowNoBreaking}%`;
+		case "plusSign": return `${cPlus}${cSpaceNarrowNoBreaking}`;
+		case "unit": return part.value;
+	}
+	return part.value;
+}).join("");
 
 //#endregion
 //#region src/format/number.ts
@@ -400,6 +439,9 @@ const formatSiFloat = (value, svg = false) => {
 const formatFloatFixed = (value, decimals = 2) => {
 	return formatFloat(value, decimals, { minimumFractionDigits: decimals }).replace(/\.00$/, cSpacePunctuation + cSpaceFigure + cSpaceFigure).replace(/\.0$/, cSpacePunctuation + cSpaceFigure).replaceAll(/\.(\d)0$/g, `.$1${cSpaceFigure}`);
 };
+const formatFloatWithUnit = (x, u) => `${formatSiFloat(x)}${cSpaceNarrowNoBreaking}${formatUnit(u)}`;
+const formatReales = (x) => `${formatUnit("R")}${cSpaceNarrowNoBreaking}${formatSiFloat(x)}`;
+const formatWeight = (x) => formatFloatWithUnit(x, "t");
 /**
 * Rounds a number to specified decimal places.
 * @example round(3.14159, 2) → 3.14
@@ -426,6 +468,50 @@ const formatInt = (value, options = {}) => {
 const formatSignInt = (value) => {
 	return formatInt(value, { signDisplay: "always" });
 };
+/**
+* Format integer
+*/
+const formatSiInt = (x, max = 2, options = {}) => formatNumber(x, 0, {
+	...options,
+	maximumSignificantDigits: max
+});
+
+//#endregion
+//#region src/format/ordinal.ts
+const ordinalRulesCache = /* @__PURE__ */ new Map();
+const getOrdinalRules = (locale) => {
+	let rules = ordinalRulesCache.get(locale);
+	if (!rules) {
+		rules = new Intl.PluralRules(locale, { type: "ordinal" });
+		ordinalRulesCache.set(locale, rules);
+	}
+	return rules;
+};
+const suffixes = new Map([
+	["few", "rd"],
+	["one", "st"],
+	["other", "th"],
+	["two", "nd"]
+]);
+const suffixesSuper = new Map([
+	["few", "ʳᵈ"],
+	["one", "ˢᵗ"],
+	["other", "ᵗʰ"],
+	["two", "ⁿᵈ"]
+]);
+/**
+* Format ordinal number with appropriate suffix.
+* @param n - Integer
+* @param sup - True if superscript suffixes needed
+* @param locale - Optional locale override
+* @example getOrdinal(1) → "1ˢᵗ"
+* @example getOrdinal(2, false) → "2nd"
+* @example getOrdinal(3) → "3ʳᵈ"
+*/
+const getOrdinal = (n, sup = true, locale) => {
+	const rule = getOrdinalRules(locale ?? getLocale()).select(n);
+	return `${n}${(sup ? suffixesSuper.get(rule) : suffixes.get(rule)) ?? ""}`;
+};
 
 //#endregion
 //#region src/format/percent.ts
@@ -449,26 +535,31 @@ const formatPercent = (value, decimals = 1, options = {}) => {
 const formatSignPercent = (value, decimals = 1) => {
 	return formatPercent(value, decimals, { signDisplay: "always" });
 };
+/**
+* Format percentage point
+*/
+const formatPP = (x, f = 0) => formatPercent(x, f).replace("%", "pp");
 
 //#endregion
 //#region src/format/text.ts
 /**
-* Capitalizes the first letter of a string.
-* @link https://stackoverflow.com/a/1026087
+* Capitalizes the first letter of a string using locale-aware rules.
 * @example capitalizeFirstLetter("hello") → "Hello"
+* @example capitalizeFirstLetter("istanbul") → "İstanbul" (in Turkish locale)
 */
-const capitalizeFirstLetter = (text) => {
-	return text.charAt(0).toUpperCase() + text.slice(1);
+const capitalizeFirstLetter = (text, locale) => {
+	if (!text) return text;
+	const effectiveLocale = locale ?? getLocale();
+	return text.charAt(0).toLocaleUpperCase(effectiveLocale) + text.slice(1);
 };
-const cardinalRules = new Intl.PluralRules("en", { type: "cardinal" });
 /**
 * Returns the appropriate singular or plural form based on count.
-* Uses Intl.PluralRules for locale-aware pluralization.
+* Uses Intl.PluralRules for locale-aware pluralisation.
 * @example pluralise(1, "item", "items") → "item"
 * @example pluralise(5, "item", "items") → "items"
 */
 const pluralise = (count, wordSingle, wordPlural) => {
-	return cardinalRules.select(count) === "one" ? wordSingle : wordPlural;
+	return getCardinalRules(getLocale()).select(count) === "one" ? wordSingle : wordPlural;
 };
 
 //#endregion
@@ -566,5 +657,5 @@ const drawSvgHLine = (x, y, l) => `M${x},${y}h${l}`;
 const optimisePath = (path) => new SVGPathCommander(path, { round: 2 }).optimize().toString();
 
 //#endregion
-export { ColourMath, ColourScaleGenerator, ColourUtility, HslColour, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, clamp, closestDateIndex, delay, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine, formatFloat, formatFloatFixed, formatInt, formatPercent, formatSiFloat, formatSignFloat, formatSignInt, formatSignPercent, formatWithIntl, getDateDistance, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocale, isFutureDate, optimisePath, pluralise, round, roundToThousands, setLocale, simpleNumberSort, simpleStringSort, sortBy };
+export { ColourMath, ColourScaleGenerator, ColourUtility, HslColour, addSpan, beautifySuffix, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, clamp, closestDateIndex, delay, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine, formatFloat, formatFloatFixed, formatFloatWithUnit, formatInt, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getDateDistance, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocale, getOrdinal, isFutureDate, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
 //# sourceMappingURL=index.js.map

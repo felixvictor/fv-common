@@ -18,7 +18,7 @@ export {
     setLocale,
 } from "./date.js"
 export { delay } from "./delay.js"
-export { formatWithIntl } from "./format/intl-helpers.js"
+export { formatWithIntl } from "./format/intl.js"
 export {
     formatFloat,
     formatFloatFixed,

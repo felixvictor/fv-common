@@ -1,0 +1,13 @@
+import { cSpaceThin } from "../unicode.js"
+
+/**
+ * Adds styled span/tspan wrapper for compact notation suffixes.
+ */
+export const addSpan = (suffix: string, svg: boolean): string =>
+    svg ? `<tspan class="caps">${suffix}</tspan>` : `<span class="caps">${suffix}</span>`
+
+/**
+ * Beautifies compact notation suffixes (K, M) with styling and spacing.
+ */
+export const beautifySuffix = (suffix: string, svg: boolean): string =>
+    cSpaceThin + suffix.replace("K", addSpan("k", svg)).replace("M", addSpan("m", svg))

@@ -1,23 +1,13 @@
 import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "../unicode.js"
-
-/**
- * Adds styled span/tspan wrapper for compact notation suffixes.
- */
-const addSpan = (suffix: string, svg: boolean): string =>
-    svg ? `<tspan class="caps">${suffix}</tspan>` : `<span class="caps">${suffix}</span>`
-
-/**
- * Beautifies compact notation suffixes (K, M) with styling and spacing.
- */
-const beautifySuffix = (suffix: string, svg: boolean): string =>
-    cSpaceThin + suffix.replace("K", addSpan("k", svg)).replace("M", addSpan("m", svg))
+import { getLocale } from "./config.js"
+import { beautifySuffix } from "./helpers.js"
 
 /**
  * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
  * Applies thin spaces, proper minus signs, and styled compact notation.
  */
-export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, svg = false): string => {
-    return new Intl.NumberFormat("de", options)
+export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, svg = false): string =>
+    new Intl.NumberFormat(getLocale(), options)
         .formatToParts(value)
         .map((part) => {
             switch (part.type) {
@@ -68,4 +58,3 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
             return part.value
         })
         .join("")
-}

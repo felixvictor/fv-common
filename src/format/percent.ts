@@ -1,4 +1,4 @@
-import { formatWithIntl } from "./intl-helpers.js"
+import { formatWithIntl } from "./intl.js"
 
 /**
  * Formats a decimal value as a percentage.

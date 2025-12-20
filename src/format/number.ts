@@ -1,5 +1,5 @@
 import { cSpaceFigure, cSpacePunctuation } from "../unicode.js"
-import { formatWithIntl } from "./intl-helpers.js"
+import { formatWithIntl } from "./intl.js"
 
 /**
  * Base number formatter with decimal precision.

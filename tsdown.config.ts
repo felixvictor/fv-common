@@ -1,12 +1,12 @@
 import { defineConfig } from "tsdown"
 
 const d = {
-    tsconfig: "tsconfig.build.json",
     format: "esm",
-    target: false,
     minify: false,
     sourcemap: true,
+    target: false,
     treeshake: true,
+    tsconfig: "tsconfig.build.json",
 }
 
 export default defineConfig([

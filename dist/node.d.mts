@@ -1,3 +1,127 @@
+import { ExecOptions, ExecSyncOptions } from "node:child_process";
+
+//#region src/fs/command.d.ts
+
+/**
+ * Result of async command execution.
+ */
+interface AsyncCommandResult {
+  error?: Error;
+  stderr: string;
+  stdout: string;
+  success: boolean;
+}
+/**
+ * Result of command execution.
+ */
+interface CommandResult {
+  error?: Error;
+  output: Buffer | undefined;
+  success: boolean;
+}
+/**
+ * Executes a shell command synchronously with error handling.
+ *
+ * @param command - The shell command to execute.
+ * @param options - Optional execSync options.
+ * @returns Buffer containing command output, or empty Buffer on error.
+ *
+ * @example
+ * const output = executeCommand("ls -la")
+ * console.log(output.toString())
+ *
+ * @example
+ * // With options
+ * const output = executeCommand("pwd", { cwd: "/tmp" })
+ */
+declare const executeCommand: (command: string, options?: ExecSyncOptions) => Buffer;
+/**
+ * Executes a shell command synchronously and returns a detailed result.
+ *
+ * @param command - The shell command to execute.
+ * @param options - Optional execSync options.
+ * @returns Object containing success status, output, and error if any.
+ *
+ * @example
+ * const result = executeCommandWithResult("ls -la")
+ * if (result.success) {
+ *   console.log(result.output?.toString())
+ * } else {
+ *   console.error("Command failed:", result.error)
+ * }
+ */
+declare const executeCommandWithResult: (command: string, options?: ExecSyncOptions) => CommandResult;
+/**
+ * Executes a shell command synchronously and returns output as string.
+ * Returns empty string on error.
+ *
+ * @param command - The shell command to execute.
+ * @param options - Optional execSync options.
+ * @returns Command output as string, or empty string on error.
+ *
+ * @example
+ * const path = executeCommandString("pwd")
+ * console.log("Current directory:", path.trim())
+ */
+declare const executeCommandString: (command: string, options?: ExecSyncOptions) => string;
+/**
+ * Checks if a command exists and is executable.
+ *
+ * @param command - Command name to check (e.g., "git", "node").
+ * @returns True if command exists, false otherwise.
+ *
+ * @example
+ * if (commandExists("git")) {
+ *   console.log("Git is available")
+ * }
+ */
+declare const commandExists: (command: string) => boolean;
+/**
+ * Executes a shell command asynchronously with error handling.
+ *
+ * @param command - The shell command to execute.
+ * @param options - Optional exec options.
+ * @returns Promise resolving to command stdout, or empty string on error.
+ *
+ * @example
+ * const output = await executeCommandAsync("ls -la")
+ * console.log(output)
+ *
+ * @example
+ * // With options
+ * const output = await executeCommandAsync("pwd", { cwd: "/tmp" })
+ */
+declare const executeCommandAsync: (command: string, options?: ExecOptions) => Promise<string>;
+/**
+ * Executes a shell command asynchronously and returns a detailed result.
+ *
+ * @param command - The shell command to execute.
+ * @param options - Optional exec options.
+ * @returns Promise resolving to object containing success status, stdout, stderr, and error if any.
+ *
+ * @example
+ * const result = await executeCommandAsyncWithResult("ls -la")
+ * if (result.success) {
+ *   console.log(result.stdout)
+ * } else {
+ *   console.error("Command failed:", result.error)
+ *   console.error("stderr:", result.stderr)
+ * }
+ */
+declare const executeCommandAsyncWithResult: (command: string, options?: ExecOptions) => Promise<AsyncCommandResult>;
+/**
+ * Checks if a command exists asynchronously.
+ *
+ * @param command - Command name to check (e.g., "git", "node").
+ * @returns Promise resolving to true if command exists, false otherwise.
+ *
+ * @example
+ * if (await commandExistsAsync("git")) {
+ *   console.log("Git is available")
+ * }
+ */
+declare const commandExistsAsync: (command: string) => Promise<boolean>;
+//#endregion
 //#region src/fs/directory.d.ts
 declare const makeDirectorySync: (directory: string) => void;
 declare const makeDirectoryAsync: (directory: string) => Promise<void>;
@@ -107,5 +231,5 @@ declare const appendToFileName: (filePath: string, suffix: string) => string;
  */
 declare const changeFileName: (filePath: string, newName: string) => string;
 //#endregion
-export { appendToFileName, changeExtension, changeFileName, errorCodes, fileEmpty, fileExists, fileExistsAsync, isNodeError, makeDirectoryAsync, makeDirectorySync, putError, readDirectorySync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectorySync, removeFileAsync, removeFileSync, saveBinaryFile, saveImage, saveJson, saveJsonAsync, saveTextFileAsync, saveTextFileSync };
+export { appendToFileName, changeExtension, changeFileName, commandExists, commandExistsAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, fileEmpty, fileExists, fileExistsAsync, isNodeError, makeDirectoryAsync, makeDirectorySync, putError, readDirectorySync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectorySync, removeFileAsync, removeFileSync, saveBinaryFile, saveImage, saveJson, saveJsonAsync, saveTextFileAsync, saveTextFileSync };
 //# sourceMappingURL=node.d.mts.map

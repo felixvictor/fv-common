@@ -3,6 +3,15 @@ import dayjs from "dayjs";
 //#region src/na/compass.d.ts
 
 /**
+ * Compass directions using 24-point compass rose.
+ * Each direction represents 15° (360° / 24).
+ *
+ * Format uses fractional notation:
+ * - N⅓NE means "North by one-third toward Northeast" (between N and NE)
+ * - N⅔NE means "North by two-thirds toward Northeast" (closer to NE)
+ */
+declare const compassDirections: readonly ["N", "N⅓NE", "N⅔NE", "NE", "E⅔NE", "E⅓NE", "E", "E⅓SE", "E⅔SE", "SE", "S⅔SE", "S⅓SE", "S", "S⅓SW", "S⅔SW", "SW", "W⅔SW", "W⅓SW", "W", "W⅓NW", "W⅔NW", "NW", "N⅔NW", "N⅓NW"];
+/**
  * Converts a compass direction to degrees.
  *
  * @param compass - Compass direction (e.g., "N", "NE", "E⅓SE").
@@ -98,40 +107,15 @@ declare const speedConstB = 0.007216940683850481;
 declare const speedConstM = 0.07138237949891339;
 declare const speedFactor = 390;
 declare const timeFactor = 2.63;
-/**
- * The hour (UTC) when server maintenance/reset occurs.
- * Server day boundaries align with this time.
- */
+declare const distanceMapSize = 8192;
+declare const mapSize = 8192;
+declare const minDeepWaterBR = 22;
 declare const serverMaintenanceHour = 10;
-/**
- * Hours in a day.
- */
 declare const hoursPerDay = 24;
-/**
- * Maximum allowed port battle time (2 hours before server maintenance).
- */
 declare const maxPortBattleHour: number;
-/**
- * Degrees in a full circle.
- */
 declare const degreesFullCircle = 360;
-/**
- * Degrees in a half circle.
- */
 declare const degreesHalfCircle = 180;
-/**
- * Degrees in a quarter circle.
- */
 declare const degreesQuarterCircle = 90;
-/**
- * Compass directions using 24-point compass rose.
- * Each direction represents 15° (360° / 24).
- *
- * Format uses fractional notation:
- * - N⅓NE means "North by one-third toward Northeast" (between N and NE)
- * - N⅔NE means "North by two-thirds toward Northeast" (closer to NE)
- */
-declare const compassDirections: readonly ["N", "N⅓NE", "N⅔NE", "NE", "E⅔NE", "E⅓NE", "E", "E⅓SE", "E⅔SE", "SE", "S⅔SE", "S⅓SE", "S", "S⅓SW", "S⅔SW", "SW", "W⅔SW", "W⅓SW", "W", "W⅓NW", "W⅔NW", "NW", "N⅔NW", "N⅓NW"];
 /**
  * Degrees per compass direction (15° for 24-point compass).
  */
@@ -391,5 +375,5 @@ declare const subtractFromWind: (wind: number, sub: number) => number;
  */
 declare const subtractFromWindAlt: (wind: number, sub: number) => number;
 //#endregion
-export { type Coordinate, type Distance, type Extent, type Point, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distancePoints, getAngle, getCurrentServerStart, getDistance, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, hoursPerDay, isCardinal, isCardinalOrIntercardinal, maxPortBattleHour, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, speedConstB, speedConstM, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
+export { type Coordinate, type Distance, type Extent, type Point, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distanceMapSize, distancePoints, getAngle, getCurrentServerStart, getDistance, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, hoursPerDay, isCardinal, isCardinalOrIntercardinal, mapSize, maxPortBattleHour, minDeepWaterBR, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, speedConstB, speedConstM, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
 //# sourceMappingURL=na.d.ts.map

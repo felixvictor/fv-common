@@ -7,7 +7,7 @@ export { ColourScaleGenerator } from './colour/colour-at-scale.js';
 export { ColourMath } from './colour/colour-math.js';
 export { ColourUtility } from './colour/colour-utility.js';
 export { HslColour } from './colour/hsl-colour.js';
-export { clamp } from './common.js';
+export { clamp, isEmpty } from './common.js';
 export { datetimeFormat } from './date/constants.js';
 export { closestDateIndex, formatDate, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocalHour, getRange, getRelativeTime, isBetweenTime, isFutureDate, isPastDate, setDateLocale } from './date/date.js';
 export { getDateFromTicks, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks } from './date/ticks.js';

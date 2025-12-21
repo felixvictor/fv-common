@@ -1,4 +1,11 @@
-import { degreesFullCircle, degreesHalfCircle, degreesQuarterCircle, speedFactor, timeFactor } from "./constants.js"
+import {
+    degreesFullCircle,
+    degreesHalfCircle,
+    degreesQuarterCircle,
+    mapSize,
+    speedFactor,
+    timeFactor,
+} from "./constants.js"
 
 // ============================================================================
 // Coordinate Transform Matrices
@@ -102,6 +109,8 @@ export interface Point extends Array<number> {
     0: number // X coordinate
     1: number // Y coordinate
 }
+
+export type PointTuple = [number, number]
 
 // ============================================================================
 // Angle Conversion Functions
@@ -271,4 +280,21 @@ export const getDistance = (pt0: Coordinate, pt1: Coordinate): number => {
 
     // Calculate distance and convert to game units
     return distancePoints(fromF11, toF11) / (timeFactor * speedFactor)
+}
+
+/**
+ * Adjust for openlayers (top left is not [0,0] but [0,mapSize])
+ */
+export const coordinateAdjust = (x: number | PointTuple | PointTuple[], y?: number): PointTuple | PointTuple[] => {
+    if (Array.isArray(x)) {
+        return Array.isArray(x[0])
+            ? (x as PointTuple[]).map((element: PointTuple) => [element[0], mapSize - element[1]] as PointTuple)
+            : [(x as PointTuple)[0], mapSize - (x as PointTuple)[1]]
+    }
+
+    if (y != undefined) {
+        return [x, mapSize - y]
+    }
+
+    throw new Error(`Wrong parameters x: ${x}, y: ${y}`)
 }

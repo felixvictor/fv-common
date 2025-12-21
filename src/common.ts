@@ -12,3 +12,6 @@ export const clamp = (x: number | string, min: number | string, max: number | st
     }
     return Math.min(Math.max(value, lower), upper)
 }
+
+export const isEmpty = (object: null | Record<string, unknown> | undefined): boolean =>
+    object !== undefined && object !== null && Object.keys(object).length === 0

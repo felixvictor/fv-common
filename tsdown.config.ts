@@ -1,23 +1,23 @@
 import { defineConfig } from "tsdown"
 
-const d = {
+const config = {
     format: "esm",
     minify: false,
     sourcemap: true,
-    target: false,
+    target: false, // disable all syntax transformations
     treeshake: true,
     tsconfig: "tsconfig.build.json",
-}
+} as const
 
 export default defineConfig([
     {
         entry: "src/index.ts",
         platform: "browser",
-        ...d,
+        ...config,
     },
     {
         entry: "src/node.ts",
         platform: "node",
-        ...d,
+        ...config,
     },
 ])

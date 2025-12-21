@@ -12,6 +12,10 @@ import dayjs from "dayjs";
  */
 declare const compassDirections: readonly ["N", "N⅓NE", "N⅔NE", "NE", "E⅔NE", "E⅓NE", "E", "E⅓SE", "E⅔SE", "SE", "S⅔SE", "S⅓SE", "S", "S⅓SW", "S⅔SW", "SW", "W⅔SW", "W⅓SW", "W", "W⅓NW", "W⅔NW", "NW", "N⅔NW", "N⅓NW"];
 /**
+ * Degrees per compass direction (15° for 24-point compass).
+ */
+declare const degreesPerDirection: number;
+/**
  * Converts a compass direction to degrees.
  *
  * @param compass - Compass direction (e.g., "N", "NE", "E⅓SE").
@@ -116,10 +120,6 @@ declare const maxPortBattleHour: number;
 declare const degreesFullCircle = 360;
 declare const degreesHalfCircle = 180;
 declare const degreesQuarterCircle = 90;
-/**
- * Degrees per compass direction (15° for 24-point compass).
- */
-declare const degreesPerDirection: number;
 //#endregion
 //#region src/na/coordinates.d.ts
 /**

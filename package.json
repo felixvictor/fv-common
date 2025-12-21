@@ -1,6 +1,6 @@
 {
     "name": "fv-common",
-    "version": "1.13.1",
+    "version": "1.13.2",
     "description": "Common helper functions",
     "license": "SEE LICENSE IN licence.md",
     "repository": "https://fj.byrtz.de/ibey/fv-common.git",

@@ -1,4 +1,39 @@
-import { compassDirections, degreesFullCircle, degreesHalfCircle, degreesPerDirection } from "./constants.js"
+import { degreesFullCircle, degreesHalfCircle, degreesPerDirection } from "./constants.js"
+
+/**
+ * Compass directions using 24-point compass rose.
+ * Each direction represents 15° (360° / 24).
+ *
+ * Format uses fractional notation:
+ * - N⅓NE means "North by one-third toward Northeast" (between N and NE)
+ * - N⅔NE means "North by two-thirds toward Northeast" (closer to NE)
+ */
+export const compassDirections = [
+    "N",
+    "N⅓NE",
+    "N⅔NE",
+    "NE",
+    "E⅔NE",
+    "E⅓NE",
+    "E",
+    "E⅓SE",
+    "E⅔SE",
+    "SE",
+    "S⅔SE",
+    "S⅓SE",
+    "S",
+    "S⅓SW",
+    "S⅔SW",
+    "SW",
+    "W⅔SW",
+    "W⅓SW",
+    "W",
+    "W⅓NW",
+    "W⅔NW",
+    "NW",
+    "N⅔NW",
+    "N⅓NW",
+] as const
 
 // ============================================================================
 // Conversion Functions

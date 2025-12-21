@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.19.0](/fj.byrtz.de/ibey/fv-common/compare/1.18.0...1.19.0) (2025-12-21)
+
+### Features
+
+* na related stuff wip ([38ff3e1](/fj.byrtz.de/ibey/fv-common/commit/38ff3e1cb008c28011fd079824cbcbd446775405))
+
 ## [1.18.0](/fj.byrtz.de/ibey/fv-common/compare/1.17.0...1.18.0) (2025-12-21)
 
 ### Features

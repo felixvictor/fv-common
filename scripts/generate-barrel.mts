@@ -5,6 +5,7 @@ import { Project, SourceFile, SyntaxKind } from "ts-morph"
 
 const sourceDirectory = fileURLToPath(new URL("../src", import.meta.url))
 const fsDirectory = path.resolve(sourceDirectory, "fs")
+const naDirectory = path.resolve(sourceDirectory, "na")
 
 const isDryRun = process.argv.includes("--dry-run")
 const targetArgument = process.argv.find((argument) => argument.startsWith("--target="))?.split("=")[1]
@@ -84,6 +85,7 @@ const generateBarrel = async (targetFilePath: string, fileFilter: (filePath: str
         // Exclude the barrel files themselves so they don't import each other
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "index.ts"))
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "node.ts"))
+        .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "na.ts"))
         .filter((f) => !f.getBaseName().startsWith("index."))
         .filter((f) => fileFilter(f.getFilePath()))
         .toSorted((a, b) => a.getFilePath().localeCompare(b.getFilePath()))
@@ -110,16 +112,25 @@ const generateBarrel = async (targetFilePath: string, fileFilter: (filePath: str
 
 try {
     const mainBarrel = path.resolve(sourceDirectory, "index.ts")
+    const naBarrel = path.resolve(sourceDirectory, "na.ts")
     const nodeBarrel = path.resolve(sourceDirectory, "node.ts")
 
     // 1. Generate Main Barrel (Everything except src/fs)
     if (!targetArgument || targetArgument === "index.ts") {
-        await generateBarrel(mainBarrel, (filePath) => !filePath.startsWith(fsDirectory))
+        await generateBarrel(
+            mainBarrel,
+            (filePath) => !(filePath.startsWith(fsDirectory) || filePath.startsWith(naDirectory)),
+        )
     }
 
     // 2. Generate Node Barrel (only src/fs)
     if (!targetArgument || targetArgument === "node.ts") {
         await generateBarrel(nodeBarrel, (filePath) => filePath.startsWith(fsDirectory))
+    }
+
+    // 2. Generate NA Barrel (only src/na)
+    if (!targetArgument || targetArgument === "na.ts") {
+        await generateBarrel(naBarrel, (filePath) => filePath.startsWith(naDirectory))
     }
 } catch (error: unknown) {
     throw new Error(`Barrel generation failure: ${error as string}`)

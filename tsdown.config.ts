@@ -20,4 +20,9 @@ export default defineConfig([
         platform: "node",
         ...config,
     },
+    {
+        entry: "src/na.ts",
+        platform: "neutral",
+        ...config,
+    },
 ])

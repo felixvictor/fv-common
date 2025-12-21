@@ -6,7 +6,6 @@
         "rootDir": ".",
 
         // Environment Settings
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "module": "nodeNext",
         "moduleResolution": "nodeNext",
         "target": "ESNext",
@@ -37,6 +36,5 @@
         "strict": true,
         "useDefineForClassFields": true,
         "verbatimModuleSyntax": true
-    },
-    "exclude": ["dist", "eslint-rules", "node_modules", "scripts", "src/fs/**"]
+    }
 }

@@ -16,6 +16,10 @@
         "./node": {
             "types": "./dist/node.d.mts",
             "import": "./dist/node.mjs"
+        },
+        "./na": {
+            "types": "./dist/na.d.mts",
+            "import": "./dist/na.mjs"
         }
     },
     "files": [

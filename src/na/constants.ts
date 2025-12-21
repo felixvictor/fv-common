@@ -1,6 +1,3 @@
-export const speedConstB = 0.007_216_940_683_850_481
-export const speedConstM = 0.071_382_379_498_913_39
-
 export const speedFactor = 390
 export const timeFactor = 2.63
 

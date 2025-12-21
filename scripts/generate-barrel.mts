@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { Project, SourceFile, SyntaxKind } from "ts-morph"
 
 const sourceDirectory = fileURLToPath(new URL("../src", import.meta.url))
-const fsDirectory = path.resolve(sourceDirectory, "fs")
+const fsDirectory = path.resolve(sourceDirectory, "node")
 const naDirectory = path.resolve(sourceDirectory, "na")
 
 const isDryRun = process.argv.includes("--dry-run")

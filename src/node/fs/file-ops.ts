@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import { putError } from "./error.js"
+import { putError } from "../error.js"
 
 const fileSystemOptions = {
     force: true,

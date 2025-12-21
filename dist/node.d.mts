@@ -1,6 +1,6 @@
 import { ExecOptions, ExecSyncOptions } from "node:child_process";
 
-//#region src/fs/command.d.ts
+//#region src/node/command.d.ts
 
 /**
  * Result of async command execution.
@@ -122,20 +122,20 @@ declare const executeCommandAsyncWithResult: (command: string, options?: ExecOpt
  */
 declare const commandExistsAsync: (command: string) => Promise<boolean>;
 //#endregion
-//#region src/fs/directory.d.ts
-declare const makeDirectorySync: (directory: string) => void;
-declare const makeDirectoryAsync: (directory: string) => Promise<void>;
-declare const readDirectorySync: (directoryPath: string) => string[];
-declare const removeDirectorySync: (directoryPath: string) => void;
-//#endregion
-//#region src/fs/error.d.ts
+//#region src/node/error.d.ts
 declare const errorCodes: {
   readonly fileNotFound: "ENOENT";
 };
 declare const putError: (error: unknown) => void;
 declare const isNodeError: (error: unknown) => error is NodeJS.ErrnoException;
 //#endregion
-//#region src/fs/file-io.d.ts
+//#region src/node/fs/directory.d.ts
+declare const makeDirectorySync: (directory: string) => void;
+declare const makeDirectoryAsync: (directory: string) => Promise<void>;
+declare const readDirectorySync: (directoryPath: string) => string[];
+declare const removeDirectorySync: (directoryPath: string) => void;
+//#endregion
+//#region src/node/fs/file-io.d.ts
 /**
  * Saves text to file asynchronously using atomic write.
  * Atomic write ensures file is not corrupted if process crashes during write.
@@ -185,7 +185,7 @@ declare const readJsonSync: (fileName: string) => unknown;
  */
 declare const readTextFileAsync: (fileName: string) => Promise<string | undefined>;
 //#endregion
-//#region src/fs/file-ops.d.ts
+//#region src/node/fs/file-ops.d.ts
 /**
  * Removes a file. Does nothing if file doesn't exist (force: true).
  */
@@ -211,7 +211,7 @@ declare const fileEmpty: (fileName: string) => boolean;
  */
 declare const fileExistsAsync: (fileName: string) => Promise<boolean>;
 //#endregion
-//#region src/fs/path.d.ts
+//#region src/node/fs/path.d.ts
 /**
  * Changes the file extension of a path.
  * Automatically adds leading dot if not provided.

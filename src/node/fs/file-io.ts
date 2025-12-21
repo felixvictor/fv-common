@@ -1,7 +1,7 @@
 import { readFileSync, writeFile, writeFileSync } from "atomically"
 import fsPromises from "node:fs/promises"
 
-import { errorCodes, isNodeError, putError } from "./error.js"
+import { errorCodes, isNodeError, putError } from "../error.js"
 
 const encoding = "utf8" as const
 

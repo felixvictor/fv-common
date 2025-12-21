@@ -1,40 +1,5 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "compilerOptions": {
-        // File Layout
-        "outDir": "./dist",
-        "rootDir": ".",
-
-        // Environment Settings
-        "module": "nodeNext",
-        "moduleResolution": "nodeNext",
-        "target": "ESNext",
-
-        // Other Outputs
-        "declaration": true,
-        "declarationMap": true,
-        "sourceMap": true,
-
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "esModuleInterop": true,
-        "exactOptionalPropertyTypes": true,
-        "forceConsistentCasingInFileNames": true,
-        "isolatedModules": true,
-        "libReplacement": false,
-        "moduleDetection": "force",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitOverride": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noPropertyAccessFromIndexSignature": true,
-        "noUncheckedIndexedAccess": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "useDefineForClassFields": true,
-        "verbatimModuleSyntax": true
-    }
+    "files": [],
+    "references": [{ "path": "./tsconfig.browser.json" }, { "path": "./tsconfig.node.json" }]
 }

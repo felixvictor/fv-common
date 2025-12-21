@@ -44,7 +44,7 @@
         "pretty-print-package": "pnpm prettier-package-json --write ./package.json",
         "push": "git push",
         "release": "release-it --ci",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --build"
     },
     "engines": {
         "node": ">= 24"

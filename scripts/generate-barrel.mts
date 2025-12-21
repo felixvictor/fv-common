@@ -77,7 +77,7 @@ const generateExportStatements = (file: SourceFile): string => {
 }
 
 const generateBarrel = async (targetFilePath: string, fileFilter: (filePath: string) => boolean) => {
-    const project = new Project({ tsConfigFilePath: "./tsconfig.json" })
+    const project = new Project({ tsConfigFilePath: "./tsconfig.base.json" })
 
     const sourceFiles = project
         .getSourceFiles("src/**/*.ts")

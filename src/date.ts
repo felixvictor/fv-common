@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import "dayjs/locale/de"
 import "dayjs/locale/en"
-import relativeTime from "dayjs/plugin/relativeTime.js"
+import relativeTime from "dayjs/plugin/relativeTime"
 
 import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "./locale.js"
 

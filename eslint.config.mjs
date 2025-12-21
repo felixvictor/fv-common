@@ -13,7 +13,7 @@ const localPlugin = {
     },
 }
 
-export default typescriptEslint.config(
+export default [
     eslint.configs.recommended,
     ...typescriptEslint.configs.strictTypeChecked,
     ...typescriptEslint.configs.stylisticTypeChecked,
@@ -26,13 +26,37 @@ export default typescriptEslint.config(
     },
     {
         languageOptions: {
-            globals: {
-                ...globals.es2021,
-                ...globals.node,
-            },
             parserOptions: {
-                project: "./tsconfig.eslint.json",
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
+    {
+        name: "browser",
+        files: ["src/**/*"],
+        ignores: ["scripts/**/*", "src/node/**/*", "src/node.ts"],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.es2021,
+            },
+        },
+        rules: {
+            "@typescript-eslint/no-extraneous-class": "off",
+            "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
+            "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
+            curly: ["error", "multi-line"],
+            "prefer-template": "error",
+        },
+    },
+    {
+        name: "node",
+        files: ["scripts/**/*", "src/node/**/*", "src/node.ts"],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+                ...globals.es2021,
             },
         },
         rules: {
@@ -56,4 +80,4 @@ export default typescriptEslint.config(
             "@typescript-eslint/no-unused-vars": "off",
         },
     },
-)
+]

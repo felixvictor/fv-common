@@ -18,8 +18,8 @@
             "import": "./dist/node.mjs"
         },
         "./na": {
-            "types": "./dist/na.d.mts",
-            "import": "./dist/na.mjs"
+            "types": "./dist/na.d.ts",
+            "import": "./dist/na.js"
         }
     },
     "files": [

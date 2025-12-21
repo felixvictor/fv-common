@@ -2,7 +2,7 @@ import { defineConfig } from "tsdown"
 
 const config = {
     format: "esm",
-    minify: false,
+    minify: true,
     sourcemap: true,
     target: false, // disable all syntax transformations
     treeshake: true,

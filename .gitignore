@@ -1,5 +1,7 @@
 node_modules
 tsconfig.tsbuildinfo
+tsconfig.browser.tsbuildinfo
+tsconfig.node.tsbuildinfo
 
 # Logs
 logs

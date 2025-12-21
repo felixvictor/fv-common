@@ -1,4 +1,4 @@
-import { degreesFullCircle, degreesHalfCircle, degreesPerDirection } from "./constants.js"
+import { degreesFullCircle, degreesHalfCircle } from "./constants.js"
 
 /**
  * Compass directions using 24-point compass rose.
@@ -34,6 +34,11 @@ export const compassDirections = [
     "N⅔NW",
     "N⅓NW",
 ] as const
+
+/**
+ * Degrees per compass direction (15° for 24-point compass).
+ */
+export const degreesPerDirection = degreesFullCircle / compassDirections.length
 
 // ============================================================================
 // Conversion Functions

@@ -1,5 +1,3 @@
-import { compassDirections } from "./compass.js"
-
 export const speedConstB = 0.007_216_940_683_850_481
 export const speedConstM = 0.071_382_379_498_913_39
 
@@ -17,8 +15,3 @@ export const maxPortBattleHour = serverMaintenanceHour - 2
 export const degreesFullCircle = 360
 export const degreesHalfCircle = 180
 export const degreesQuarterCircle = 90
-
-/**
- * Degrees per compass direction (15° for 24-point compass).
- */
-export const degreesPerDirection = degreesFullCircle / compassDirections.length

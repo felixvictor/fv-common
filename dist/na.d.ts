@@ -107,8 +107,6 @@ declare const isCardinalOrIntercardinal: (index: number) => boolean;
 declare const isCardinal: (index: number) => boolean;
 //#endregion
 //#region src/na/constants.d.ts
-declare const speedConstB = 0.007216940683850481;
-declare const speedConstM = 0.07138237949891339;
 declare const speedFactor = 390;
 declare const timeFactor = 2.63;
 declare const distanceMapSize = 8192;
@@ -380,5 +378,5 @@ declare const subtractFromWind: (wind: number, sub: number) => number;
  */
 declare const subtractFromWindAlt: (wind: number, sub: number) => number;
 //#endregion
-export { type Coordinate, type Distance, type Extent, type Point, type PointTuple, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, coordinateAdjust, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distanceMapSize, distancePoints, getAngle, getCurrentServerStart, getDistance, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, hoursPerDay, isCardinal, isCardinalOrIntercardinal, mapSize, maxPortBattleHour, minDeepWaterBR, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, speedConstB, speedConstM, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
+export { type Coordinate, type Distance, type Extent, type Point, type PointTuple, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, coordinateAdjust, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distanceMapSize, distancePoints, getAngle, getCurrentServerStart, getDistance, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, hoursPerDay, isCardinal, isCardinalOrIntercardinal, mapSize, maxPortBattleHour, minDeepWaterBR, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
 //# sourceMappingURL=na.d.ts.map

@@ -1,7 +1,31 @@
 import Color, { Coords } from "colorjs.io";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/en-gb";
 
+//#region src/chunkify.d.ts
+
+/**
+ * Splits an array into n pieces.
+ *
+ * @param array - The source array to be split.
+ * @param n - The number of pieces to create (must be >= 1).
+ * @param balanced - If true, chunk sizes differ by at most 1 element.
+ *                    If false, creates n-1 equal chunks with remainder in the last chunk.
+ * @returns An array of n (or fewer) arrays containing the split pieces.
+ * @throws {Error} If n is less than 1.
+ *
+ * @example
+ * // Balanced split (default)
+ * chunkify([1,2,3,4,5,6,7], 3) // [[1,2,3], [4,5], [6,7]]
+ *
+ * @example
+ * // Unbalanced split
+ * chunkify([1,2,3,4,5,6,7], 3, false) // [[1,2], [3,4], [5,6,7]]
+ */
+declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];
+//#endregion
 //#region src/colour/hsl-colour.d.ts
 declare class HslColour {
   #private;
@@ -97,7 +121,13 @@ declare class ColourUtility {
 //#region src/common.d.ts
 declare const clamp: (x: number | string, min: number | string, max: number | string) => number;
 //#endregion
-//#region src/date.d.ts
+//#region src/date/constants.d.ts
+/**
+ * Standard datetime format used throughout the application.
+ */
+declare const datetimeFormat = "YYYY-MM-DD HH:mm";
+//#endregion
+//#region src/date/date.d.ts
 declare const setDateLocale: (locale: string) => void;
 /**
  * Formats date with locale-specific formatting.
@@ -131,6 +161,163 @@ declare const isFutureDate: (date: Date | string) => boolean;
  * @returns Index of closest date, or undefined if array is empty
  */
 declare const closestDateIndex: (datesString: string[]) => number | undefined;
+/**
+ * Formats a datetime string as relative time (e.g., "2 hours ago").
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns Relative time string.
+ *
+ * @example
+ * getRelativeTime("2024-01-15 10:00") // "2 hours ago"
+ */
+declare const getRelativeTime: (time: string) => string;
+/**
+ * Checks if a datetime is in the past (or current moment).
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns True if the time is same or before now.
+ *
+ * @example
+ * isPastDate("2024-01-15 10:00") // true if current time is after this
+ */
+declare const isPastDate: (time: string) => boolean;
+/**
+ * Formats a datetime string in UTC.
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns Formatted UTC datetime string.
+ *
+ * @example
+ * formatDate("2024-01-15 10:00") // "2024-01-15 10:00"
+ */
+declare const formatDate: (time: string) => string;
+/**
+ * Formats a datetime string as time only in UTC.
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns Formatted UTC time string (H:mm).
+ *
+ * @example
+ * formatTime("2024-01-15 10:30") // "10:30"
+ */
+declare const formatTime: (time: string) => string;
+/**
+ * Formats a datetime string in local timezone.
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns Formatted local datetime string.
+ *
+ * @example
+ * formatLocalDate("2024-01-15 10:00") // "2024-01-15 14:00" (if local is UTC+4)
+ */
+declare const formatLocalDate: (time: string) => string;
+/**
+ * Formats a datetime string as time only in local timezone.
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format.
+ * @returns Formatted local time string (H:mm).
+ *
+ * @example
+ * formatLocalTime("2024-01-15 10:00") // "14:00" (if local is UTC+4)
+ */
+declare const formatLocalTime: (time: string) => string;
+/**
+ * Checks if a time falls within a given range.
+ *
+ * @param time - Datetime string in YYYY-MM-DD HH:mm format (or undefined).
+ * @param begin - Start of the time range.
+ * @param end - End of the time range.
+ * @returns True if time is within range (exclusive start, inclusive end).
+ *
+ * @example
+ * const begin = dayjs("2024-01-15 10:00")
+ * const end = dayjs("2024-01-15 20:00")
+ * isBetweenTime("2024-01-15 15:00", begin, end) // true
+ */
+declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
+/**
+ * Converts a date range array to begin/end Dayjs objects.
+ *
+ * @param dateRange - Array of Date objects.
+ * @returns Object with begin and end Dayjs objects.
+ *
+ * @example
+ * const dates = [new Date("2024-01-01"), new Date("2024-01-31")]
+ * const { begin, end } = getRange(dates)
+ */
+declare const getRange: (dateRange: Date[]) => {
+  begin: Dayjs;
+  end: Dayjs;
+};
+/**
+ * Converts a UTC hour to local hour.
+ *
+ * @param hour - Hour in UTC (0-23).
+ * @returns Hour in local timezone (0-23).
+ */
+declare const getLocalHour: (hour: number) => number;
+/**
+ * Formats a time range as HTML with non-breaking spaces.
+ *
+ * @param from - Starting hour.
+ * @param to - Ending hour.
+ * @returns HTML string with formatted time range.
+ */
+declare const formatFromToTime: (from: number, to: number) => string;
+/**
+ * Formats a time range showing both UTC and local times.
+ *
+ * @param from - Starting hour in UTC.
+ * @param to - Ending hour in UTC.
+ * @returns HTML string with UTC and local time ranges.
+ */
+declare const formatTimeRange: (from: number, to: number) => string;
+//#endregion
+//#region src/date/ticks.d.ts
+/**
+ * Converts .NET DateTime ticks to a formatted date-time string.
+ *
+ * @param ticks - The time in .NET ticks (100-nanosecond intervals since 0001-01-01).
+ * @returns Formatted date-time string in UTC (YYYY-MM-DD HH:mm).
+ *
+ * @example
+ * // Convert .NET DateTime.Now.Ticks to readable format
+ * getTimeFromTicks(638400000000000000) // "2024-01-15 10:30"
+ */
+declare const getTimeFromTicks: (ticks: bigint | number | string) => string;
+/**
+ * Converts .NET DateTime ticks to a Day.js object.
+ *
+ * @param ticks - The time in .NET ticks (100-nanosecond intervals since 0001-01-01).
+ * @returns A Day.js object in UTC.
+ *
+ * @example
+ * const date = getDateFromTicks(638400000000000000)
+ * console.log(date.format("YYYY-MM-DD"))
+ */
+declare const getDateFromTicks: (ticks: bigint | number) => dayjs.Dayjs;
+/**
+ * Converts a Day.js object or timestamp to .NET DateTime ticks.
+ *
+ * @param date - A Day.js object or Unix timestamp in milliseconds.
+ * @returns The time in .NET ticks.
+ *
+ * @example
+ * const ticks = getTicksFromDate(dayjs())
+ * const ticks2 = getTicksFromDate(Date.now())
+ */
+declare const getTicksFromDate: (date: dayjs.Dayjs | number) => bigint;
+/**
+ * Converts .NET DateTime ticks to a Unix timestamp in milliseconds.
+ *
+ * @param ticks - The time in .NET ticks (100-nanosecond intervals since 0001-01-01).
+ * @returns Unix timestamp in milliseconds.
+ *
+ * @example
+ * const timestamp = getTimestampFromTicks(638400000000000000)
+ * const date = new Date(timestamp)
+ */
+declare const getTimestampFromTicks: (ticks: bigint | number | string) => number;
 //#endregion
 //#region src/delay.d.ts
 declare const delay: (ms: number) => Promise<unknown>;
@@ -254,7 +441,74 @@ declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
 declare const pluralise: (count: number, wordSingle: string, wordPlural: string) => string;
 //#endregion
 //#region src/html.d.ts
+/**
+ * Gets the bounding rectangle with all dimensions floored.
+ * This is the base function that other utilities build upon.
+ *
+ * @param element - The HTML or SVG element to measure.
+ * @returns A DOMRect-like object with all values floored to integers.
+ *
+ * @example
+ * const rect = getElementRect(document.getElementById('myDiv'))
+ * console.log(rect.top, rect.left, rect.width, rect.height)
+ */
+declare const getElementRect: (element: HTMLElement | SVGElement) => {
+  bottom: number;
+  height: number;
+  left: number;
+  right: number;
+  top: number;
+  width: number;
+  x: number;
+  y: number;
+};
+/**
+ * Gets the height of an element in pixels (floored to nearest integer).
+ *
+ * @param element - The HTML or SVG element to measure.
+ * @returns The floored height in pixels, including padding and borders.
+ *
+ * @example
+ * const height = getElementHeight(document.getElementById('myDiv'))
+ */
+declare const getElementHeight: (element: HTMLElement | SVGElement) => number;
+/**
+ * Gets the width of an element in pixels (floored to nearest integer).
+ *
+ * @param element - The HTML or SVG element to measure.
+ * @returns The floored width in pixels, including padding and borders.
+ *
+ * @example
+ * const width = getElementWidth(document.getElementById('myDiv'))
+ */
 declare const getElementWidth: (element: HTMLElement | SVGElement) => number;
+/**
+ * Gets both width and height of an element in pixels (floored to nearest integers).
+ *
+ * @param element - The HTML or SVG element to measure.
+ * @returns An object containing floored width and height in pixels.
+ *
+ * @example
+ * const { width, height } = getElementDimensions(document.getElementById('myDiv'))
+ */
+declare const getElementDimensions: (element: HTMLElement | SVGElement) => {
+  height: number;
+  width: number;
+};
+/**
+ * Gets precise (non-floored) dimensions of an element.
+ *
+ * @param element - The HTML or SVG element to measure.
+ * @returns An object containing precise width and height in pixels.
+ *
+ * @example
+ * const { width, height } = getElementDimensionsPrecise(document.getElementById('myDiv'))
+ * // Returns fractional pixels: { width: 150.5, height: 200.75 }
+ */
+declare const getElementDimensionsPrecise: (element: HTMLElement | SVGElement) => {
+  height: number;
+  width: number;
+};
 //#endregion
 //#region src/locale.d.ts
 declare const setLocale: (locale: string) => void;
@@ -264,6 +518,102 @@ declare const getLocale: () => string;
  * @param callback - Function to call on locale change
  */
 declare const onLocaleChange: (callback: () => void) => void;
+//#endregion
+//#region src/math/common.d.ts
+/**
+ * Tests if a number is between two bounds (order-independent).
+ *
+ * @param value - The number to test.
+ * @param a - First bound (can be min or max).
+ * @param b - Second bound (can be min or max).
+ * @param inclusive - If true, bounds are included in the range. Default is true.
+ * @returns True if value is within the range defined by a and b.
+ *
+ * @example
+ * between(5, 1, 10) // true
+ * between(5, 10, 1) // true (order-independent)
+ * between(1, 1, 10) // true (inclusive by default)
+ * between(1, 1, 10, false) // false (exclusive)
+ */
+declare const between: (value: number, a: number, b: number, inclusive?: boolean) => boolean;
+//#endregion
+//#region src/math/find-segment.d.ts
+/**
+ * Represents a point on a cubic Hermite spline curve.
+ */
+interface CurvePoint {
+  /** Incoming tangent (derivative at this point from the left) */
+  tangentIn: number;
+  /** Outgoing tangent (derivative at this point to the right) */
+  tangentOut: number;
+  /** Time coordinate (x-axis) */
+  time: number;
+  /** Value coordinate (y-axis) */
+  value: number;
+}
+/**
+ * Evaluates a cubic Hermite spline curve at a given time.
+ *
+ * @param time - The time value to evaluate at.
+ * @param points - Array of curve points sorted by time in ascending order.
+ * @returns The interpolated curve value, or undefined if time is out of bounds.
+ * @throws {Error} If points array is empty or not sorted.
+ *
+ * @example
+ * const points: CurvePoint[] = [
+ *   { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
+ *   { time: 1, value: 1, tangentIn: 1, tangentOut: 0 }
+ * ]
+ * getCurveValue(0.5, points) // Returns interpolated value at t=0.5
+ */
+declare const getCurveValue: (time: number, points: CurvePoint[]) => number | undefined;
+/**
+ * Evaluates a cubic Hermite spline curve at a given time with clamping.
+ * If time is before the first point, returns the first value.
+ * If time is after the last point, returns the last value.
+ *
+ * @param time - The time value to evaluate at.
+ * @param points - Array of curve points sorted by time in ascending order.
+ * @returns The interpolated or clamped curve value.
+ *
+ * @example
+ * const points: CurvePoint[] = [
+ *   { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
+ *   { time: 1, value: 1, tangentIn: 1, tangentOut: 0 }
+ * ]
+ * getCurveValueClamped(-0.5, points) // Returns 0 (clamped to first point)
+ * getCurveValueClamped(1.5, points)  // Returns 1 (clamped to last point)
+ */
+declare const getCurveValueClamped: (time: number, points: CurvePoint[]) => number;
+//#endregion
+//#region src/math/power.d.ts
+/**
+ * Calculates the largest power of 2 that is less than or equal to the given number.
+ *
+ * @param value - The input number (must be positive).
+ * @returns The largest power of 2 ≤ value.
+ * @throws {Error} If value is not a positive number.
+ *
+ * @example
+ * nearestPow2(100) // 64 (2^6)
+ * nearestPow2(64)  // 64 (2^6)
+ * nearestPow2(65)  // 64 (2^6)
+ * nearestPow2(7)   // 4 (2^2)
+ */
+declare const nearestPow2: (value: number) => number;
+/**
+ * Calculates the smallest power of 2 that is greater than or equal to the given number.
+ *
+ * @param value - The input number (must be positive).
+ * @returns The smallest power of 2 ≥ value.
+ * @throws {Error} If value is not a positive number.
+ *
+ * @example
+ * nextPow2(100) // 128 (2^7)
+ * nextPow2(64)  // 64 (2^6)
+ * nextPow2(65)  // 128 (2^7)
+ */
+declare const nextPow2: (value: number) => number;
 //#endregion
 //#region src/sort.d.ts
 /**
@@ -289,10 +639,89 @@ declare function simpleStringSort(a: string, b: string): number;
 declare function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number;
 //#endregion
 //#region src/svg/draw.d.ts
-declare const drawSvgRect: (x: number, y: number, h: number, w: number) => string;
+/**
+ * Generates an SVG path string for a circle.
+ * Uses arc commands to draw two semicircles.
+ *
+ * @param x - Center x-coordinate.
+ * @param y - Center y-coordinate.
+ * @param r - Radius.
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgCircle(50, 50, 20)} />
+ * // Draws a circle centered at (50, 50) with radius 20
+ */
+declare const drawSvgCircle: (x: number, y: number, r: number) => string;
+/**
+ * Generates an SVG path string for a rectangle.
+ * The rectangle is centered at (x, y).
+ *
+ * @param x - Center x-coordinate.
+ * @param y - Center y-coordinate.
+ * @param size - Width and height of the rectangle.
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgRect(50, 50, 30)} />
+ * // Draws a 30×30 square centered at (50, 50)
+ */
+declare const drawSvgRect: (x: number, y: number, size: number) => string;
+/**
+ * Generates an SVG path string for a rectangle with separate width and height.
+ * The rectangle is centered at (x, y).
+ *
+ * @param x - Center x-coordinate.
+ * @param y - Center y-coordinate.
+ * @param width - Rectangle width.
+ * @param height - Rectangle height.
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgRectWH(50, 50, 40, 20)} />
+ * // Draws a 40×20 rectangle centered at (50, 50)
+ */
+declare const drawSvgRectWH: (x: number, y: number, width: number, height: number) => string;
+/**
+ * Generates an SVG path string for a vertical line.
+ *
+ * @param x - Starting x-coordinate.
+ * @param y - Starting y-coordinate.
+ * @param length - Length of the line (positive = down, negative = up).
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgVLine(50, 20, 60)} />
+ * // Draws a vertical line from (50, 20) downward 60 units
+ */
+declare const drawSvgVLine: (x: number, y: number, length: number) => string;
+/**
+ * Generates an SVG path string for a horizontal line.
+ *
+ * @param x - Starting x-coordinate.
+ * @param y - Starting y-coordinate.
+ * @param length - Length of the line (positive = right, negative = left).
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgHLine(20, 50, 60)} />
+ * // Draws a horizontal line from (20, 50) rightward 60 units
+ */
+declare const drawSvgHLine: (x: number, y: number, length: number) => string;
+/**
+ * Generates an SVG path string for a line between two points.
+ *
+ * @param x1 - Starting x-coordinate.
+ * @param y1 - Starting y-coordinate.
+ * @param x2 - Ending x-coordinate.
+ * @param y2 - Ending y-coordinate.
+ * @returns SVG path data string.
+ *
+ * @example
+ * <path d={drawSvgLine(10, 10, 90, 90)} />
+ * // Draws a line from (10, 10) to (90, 90)
+ */
 declare const drawSvgLine: (x1: number, y1: number, x2: number, y2: number) => string;
-declare const drawSvgVLine: (x: number, y: number, l: number) => string;
-declare const drawSvgHLine: (x: number, y: number, l: number) => string;
 //#endregion
 //#region src/svg/optimise.d.ts
 declare const optimisePath: (path: string) => string;
@@ -312,5 +741,5 @@ declare const cSpaceThin: string;
 declare const cSpaceZeroWidthBreaking: string;
 declare const cCombiningDiaeresis: string;
 //#endregion
-export { ColourMath, ColourScaleGenerator, ColourUtility, HslColour, type SortArgument, addSpan, beautifySuffix, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, clamp, closestDateIndex, delay, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgVLine, formatFloat, formatFloatFixed, formatFloatWithUnit, formatInt, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getDateDistance, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocale, getOrdinal, isFutureDate, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
+export { ColourMath, ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, beautifySuffix, between, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, chunkify, clamp, closestDateIndex, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, isBetweenTime, isFutureDate, isPastDate, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
 //# sourceMappingURL=index.d.ts.map

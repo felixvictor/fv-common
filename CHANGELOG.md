@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.20.2](/fj.byrtz.de/ibey/fv-common/compare/1.20.1...1.20.2) (2025-12-22)
+
+### Bug Fixes
+
+* pluralise ([39a9bba](/fj.byrtz.de/ibey/fv-common/commit/39a9bba63bfef17e0c3225ecb6f82cd4cb1b1097))
+
 ## [1.20.1](/fj.byrtz.de/ibey/fv-common/compare/1.20.0...1.20.1) (2025-12-22)
 
 ## [1.20.0](/fj.byrtz.de/ibey/fv-common/compare/1.19.0...1.20.0) (2025-12-22)

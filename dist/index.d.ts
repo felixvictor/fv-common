@@ -728,20 +728,23 @@ declare const drawSvgLine: (x1: number, y1: number, x2: number, y2: number) => s
 declare const optimisePath: (path: string) => string;
 //#endregion
 //#region src/unicode.d.ts
+declare const cCircleWhite: string;
+declare const cCombiningDiaeresis: string;
 declare const cDashEm: string;
 declare const cDashEn: string;
 declare const cDashFigure: string;
 declare const cMinus: string;
 declare const cPlus: string;
 declare const cPlusSmall: string;
+declare const cSmallDot: string;
+declare const cSpace: string;
 declare const cSpaceFigure: string;
 declare const cSpaceNarrowNoBreaking: string;
 declare const cSpaceNoBreak: string;
 declare const cSpacePunctuation: string;
 declare const cSpaceThin: string;
 declare const cSpaceZeroWidthBreaking: string;
-declare const cCombiningDiaeresis: string;
-declare const cCircleWhite: string;
+declare const cSpaceZeroWidthNoBreak: string;
 //#endregion
-export { ColourMath, ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, beautifySuffix, between, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, capitalizeFirstLetter, chunkify, clamp, closestDateIndex, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, isBetweenTime, isEmpty, isFutureDate, isPastDate, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
+export { ColourMath, ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, beautifySuffix, between, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chunkify, clamp, closestDateIndex, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, isBetweenTime, isEmpty, isFutureDate, isPastDate, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
 //# sourceMappingURL=index.d.ts.map

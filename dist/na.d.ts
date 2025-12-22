@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import "dayjs/locale/de";
+import "dayjs/locale/en";
+import "dayjs/locale/en-gb";
 
 //#region src/na/compass.d.ts
 
@@ -323,6 +326,7 @@ declare const currentServerDateYear: string;
 declare const currentServerDateMonth: string;
 //#endregion
 //#region src/na/time.d.ts
+declare const setDateLocale: (locale: string) => void;
 /**
  * Calculates and formats the port battle time window.
  *
@@ -335,6 +339,22 @@ declare const currentServerDateMonth: string;
  * getPortBattleTime(2, true)  // "12 – 21 (16 – 1 local)" (9-hour neutral port window)
  */
 declare const getPortBattleTime: (startHoursFromSMH: number, isNeutralPort?: boolean) => string;
+declare const getToday: () => {
+  begin: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+};
+declare const getYesterday: () => {
+  begin: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+};
+declare const getThisWeek: () => {
+  begin: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+};
+declare const getLastWeek: () => {
+  begin: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+};
 //#endregion
 //#region src/na/wind.d.ts
 /**
@@ -378,5 +398,5 @@ declare const subtractFromWind: (wind: number, sub: number) => number;
  */
 declare const subtractFromWindAlt: (wind: number, sub: number) => number;
 //#endregion
-export { type Coordinate, type Distance, type Extent, type Point, type PointTuple, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, coordinateAdjust, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distanceMapSize, distancePoints, getAngle, getCurrentServerStart, getDistance, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, hoursPerDay, isCardinal, isCardinalOrIntercardinal, mapSize, maxPortBattleHour, minDeepWaterBR, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
+export { type Coordinate, type Distance, type Extent, type Point, type PointTuple, addAngle, circleRadiusFactor, compassDirectionFromSlider, compassDirections, compassToDegrees, convertCoordX, convertCoordY, convertInvCoordX, convertInvCoordY, coordinateAdjust, currentServerDateMonth, currentServerDateYear, currentServerStartDate, currentServerStartDateTime, degreesFullCircle, degreesHalfCircle, degreesPerDirection, degreesPerSecond, degreesQuarterCircle, degreesToCompass, degreesToCompassSlider, degreesToRadians, displayCompassAndDegrees, distanceMapSize, distancePoints, getAngle, getCurrentServerStart, getDistance, getLastWeek, getNextServerStart, getPortBattleTime, getPreviousServerStart, getRadians, getThisWeek, getToday, getYesterday, hoursPerDay, isCardinal, isCardinalOrIntercardinal, mapSize, maxPortBattleHour, minDeepWaterBR, numberSegments, previousServerStartDate, radiansToDegrees, rotationAngleInDegrees, rotationAngleInRadians, segmentRadians, serverMaintenanceHour, setDateLocale, speedFactor, subtractFromWind, subtractFromWindAlt, timeFactor };
 //# sourceMappingURL=na.d.ts.map

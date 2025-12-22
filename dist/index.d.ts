@@ -439,7 +439,7 @@ declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
  * @example pluralise(1, "item", "items") → "item"
  * @example pluralise(5, "item", "items") → "items"
  */
-declare const pluralise: (count: number, wordSingle: string, wordPlural: string) => string;
+declare const pluralise: (count: number, wordSingle: string, wordPlural?: string) => string;
 //#endregion
 //#region src/html.d.ts
 /**

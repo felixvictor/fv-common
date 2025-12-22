@@ -18,8 +18,8 @@ export const capitalizeFirstLetter = (text: string, locale?: string): string => 
  * @example pluralise(1, "item", "items") → "item"
  * @example pluralise(5, "item", "items") → "items"
  */
-export const pluralise = (count: number, wordSingle: string, wordPlural: string): string => {
+export const pluralise = (count: number, wordSingle: string, wordPlural?: string): string => {
     const cardinalRules = getCardinalRules(getLocale())
     const rule = cardinalRules.select(count)
-    return rule === "one" ? wordSingle : wordPlural
+    return rule === "one" ? wordSingle : (wordPlural ?? `${wordSingle}s`)
 }

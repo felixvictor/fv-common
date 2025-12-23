@@ -10,7 +10,11 @@ export default {
         const normalized = filename.replaceAll("\\", "/")
 
         // 1. Check if the file is one of our generated barrels
-        if (!normalized.endsWith("src/index.ts") && !normalized.endsWith("src/node.ts")) {
+        if (
+            !normalized.endsWith("src/index.ts") &&
+            !normalized.endsWith("src/na.ts") &&
+            !normalized.endsWith("src/node.ts")
+        ) {
             return {}
         }
 

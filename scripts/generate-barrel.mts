@@ -3,6 +3,8 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { Project, SourceFile, SyntaxKind } from "ts-morph"
 
+import { simpleStringSort } from "../src/sort.js"
+
 const sourceDirectory = fileURLToPath(new URL("../src", import.meta.url))
 const fsDirectory = path.resolve(sourceDirectory, "node")
 const naDirectory = path.resolve(sourceDirectory, "na")
@@ -61,6 +63,8 @@ const analyzeFileExports = (file: SourceFile) => {
     return { types, values }
 }
 
+const sortImports = (strings: string[]) => strings.toSorted(simpleStringSort).join(", ")
+
 const generateExportStatements = (file: SourceFile): string => {
     const { types, values } = analyzeFileExports(file)
     if (values.length === 0 && types.length === 0) return ""
@@ -68,9 +72,9 @@ const generateExportStatements = (file: SourceFile): string => {
     const relativePath = normalizeRelativePath(file.getFilePath())
     let out = ""
 
-    if (values.length > 0) out += `export { ${values.toSorted().join(", ")} } from "${relativePath}";\n`
+    if (values.length > 0) out += `export { ${sortImports(values)} } from "${relativePath}";\n`
     if (types.length > 0) {
-        out += `export type { ${types.toSorted().join(", ")} } from "${relativePath}";\n`
+        out += `export type { ${sortImports(types)} } from "${relativePath}";\n`
     }
 
     return out

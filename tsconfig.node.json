@@ -10,6 +10,8 @@
     "include": [
         "src/node.ts",
         "src/node/**/*",
+        "src/locale.ts",
+        "src/sort.ts",
         "scripts/**/*",
         "eslint-rules/**/*",
         "commitlint.config.ts",

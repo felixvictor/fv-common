@@ -65,8 +65,9 @@ export const formatWeight = (x: number): string => formatFloatWithUnit(x, "t")
  * Rounds a number to specified decimal places.
  * @example round(3.14159, 2) → 3.14
  */
-export const round = (value: number, decimals = 0): number => {
-    return Number(formatFloat(value, decimals))
+export const round = (n: number, d = 0): number => {
+    const multiplier = 10 ** d
+    return Math.round(n * multiplier) / multiplier
 }
 
 /**

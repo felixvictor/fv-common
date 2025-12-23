@@ -26,7 +26,7 @@
         "dist"
     ],
     "scripts": {
-        "build": "run-s barrel typecheck build:gen build:commit",
+        "build": "run-s barrel pretty-print typecheck build:gen build:commit",
         "build:commit": "git add dist/ src/ && git diff --staged --quiet || git commit -m 'build: dist'",
         "build:gen": "tsdown",
         "build:push": "git push",

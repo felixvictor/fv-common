@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.21.3](/fj.byrtz.de/ibey/fv-common/compare/1.21.2...1.21.3) (2025-12-23)
+
+### Bug Fixes
+
+* round ([4f5c924](/fj.byrtz.de/ibey/fv-common/commit/4f5c924a3b0f916173ce4e3976746fca21066582))
+
 ## [1.21.2](/fj.byrtz.de/ibey/fv-common/compare/1.21.1...1.21.2) (2025-12-23)
 
 ### Bug Fixes

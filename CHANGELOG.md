@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.21.2](/fj.byrtz.de/ibey/fv-common/compare/1.21.1...1.21.2) (2025-12-23)
+
+### Bug Fixes
+
+* barrel with simpleStringSort ([511e0b8](/fj.byrtz.de/ibey/fv-common/commit/511e0b84e731e6cd07c7f6ddd791b773d9397ad2))
+* do not use prettier on barrel files ([12e9852](/fj.byrtz.de/ibey/fv-common/commit/12e985269f3025060d9b5d0000c1a468a49b063c))
+* eslint rule ([4af6754](/fj.byrtz.de/ibey/fv-common/commit/4af67544aa61711cda3f14d4425a0309b62f7244))
+* sort with locale ([a7ac6f9](/fj.byrtz.de/ibey/fv-common/commit/a7ac6f9a0c2c3071bf742853a94a32f1e788547e))
+
 ## [1.21.1](/fj.byrtz.de/ibey/fv-common/compare/1.21.0...1.21.1) (2025-12-23)
 
 ## [1.21.0](/fj.byrtz.de/ibey/fv-common/compare/1.20.2...1.21.0) (2025-12-22)

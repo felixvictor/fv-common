@@ -378,7 +378,7 @@ declare const formatWeight: (x: number) => string;
  * Rounds a number to specified decimal places.
  * @example round(3.14159, 2) → 3.14
  */
-declare const round: (value: number, decimals?: number) => number;
+declare const round: (n: number, d?: number) => number;
 /**
  * Rounds a number to 3 decimal places (thousands precision).
  * @example roundToThousands(3.14159) → 3.142

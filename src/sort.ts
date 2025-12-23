@@ -1,3 +1,7 @@
+import { getLocale } from "./locale.js"
+
+const locale = getLocale()
+
 /**
  * Sort argument type.
  * keyof T for ascending, `-${string & keyof T}` for descending.
@@ -19,7 +23,7 @@ const parseSortArgument = <T extends object>(property: SortArgument<T>): { desc:
  * Note: 'base' sensitivity ignores case and accents, which is often desirable for data sorting.
  */
 const compareStrings = (a: string, b: string): number =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+    a.localeCompare(b, locale, { numeric: true, sensitivity: "base" })
 
 /**
  * Check if a value is nullish (null or undefined).

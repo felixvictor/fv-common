@@ -2,12 +2,10 @@
     "name": "fv-common",
     "version": "1.21.1",
     "description": "Common helper functions",
-    "license": "SEE LICENSE IN licence.md",
     "repository": "https://fj.byrtz.de/ibey/fv-common.git",
+    "license": "SEE LICENSE IN licence.md",
+    "sideEffects": false,
     "type": "module",
-    "main": "./dist/index.js",
-    "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
@@ -22,34 +20,34 @@
             "import": "./dist/na.js"
         }
     },
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "files": [
         "dist"
     ],
     "scripts": {
-        "build": "run-s barrel pretty-print typecheck build:gen build:commit",
+        "barrel": "tsx scripts/generate-barrel.mts",
+        "build": "run-s barrel typecheck build:gen build:commit",
         "build:commit": "git add dist/ src/ && git diff --staged --quiet || git commit -m 'build: dist'",
         "build:gen": "tsdown",
         "build:push": "git push",
         "dev": "tsc --watch",
-        "barrel": "tsx scripts/generate-barrel.mts",
         "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "run-s lint:js pretty-print pretty-print-package",
         "lint:js": "eslint . --fix",
         "main:release": "run-s build build:push release",
+        "node-modules-inspector": "pnpx node-modules-inspector",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
         "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",
         "pretty-print": "prettier --config .prettierrc.json --log-level error --write .",
-        "pretty-print-package": "pnpm prettier-package-json --write ./package.json",
+        "pretty-print-package": "sort-package-json package.json",
         "push": "git push",
         "release": "release-it --ci",
         "typecheck": "tsc --build"
     },
-    "engines": {
-        "node": ">= 24"
-    },
-    "sideEffects": false,
     "dependencies": {
         "atomically": "^2.1.0",
         "colorjs.io": "^0.6.0-beta.3",
@@ -74,8 +72,8 @@
         "husky": "^9.1.7",
         "npm-run-all2": "^8.0.4",
         "prettier": "^3.7.4",
-        "prettier-package-json": "^2.8.0",
         "release-it": "^19.1.0",
+        "sort-package-json": "^3.6.0",
         "ts-morph": "^27.0.2",
         "tsdown": "^0.18.2",
         "tsx": "^4.7.0",
@@ -83,6 +81,9 @@
         "typescript-eslint": "^8.50.1"
     },
     "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa",
+    "engines": {
+        "node": ">= 24"
+    },
     "pnpm": {
         "onlyBuiltDependencies": [
             "esbuild"

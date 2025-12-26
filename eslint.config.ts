@@ -7,7 +7,7 @@ import { defineConfig } from "eslint/config"
 import globals from "globals"
 import typescriptEslint from "typescript-eslint"
 
-import requireFreshBarrel from "./eslint-rules/require-barrel.mts"
+import requireFreshBarrel from "./eslint-rules/require-barrel.mjs"
 
 const localPlugin = {
     rules: {

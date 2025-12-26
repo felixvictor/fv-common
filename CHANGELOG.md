@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.21.5](/fj.byrtz.de/ibey/fv-common/compare/1.21.4...1.21.5) (2025-12-26)
+
+### Bug Fixes
+
+* configs for tsconfig and eslint ([a6dc396](/fj.byrtz.de/ibey/fv-common/commit/a6dc396c30470ddbab3758f7e57d1c5a9716bb70))
+
 ## [1.21.4](/fj.byrtz.de/ibey/fv-common/compare/1.21.3...1.21.4) (2025-12-26)
 
 ## [1.21.3](/fj.byrtz.de/ibey/fv-common/compare/1.21.2...1.21.3) (2025-12-23)

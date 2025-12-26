@@ -1,4 +1,4 @@
-import type { Rule } from "eslint"
+import type { AST, Rule } from "eslint"
 
 import { execSync } from "node:child_process"
 import fs from "node:fs"
@@ -19,7 +19,7 @@ export default {
         }
 
         return {
-            Program(node): void {
+            Program(node: AST.Program): void {
                 try {
                     const cwd = context.cwd
                     // 2. Determine which target we are checking (index.ts or node.ts)

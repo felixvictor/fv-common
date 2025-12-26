@@ -3,7 +3,6 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "lib": ["ESNext"],
         "types": ["node"],
         "noEmit": true
     },
@@ -14,7 +13,6 @@
         "src/sort.ts",
         "scripts/**/*",
         "eslint-rules/**/*",
-        "commitlint.config.ts",
-        "tsdown.config.ts"
+        "*.config.*"
     ]
 }

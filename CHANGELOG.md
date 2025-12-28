@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.22.0](/fj.byrtz.de/ibey/fv-common/compare/1.21.6...1.22.0) (2025-12-28)
+
+### Features
+
+* added fs functions and AI refactoring ([352cf87](/fj.byrtz.de/ibey/fv-common/commit/352cf87a97b8e76bc7453f26c267ab89a80ae33d))
+
 ## [1.21.6](/fj.byrtz.de/ibey/fv-common/compare/1.21.5...1.21.6) (2025-12-26)
 
 ### Bug Fixes

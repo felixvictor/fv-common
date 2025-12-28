@@ -4,8 +4,11 @@
 //
 export { commandExists, commandExistsAsync, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult } from "./node/command.js";
 export { errorCodes, isNodeError, putError } from "./node/error.js";
-export { makeDirectoryAsync, makeDirectorySync, readDirectorySync, removeDirectorySync } from "./node/fs/directory.js";
-export { readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFile, saveImage, saveJson, saveJsonAsync, saveTextFileAsync, saveTextFileSync } from "./node/fs/file-io.js";
-export { fileEmpty, fileExists, fileExistsAsync, removeFileAsync, removeFileSync } from "./node/fs/file-ops.js";
-export { appendToFileName, changeExtension, changeFileName } from "./node/fs/path.js";
+export { defaultEncoding } from "./node/fs/constants.js";
+export { directoryExists, directoryExistsAsync, makeDirectoryAsync, makeDirectorySync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, removeDirectoryAsync, removeDirectorySync } from "./node/fs/directory.js";
+export { readBinaryFileAsync, readBinaryFileSync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync } from "./node/fs/file-io.js";
+export { fileEmpty, fileExists, fileExistsAsync, getFileSize, removeFileAsync, removeFileSync } from "./node/fs/file-ops.js";
+export { getDiskUsage, getDiskUsageAsync, getFreeSpace, getFreeSpaceAsync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync } from "./node/fs/fs.js";
+export { appendToFileName, changeExtension, changeFileName, getDirectory, getExtension, getFileName, getFileNameWithExtension, getFullPath, prependToFileName, removeExtension } from "./node/fs/path.js";
+export { getStatAsync, getStatSync, pathExists, pathExistsAsync } from "./node/fs/stat.js";
 

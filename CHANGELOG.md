@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.23.0](/fj.byrtz.de/ibey/fv-common/compare/1.22.3...1.23.0) (2025-12-31)
+
+### Features
+
+* date functions ([e5be105](/fj.byrtz.de/ibey/fv-common/commit/e5be1056336d8dfd9b4c82c9a87d96136835465a))
+
 ## [1.22.3](/fj.byrtz.de/ibey/fv-common/compare/1.22.2...1.22.3) (2025-12-31)
 
 ### Bug Fixes

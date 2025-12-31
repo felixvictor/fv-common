@@ -1,8 +1,8 @@
 import dayjs from "dayjs"
-import "dayjs/locale/de"
-import "dayjs/locale/en"
-import "dayjs/locale/en-gb"
-import utc from "dayjs/plugin/utc"
+import "dayjs/locale/de.js"
+import "dayjs/locale/en.js"
+import "dayjs/locale/en-gb.js"
+import utc from "dayjs/plugin/utc.js"
 
 import { formatTimeRange } from "../date/date.js"
 import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "../locale.js"

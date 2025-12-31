@@ -8,6 +8,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat.js"
 import isBetween from "dayjs/plugin/isBetween.js"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js"
 import relativeTime from "dayjs/plugin/relativeTime.js"
+import timezone from "dayjs/plugin/timezone.js"
 import utc from "dayjs/plugin/utc.js"
 
 import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "../locale.js"
@@ -19,6 +20,7 @@ dayjs.extend(customParseFormat)
 dayjs.extend(isBetween)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(relativeTime)
+dayjs.extend(timezone)
 dayjs.extend(utc)
 
 // Wrapper to sync dayjs locale with library locale
@@ -48,12 +50,28 @@ export const getFormattedDate = (date: string, locale?: string): string => {
 }
 
 /**
- * Short date format with day, month, and time.
+ * Short date format with day, month, and time in local timezone.
+ * @param date - The date to format
+ * @param locale - Optional locale (defaults to current locale)
+ * @returns Formatted date string
  * @example getFormattedDateShort('2024-01-15') → "15.1. 14.30"
  */
 export const getFormattedDateShort = (date: number | string, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     return dayjs(date).locale(effectiveLocale).format("D.M. H.mm")
+}
+
+/**
+ * Short date format with day, full month name, and time.
+ * Converts UTC date to Berlin timezone.
+ * @param date - The UTC date to format
+ * @param locale - Optional locale (defaults to current locale)
+ * @returns Formatted date string in Berlin time
+ * @example getFormattedShortDateFromUTC('2024-01-15T13:30:00Z') → "15. Januar, 14.30"
+ */
+export const getFormattedShortDateFromUTC = (date: Date | string, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return dayjs.utc(date).tz("Europe/Berlin").locale(effectiveLocale).format("D. MMMM, H.mm")
 }
 
 /**
@@ -73,6 +91,15 @@ export const getDateDistance = (date: string, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     return dayjs(date).locale(effectiveLocale).fromNow()
 }
+
+/**
+ * Checks if a date falls within the next N hours from now
+ * @param date - The date to check
+ * @param hours - Number of hours from now to check within
+ * @returns true if date is between now and now + hours
+ */
+export const isDateInRange = (date: Date, hours: number): boolean =>
+    dayjs(date).isBetween(dayjs(), dayjs().add(hours, "hour"))
 
 /**
  * Checks if the given date is in the future.

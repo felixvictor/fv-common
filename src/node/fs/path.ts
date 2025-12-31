@@ -196,3 +196,5 @@ export const getFullPath = (parsedPath: path.ParsedPath): string => {
 export const getDirectory = (filePath: string): string => {
     return path.dirname(filePath)
 }
+
+export const joinPaths = (path1: string, path2: string): string => path.join(path1, path2)

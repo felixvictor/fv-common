@@ -9,6 +9,6 @@ export { directoryExists, directoryExistsAsync, makeDirectoryAsync, makeDirector
 export { readBinaryFileAsync, readBinaryFileSync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync } from "./node/fs/file-io.js";
 export { fileEmpty, fileExists, fileExistsAsync, getFileSize, removeFileAsync, removeFileSync } from "./node/fs/file-ops.js";
 export { getDiskUsage, getDiskUsageAsync, getFreeSpace, getFreeSpaceAsync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync } from "./node/fs/fs.js";
-export { appendToFileName, changeExtension, changeFileName, getDirectory, getExtension, getFileName, getFileNameWithExtension, getFullPath, prependToFileName, removeExtension } from "./node/fs/path.js";
+export { appendToFileName, changeExtension, changeFileName, getDirectory, getExtension, getFileName, getFileNameWithExtension, getFullPath, joinPaths, prependToFileName, removeExtension } from "./node/fs/path.js";
 export { getStatAsync, getStatSync, pathExists, pathExistsAsync } from "./node/fs/stat.js";
 

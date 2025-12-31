@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import "dayjs/locale/de";
-import "dayjs/locale/en";
-import "dayjs/locale/en-gb";
+import "dayjs/locale/de.js";
+import "dayjs/locale/en.js";
+import "dayjs/locale/en-gb.js";
 
 //#region src/na/compass.d.ts
 declare const compassDirections: readonly ["N", "N⅓NE", "N⅔NE", "NE", "E⅔NE", "E⅓NE", "E", "E⅓SE", "E⅔SE", "SE", "S⅔SE", "S⅓SE", "S", "S⅓SW", "S⅔SW", "SW", "W⅔SW", "W⅓SW", "W", "W⅓NW", "W⅔NW", "NW", "N⅔NW", "N⅓NW"];

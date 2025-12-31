@@ -1,8 +1,8 @@
 import Color, { Coords } from "colorjs.io";
-import "dayjs/locale/de";
-import "dayjs/locale/en";
+import "dayjs/locale/de.js";
+import "dayjs/locale/en.js";
+import "dayjs/locale/en-gb.js";
 import dayjs, { Dayjs } from "dayjs";
-import "dayjs/locale/en-gb";
 
 //#region src/chunkify.d.ts
 declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];

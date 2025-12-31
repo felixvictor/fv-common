@@ -1,10 +1,10 @@
 import type { Dayjs } from "dayjs"
 
-import "dayjs/locale/de"
-import "dayjs/locale/en"
+import "dayjs/locale/de.js"
+import "dayjs/locale/en.js"
+import "dayjs/locale/en-gb.js"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
-import "dayjs/locale/en-gb"
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import relativeTime from "dayjs/plugin/relativeTime"

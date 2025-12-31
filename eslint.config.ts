@@ -22,7 +22,6 @@ export default defineConfig(
     ...typescriptEslint.configs.strictTypeChecked,
     ...typescriptEslint.configs.stylisticTypeChecked,
     eslintPluginUnicorn.configs.recommended,
-    nodePlugin.configs["flat/recommended"],
     // @ts-expect-error - perfectionist config types don't match exactly
     ...(perfectionistConfig ? [perfectionistConfig] : []),
     eslintConfigPrettier,
@@ -37,6 +36,7 @@ export default defineConfig(
             },
         },
     },
+    nodePlugin.configs["flat/recommended"],
     {
         files: ["src/**/*"],
         ignores: ["scripts/**/*", "src/node/**/*", "src/node.ts"],
@@ -52,6 +52,7 @@ export default defineConfig(
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
+            "n/no-missing-import": "off",
             "prefer-template": "error",
         },
     },
@@ -80,7 +81,6 @@ export default defineConfig(
             local: localPlugin,
         },
         rules: {
-            // Disable rules that might conflict with auto-generated code
             "@typescript-eslint/no-unused-vars": "off",
             "local/require-barrel": "error",
         },

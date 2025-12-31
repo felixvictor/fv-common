@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.22.1](/fj.byrtz.de/ibey/fv-common/compare/1.22.0...1.22.1) (2025-12-31)
+
+### Bug Fixes
+
+* dayjs locale imports with '.js' ([93988f7](/fj.byrtz.de/ibey/fv-common/commit/93988f74eee5ed7e4eaefce02131ee42a3b7076f))
+
 ## [1.22.0](/fj.byrtz.de/ibey/fv-common/compare/1.21.6...1.22.0) (2025-12-28)
 
 ### Features

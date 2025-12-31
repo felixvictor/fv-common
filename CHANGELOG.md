@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.24.0](/fj.byrtz.de/ibey/fv-common/compare/1.23.0...1.24.0) (2025-12-31)
+
+### Features
+
+* path function ([ef88fb0](/fj.byrtz.de/ibey/fv-common/commit/ef88fb0528016048a4149c843cebc6d54d28c5ac))
+
 ## [1.23.0](/fj.byrtz.de/ibey/fv-common/compare/1.22.3...1.23.0) (2025-12-31)
 
 ### Features

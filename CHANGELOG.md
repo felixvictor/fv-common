@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.22.3](/fj.byrtz.de/ibey/fv-common/compare/1.22.2...1.22.3) (2025-12-31)
+
+### Bug Fixes
+
+* dayjs plugin imports with '.js' ([02eee64](/fj.byrtz.de/ibey/fv-common/commit/02eee64ec560e2c15daf580750d60cf207f24993))
+
 ## [1.22.2](/fj.byrtz.de/ibey/fv-common/compare/1.22.1...1.22.2) (2025-12-31)
 
 ### Bug Fixes

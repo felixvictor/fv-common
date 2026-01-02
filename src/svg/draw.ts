@@ -30,11 +30,7 @@ export const drawSvgCircle = (x: number, y: number, r: number): string => {
  * <path d={drawSvgRect(50, 50, 30)} />
  * // Draws a 30×30 square centered at (50, 50)
  */
-export const drawSvgRect = (x: number, y: number, size: number): string => {
-    const halfSize = size / 2
-    // Move to top-left, draw horizontal, vertical, horizontal back, close path
-    return `M${x - halfSize},${y - halfSize}h${size}v${size}h${-size}z`
-}
+export const drawSvgRect = (x: number, y: number, size: number): string => `M${x},${y}h${size}v${size}h${-size}z`
 
 /**
  * Generates an SVG path string for a rectangle with separate width and height.
@@ -50,11 +46,8 @@ export const drawSvgRect = (x: number, y: number, size: number): string => {
  * <path d={drawSvgRectWH(50, 50, 40, 20)} />
  * // Draws a 40×20 rectangle centered at (50, 50)
  */
-export const drawSvgRectWH = (x: number, y: number, width: number, height: number): string => {
-    const halfWidth = width / 2
-    const halfHeight = height / 2
-    return `M${x - halfWidth},${y - halfHeight}h${width}v${height}h${-width}z`
-}
+export const drawSvgRectWH = (x: number, y: number, width: number, height: number): string =>
+    `M${x},${y}h${width}v${height}h${-width}z`
 
 /**
  * Generates an SVG path string for a vertical line.
@@ -68,9 +61,7 @@ export const drawSvgRectWH = (x: number, y: number, width: number, height: numbe
  * <path d={drawSvgVLine(50, 20, 60)} />
  * // Draws a vertical line from (50, 20) downward 60 units
  */
-export const drawSvgVLine = (x: number, y: number, length: number): string => {
-    return `M${x},${y}v${length}`
-}
+export const drawSvgVLine = (x: number, y: number, length: number): string => `M${x},${y}v${length}`
 
 /**
  * Generates an SVG path string for a horizontal line.
@@ -84,9 +75,7 @@ export const drawSvgVLine = (x: number, y: number, length: number): string => {
  * <path d={drawSvgHLine(20, 50, 60)} />
  * // Draws a horizontal line from (20, 50) rightward 60 units
  */
-export const drawSvgHLine = (x: number, y: number, length: number): string => {
-    return `M${x},${y}h${length}`
-}
+export const drawSvgHLine = (x: number, y: number, length: number): string => `M${x},${y}h${length}`
 
 /**
  * Generates an SVG path string for a line between two points.
@@ -101,6 +90,4 @@ export const drawSvgHLine = (x: number, y: number, length: number): string => {
  * <path d={drawSvgLine(10, 10, 90, 90)} />
  * // Draws a line from (10, 10) to (90, 90)
  */
-export const drawSvgLine = (x1: number, y1: number, x2: number, y2: number): string => {
-    return `M${x1},${y1}L${x2},${y2}`
-}
+export const drawSvgLine = (x1: number, y1: number, x2: number, y2: number): string => `M${x1},${y1}L${x2},${y2}`

@@ -1,6 +1,5 @@
 import eslint from "@eslint/js"
 import eslintConfigPrettier from "eslint-config-prettier"
-import nodePlugin from "eslint-plugin-n"
 import perfectionist from "eslint-plugin-perfectionist"
 import eslintPluginUnicorn from "eslint-plugin-unicorn"
 import { defineConfig } from "eslint/config"
@@ -15,15 +14,12 @@ const localPlugin = {
     },
 }
 
-const perfectionistConfig = perfectionist.configs?.["recommended-natural"]
-
 export default defineConfig(
     eslint.configs.recommended,
     ...typescriptEslint.configs.strictTypeChecked,
     ...typescriptEslint.configs.stylisticTypeChecked,
     eslintPluginUnicorn.configs.recommended,
-    // @ts-expect-error - perfectionist config types don't match exactly
-    ...(perfectionistConfig ? [perfectionistConfig] : []),
+    [perfectionist.configs["recommended-natural"]],
     eslintConfigPrettier,
     {
         ignores: [".gitignore", "dist/**", "node_modules/**"],
@@ -36,7 +32,6 @@ export default defineConfig(
             },
         },
     },
-    nodePlugin.configs["flat/recommended"],
     {
         files: ["src/**/*"],
         ignores: ["scripts/**/*", "src/node/**/*", "src/node.ts"],
@@ -52,7 +47,6 @@ export default defineConfig(
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
-            "n/no-missing-import": "off",
             "prefer-template": "error",
         },
     },
@@ -70,8 +64,6 @@ export default defineConfig(
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
-            "n/no-missing-import": "off",
-            "n/no-unpublished-import": "off",
             "prefer-template": "error",
         },
     },

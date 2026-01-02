@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.24.3](/fj.byrtz.de/ibey/fv-common/compare/1.24.2...1.24.3) (2026-01-02)
+
+### Bug Fixes
+
+* svg draw commands ([eca3725](/fj.byrtz.de/ibey/fv-common/commit/eca37256099e31e8d0faaeb4a25474d1838455c5))
+
 ## [1.24.2](/fj.byrtz.de/ibey/fv-common/compare/1.24.1...1.24.2) (2026-01-02)
 
 ### Bug Fixes

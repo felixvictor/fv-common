@@ -30,7 +30,7 @@ export const drawSvgCircle = (x: number, y: number, r: number): string => {
  * <path d={drawSvgRect(50, 50, 30)} />
  * // Draws a 30×30 square centered at (50, 50)
  */
-export const drawSvgRect = (x: number, y: number, size: number): string => `M${x},${y}h${size}v${size}h${-size}z`
+export const drawSvgRect = (x: number, y: number, size: number): string => `M${x},${y}h${size}v${size}h${-size}`
 
 /**
  * Generates an SVG path string for a rectangle with separate width and height.
@@ -47,7 +47,7 @@ export const drawSvgRect = (x: number, y: number, size: number): string => `M${x
  * // Draws a 40×20 rectangle centered at (50, 50)
  */
 export const drawSvgRectWH = (x: number, y: number, width: number, height: number): string =>
-    `M${x},${y}h${width}v${height}h${-width}z`
+    `M${x},${y}h${width}v${height}h${-width}`
 
 /**
  * Generates an SVG path string for a vertical line.

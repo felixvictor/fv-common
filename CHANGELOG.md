@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.25.0](/fj.byrtz.de/ibey/fv-common/compare/1.24.4...1.25.0) (2026-01-03)
+
+### Features
+
+* convertNameForEmail ([77b572b](/fj.byrtz.de/ibey/fv-common/commit/77b572b0cf00766584f1d3459f5fd6a5c679bb0d))
+
 ## [1.24.4](/fj.byrtz.de/ibey/fv-common/compare/1.24.3...1.24.4) (2026-01-03)
 
 ## [1.24.3](/fj.byrtz.de/ibey/fv-common/compare/1.24.2...1.24.3) (2026-01-02)

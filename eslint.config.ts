@@ -19,7 +19,7 @@ export default defineConfig(
     ...typescriptEslint.configs.strictTypeChecked,
     ...typescriptEslint.configs.stylisticTypeChecked,
     eslintPluginUnicorn.configs.recommended,
-    [perfectionist.configs["recommended-natural"]],
+    perfectionist.configs["recommended-natural"],
     eslintConfigPrettier,
     {
         ignores: [".gitignore", "dist/**", "node_modules/**"],

@@ -41,26 +41,21 @@ declare class ColourScaleGenerator {
 }
 //#endregion
 //#region src/colour/colour-math.d.ts
-declare class ColourMath {
-  static readonly backgroundLightnessThreshold = 0.18;
-  static readonly chromaCurveFactor = 4;
-  static readonly cieExponent: number;
-  static readonly cieMultiplierHigh = 116;
-  static readonly cieMultiplierLow = 903.2962962;
-  static readonly cieOffset = 16;
-  static readonly cieThreshold = 0.0088564516;
-  static readonly hueShiftFactor = 5;
-  static readonly lightnessContrastExponent = 3.04;
-  static readonly lightnessContrastOffset = 0.05;
-  static readonly lightnessMax = 1;
-  static readonly lightnessMin = 0;
-  static readonly lightnessScaleFactor = 100;
-  static readonly toeK1 = 0.206;
-  static readonly toeK2 = 0.03;
-  static readonly toeK3: number;
-  static applyToeCurve(lightness: number): number;
-  static yToLightness(y: number): number;
-}
+declare const backgroundLightnessThreshold: 0.18;
+declare const chromaCurveFactor: 4;
+declare const cieExponent: number;
+declare const cieMultiplierHigh: 116;
+declare const cieMultiplierLow: 903.2962962;
+declare const cieOffset: 16;
+declare const cieThreshold: 0.0088564516;
+declare const hueShiftFactor: 5;
+declare const lightnessContrastExponent: 3.04;
+declare const lightnessContrastOffset: 0.05;
+declare const lightnessMax: 1;
+declare const lightnessMin: 0;
+declare const lightnessScaleFactor: 100;
+declare const applyToeCurve: (lightness: number) => number;
+declare const yToLightness: (y: number) => number;
 //#endregion
 //#region src/colour/colour-utility.d.ts
 declare class ColourUtility {
@@ -256,5 +251,5 @@ declare const cSpaceThin: string;
 declare const cSpaceZeroWidthBreaking: string;
 declare const cSpaceZeroWidthNoBreak: string;
 //#endregion
-export { ColourMath, ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, beautifySuffix, between, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chunkify, clamp, closestDateIndex, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isPastDate, loadFile, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy };
+export { ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, closestDateIndex, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isPastDate, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, loadFile, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, yToLightness };
 //# sourceMappingURL=index.d.ts.map

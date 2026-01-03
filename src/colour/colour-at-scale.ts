@@ -1,7 +1,18 @@
 import type { Coords } from "colorjs.io"
 
 import { clamp } from "../common.js"
-import { ColourMath } from "./colour-math.js"
+import {
+    applyToeCurve,
+    backgroundLightnessThreshold,
+    chromaCurveFactor,
+    hueShiftFactor,
+    lightnessContrastExponent,
+    lightnessContrastOffset,
+    lightnessMax,
+    lightnessMin,
+    lightnessScaleFactor,
+    yToLightness,
+} from "./colour-math"
 import { HslColour } from "./hsl-colour.js"
 
 /**
@@ -30,11 +41,7 @@ export class ColourScaleGenerator {
         const scaleValue = this.#normalizeScaleNumber(scaleNumber)
 
         const rawLightness = this.#computeScaleLightness(scaleValue)
-        const normalizedLightness = clamp(
-            rawLightness / ColourMath.lightnessScaleFactor,
-            ColourMath.lightnessMin,
-            ColourMath.lightnessMax,
-        )
+        const normalizedLightness = clamp(rawLightness / lightnessScaleFactor, lightnessMin, lightnessMax)
 
         const hue = this.#computeScaleHue(scaleValue)
         const chroma = this.#computeScaleChroma(scaleValue)
@@ -45,26 +52,26 @@ export class ColourScaleGenerator {
 
     #computeScaleChroma(scaleValue: number): number {
         const chromaDifference = this.#maxChroma - this.#minChroma
-        const parabolaFactor = -ColourMath.chromaCurveFactor * chromaDifference
-        const linearFactor = ColourMath.chromaCurveFactor * chromaDifference
+        const parabolaFactor = -chromaCurveFactor * chromaDifference
+        const linearFactor = chromaCurveFactor * chromaDifference
 
         return parabolaFactor * Math.pow(scaleValue, 2) + linearFactor * scaleValue + this.#minChroma
     }
 
     #computeScaleHue(scaleValue: number): number {
-        return this.#baseHue + ColourMath.hueShiftFactor * (1 - scaleValue)
+        return this.#baseHue + hueShiftFactor * (1 - scaleValue)
     }
 
     #computeScaleLightness(scaleValue: number): number {
-        const exponentialTerm = Math.exp(ColourMath.lightnessContrastExponent * scaleValue)
-        const adjustedBackground = this.#backgroundY + ColourMath.lightnessContrastOffset
+        const exponentialTerm = Math.exp(lightnessContrastExponent * scaleValue)
+        const adjustedBackground = this.#backgroundY + lightnessContrastOffset
 
         const foregroundY =
-            this.#backgroundY > ColourMath.backgroundLightnessThreshold
-                ? adjustedBackground / exponentialTerm - ColourMath.lightnessContrastOffset
-                : exponentialTerm * adjustedBackground - ColourMath.lightnessContrastOffset
+            this.#backgroundY > backgroundLightnessThreshold
+                ? adjustedBackground / exponentialTerm - lightnessContrastOffset
+                : exponentialTerm * adjustedBackground - lightnessContrastOffset
 
-        return ColourMath.applyToeCurve(ColourMath.yToLightness(foregroundY))
+        return applyToeCurve(yToLightness(foregroundY))
     }
 
     #normalizeScaleNumber(scaleNumber: number): number {

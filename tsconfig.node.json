@@ -3,8 +3,10 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "types": ["node"],
-        "noEmit": true
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "noEmit": true,
+        "types": ["node"]
     },
     "include": [
         "src/node.ts",

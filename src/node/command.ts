@@ -4,7 +4,7 @@ import { execFile, execFileSync, execSync } from "node:child_process"
 import { promisify } from "node:util"
 
 import { isNodeError, putError } from "./error.js"
-import { defaultEncoding } from "./fs/constants"
+import { defaultEncoding } from "./fs/constants.js"
 
 const execFileAsync = promisify(execFile)
 

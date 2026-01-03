@@ -11,11 +11,11 @@ export type SortArgument<T> = `-${keyof T & string}` | keyof T
 /**
  * Parses a SortArgument string to extract the property key and sort direction.
  */
-const parseSortArgument = <T extends object>(property: SortArgument<T>): { desc: boolean; key: keyof T } => {
+const parseSortArgument = <T extends object>(property: SortArgument<T>): { isDesc: boolean; key: keyof T } => {
     const propertyString = String(property)
-    const desc = propertyString.startsWith("-")
-    const key = (desc ? propertyString.slice(1) : propertyString) as keyof T
-    return { desc, key }
+    const isDesc = propertyString.startsWith("-")
+    const key = (isDesc ? propertyString.slice(1) : propertyString) as keyof T
+    return { isDesc, key }
 }
 
 /**
@@ -35,12 +35,12 @@ const isNullish = (value: unknown): value is null | undefined => value == undefi
  * Returns 0 if both are nullish, 1 if only a is nullish, -1 if only b is nullish, undefined otherwise.
  */
 const compareNullish = (a: unknown, b: unknown): number | undefined => {
-    const aIsNullish = isNullish(a)
-    const bIsNullish = isNullish(b)
+    const isNullishA = isNullish(a)
+    const isNullishB = isNullish(b)
 
-    if (aIsNullish && bIsNullish) return 0
-    if (aIsNullish) return 1
-    if (bIsNullish) return -1
+    if (isNullishA && isNullishB) return 0
+    if (isNullishA) return 1
+    if (isNullishB) return -1
     return undefined
 }
 
@@ -71,7 +71,7 @@ const compareValues = (a: unknown, b: unknown): number => {
         return compareStrings(a, b)
     }
 
-    // 5. Different types or both objects - treat as equal
+    // 5. Different types or both objects, treat as equal
     return 0
 }
 
@@ -84,11 +84,11 @@ export const sortBy =
     <T extends object>(propertyNames: SortArgument<T>[]) =>
     (a: T, b: T): number => {
         for (const property of propertyNames) {
-            const { desc, key } = parseSortArgument(property)
+            const { isDesc, key } = parseSortArgument(property)
             const result = compareValues(a[key], b[key])
 
             if (result !== 0) {
-                return desc ? -result : result
+                return isDesc ? -result : result
             }
         }
         return 0

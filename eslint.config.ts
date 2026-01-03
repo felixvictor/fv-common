@@ -43,7 +43,18 @@ export default defineConfig(
         },
         name: "browser",
         rules: {
-            "@typescript-eslint/no-extraneous-class": "off",
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    custom: {
+                        match: true,
+                        regex: "^(is|has|can|should|will|did)[A-Z]",
+                    },
+                    format: ["camelCase"],
+                    selector: "variable",
+                    types: ["boolean"],
+                },
+            ],
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
@@ -60,7 +71,18 @@ export default defineConfig(
         },
         name: "node",
         rules: {
-            "@typescript-eslint/no-extraneous-class": "off",
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    custom: {
+                        match: true,
+                        regex: "^(is|has|can|should|will|did)[A-Z]",
+                    },
+                    format: ["camelCase"],
+                    selector: "variable",
+                    types: ["boolean"],
+                },
+            ],
             "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
@@ -73,7 +95,6 @@ export default defineConfig(
             local: localPlugin,
         },
         rules: {
-            "@typescript-eslint/no-unused-vars": "off",
             "local/require-barrel": "error",
         },
     },

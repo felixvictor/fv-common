@@ -269,3 +269,5 @@ export const formatTimeRange = (from: number, to: number): string => {
     const toLocal = getLocalHour(to)
     return `${formatFromToTime(from, to)} (${formatFromToTime(fromLocal, toLocal)}${cSpaceNoBreak}local)`
 }
+
+export const convertDEDateString = (date: string): string => dayjs(date, "DD.MM.YYYY HH:mm", true).toISOString()

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.26.0](/fj.byrtz.de/ibey/fv-common/compare/1.25.0...1.26.0) (2026-01-24)
+
+### Features
+
+* create URL ([ed0b0c9](/fj.byrtz.de/ibey/fv-common/commit/ed0b0c95ad32599ea4133b4c6ad4bb9804db92a1))
+
 ## [1.25.0](/fj.byrtz.de/ibey/fv-common/compare/1.24.4...1.25.0) (2026-01-03)
 
 ### Features

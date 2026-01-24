@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.27.0](/fj.byrtz.de/ibey/fv-common/compare/1.26.0...1.27.0) (2026-01-24)
+
+### Features
+
+* convert DE date ([23f5724](/fj.byrtz.de/ibey/fv-common/commit/23f572455b35dfcd6da3a49337a1856b537934bf))
+
 ## [1.26.0](/fj.byrtz.de/ibey/fv-common/compare/1.25.0...1.26.0) (2026-01-24)
 
 ### Features

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.28.0](/fj.byrtz.de/ibey/fv-common/compare/1.27.0...1.28.0) (2026-01-25)
+
+### Features
+
+* more unicodes ([0334c3e](/fj.byrtz.de/ibey/fv-common/commit/0334c3ee4bf8ee84ff782f2c294acf23d2b62920))
+
 ## [1.27.0](/fj.byrtz.de/ibey/fv-common/compare/1.26.0...1.27.0) (2026-01-24)
 
 ### Features

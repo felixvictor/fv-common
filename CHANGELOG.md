@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.29.0](/fj.byrtz.de/ibey/fv-common/compare/1.28.0...1.29.0) (2026-01-25)
+
+### Features
+
+* truncate ([06f7878](/fj.byrtz.de/ibey/fv-common/commit/06f7878e2d8fe749f736a8e629e94bc8cc805f5e))
+
 ## [1.28.0](/fj.byrtz.de/ibey/fv-common/compare/1.27.0...1.28.0) (2026-01-25)
 
 ### Features

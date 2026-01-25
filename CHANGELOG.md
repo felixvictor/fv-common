@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.30.0](/fj.byrtz.de/ibey/fv-common/compare/1.29.0...1.30.0) (2026-01-25)
+
+### Features
+
+* getContrastColour ([ee27bf6](/fj.byrtz.de/ibey/fv-common/commit/ee27bf6a05c36e67b86391bac94d1a49fa770ee8))
+
 ## [1.29.0](/fj.byrtz.de/ibey/fv-common/compare/1.28.0...1.29.0) (2026-01-25)
 
 ### Features

@@ -15,7 +15,7 @@ export { delay } from "./delay.js";
 export { loadFile } from "./fetch.js";
 export { getCardinalRules } from "./format/cardinal.js";
 export { convertNameForEmail } from "./format/email.js";
-export { addSpan, beautifySuffix, formatUnit } from "./format/helpers.js";
+export { addSpan, beautifySuffix, formatUnit, truncate } from "./format/helpers.js";
 export { formatWithIntl } from "./format/intl.js";
 export { formatFloat, formatFloatFixed, formatFloatWithUnit, formatInt, formatReales, formatSiFloat, formatSignFloat, formatSignInt, formatSiInt, formatWeight, round, roundToThousands } from "./format/number.js";
 export { getOrdinal } from "./format/ordinal.js";

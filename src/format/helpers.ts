@@ -25,3 +25,7 @@ export const formatUnit = (u: string, svg = false): string => {
 
     return `<${tag} style="font-variant-caps: all-small-caps">${u}</${tag}>`
 }
+
+export const truncate = (string: string, n: number): string => {
+    return string.length > n ? `${string.slice(0, n - 1)}…` : string
+}

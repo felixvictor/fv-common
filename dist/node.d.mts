@@ -41,6 +41,10 @@ declare const errorCodes: {
 declare const putError: (error: unknown) => void;
 declare const isNodeError: (error: unknown) => error is NodeJS.ErrnoException;
 //#endregion
+//#region src/node/fs/compare.d.ts
+declare const isFileOlderThan: (filePathA: string, filePathB: string) => boolean;
+declare const isFileOlderThanAsync: (filePathA: string, filePathB: string) => Promise<boolean>;
+//#endregion
 //#region src/node/fs/constants.d.ts
 declare const defaultEncoding: "utf8";
 //#endregion
@@ -121,5 +125,5 @@ declare const getStatAsync: (path: string) => Promise<fs.Stats | undefined>;
 declare const pathExists: (path: string) => boolean;
 declare const pathExistsAsync: (path: string) => Promise<boolean>;
 //#endregion
-export { appendToFileName, changeExtension, changeFileName, commandExists, commandExistsAsync, defaultEncoding, directoryExists, directoryExistsAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, fileEmpty, fileExists, fileExistsAsync, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, pathExists, pathExistsAsync, prependToFileName, putError, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync };
+export { appendToFileName, changeExtension, changeFileName, commandExists, commandExistsAsync, defaultEncoding, directoryExists, directoryExistsAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, fileEmpty, fileExists, fileExistsAsync, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isFileOlderThan, isFileOlderThanAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, pathExists, pathExistsAsync, prependToFileName, putError, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync };
 //# sourceMappingURL=node.d.mts.map

@@ -4,6 +4,7 @@
 //
 export { commandExists, commandExistsAsync, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult } from "./node/command.js";
 export { errorCodes, isNodeError, putError } from "./node/error.js";
+export { isFileOlderThan, isFileOlderThanAsync } from "./node/fs/compare.js";
 export { defaultEncoding } from "./node/fs/constants.js";
 export { directoryExists, directoryExistsAsync, makeDirectoryAsync, makeDirectorySync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, removeDirectoryAsync, removeDirectorySync } from "./node/fs/directory.js";
 export { readBinaryFileAsync, readBinaryFileSync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync } from "./node/fs/file-io.js";

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.31.0](/fj.byrtz.de/ibey/fv-common/compare/1.30.0...1.31.0) (2026-01-27)
+
+### Features
+
+* file date compare ([e51ea0b](/fj.byrtz.de/ibey/fv-common/commit/e51ea0bb7037a771ce5c42174cc41be008257aff))
+
 ## [1.30.0](/fj.byrtz.de/ibey/fv-common/compare/1.29.0...1.30.0) (2026-01-25)
 
 ### Features

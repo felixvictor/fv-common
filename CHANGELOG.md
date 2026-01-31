@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.32.0](/fj.byrtz.de/ibey/fv-common/compare/1.31.0...1.32.0) (2026-01-31)
+
+### Features
+
+* isObject and some refactoring ([302f130](/fj.byrtz.de/ibey/fv-common/commit/302f13029b87fa5833cf8df2f343eaf719469572))
+
 ## [1.31.0](/fj.byrtz.de/ibey/fv-common/compare/1.30.0...1.31.0) (2026-01-27)
 
 ### Features

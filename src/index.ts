@@ -8,7 +8,7 @@ export { applyToeCurve, backgroundLightnessThreshold, chromaCurveFactor, cieExpo
 export { ColourUtility } from "./colour/colour-utility.js";
 export { getContrastColour } from "./colour/common.js";
 export { HslColour } from "./colour/hsl-colour.js";
-export { clamp, isEmpty } from "./common.js";
+export { clamp, clampUnsafe, isEmpty, isObject } from "./common.js";
 export { datetimeFormat } from "./date/constants.js";
 export { closestDateIndex, convertDEDateString, formatDate, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getRange, getRelativeTime, isBetweenTime, isDateInRange, isFutureDate, isPastDate, setDateLocale } from "./date/date.js";
 export { getDateFromTicks, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks } from "./date/ticks.js";

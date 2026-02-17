@@ -46,9 +46,10 @@ export const getLocalHour = (hour: number): number => {
 
 export const convertUTCStringToDate = (date: string): Date => dayjs.utc(date).toDate()
 
-export const convertUTC = (date: string, fromFormat: string, toFormat: string): string | undefined => {
-    const from = dayjs.utc(date, fromFormat, true)
-    console.log(date, fromFormat, from, from.isValid())
+export const convertUTC = (date: string, fromFormat: string, toFormat: string, locale?: string): string | undefined => {
+    const effectiveLocale = locale ?? getLocale()
+    const from = dayjs(date, fromFormat, effectiveLocale).utc()
+    console.log(effectiveLocale, "'", date, "' '", fromFormat, "' '", from, "' '", from.isValid(), "'")
     if (!from.isValid()) return undefined
     return from.format(toFormat)
 }

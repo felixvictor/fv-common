@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.33.2](/fj.byrtz.de/ibey/fv-common/compare/1.33.1...1.33.2) (2026-02-17)
+
+### Bug Fixes
+
+* non-strict convert ([8d76449](/fj.byrtz.de/ibey/fv-common/commit/8d7644914b840aa838f47d34b8761ccac485a2f6))
+
 ## [1.33.1](/fj.byrtz.de/ibey/fv-common/compare/1.33.0...1.33.1) (2026-02-17)
 
 ### Bug Fixes

@@ -2,19 +2,8 @@ import dayjs, { type Dayjs } from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat.js"
 import utc from "dayjs/plugin/utc.js"
 
-import { getLocale, onLocaleChange } from "../locale"
-import { setDateLocale } from "./format"
-
 dayjs.extend(customParseFormat)
 dayjs.extend(utc)
-
-// Sync dayjs locale on any locale changes
-onLocaleChange(() => {
-    dayjs.locale(getLocale())
-})
-
-// Initialise with default
-setDateLocale("en-GB")
 
 export const convertDEDateString = (date: string): string => dayjs(date, "DD.MM.YYYY HH:mm", true).toISOString()
 
@@ -46,10 +35,8 @@ export const getLocalHour = (hour: number): number => {
 
 export const convertUTCStringToDate = (date: string): Date => dayjs.utc(date).toDate()
 
-export const convertUTC = (date: string, fromFormat: string, toFormat: string, locale?: string): string | undefined => {
-    const effectiveLocale = locale ?? getLocale()
-    const from = dayjs(date, fromFormat, effectiveLocale).utc()
-    console.log(effectiveLocale, "'", date, "' '", fromFormat, "' '", from, "' '", from.isValid(), "'")
+export const convertDate = (date: string, fromFormat: string, toFormat: string, locale: string): string | undefined => {
+    const from = dayjs(date, fromFormat, locale)
     if (!from.isValid()) return undefined
     return from.format(toFormat)
 }

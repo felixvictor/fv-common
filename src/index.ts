@@ -10,7 +10,7 @@ export { getContrastColour } from "./colour/common.js";
 export { HslColour } from "./colour/hsl-colour.js";
 export { clamp, clampUnsafe, isEmpty, isObject } from "./common.js";
 export { datetimeFormat } from "./date/constants.js";
-export { convertDEDateString, convertUTC, convertUTCStringToDate, getLocalHour, getRange } from "./date/convert.js";
+export { convertDate, convertDEDateString, convertUTCStringToDate, getLocalHour, getRange } from "./date/convert.js";
 export { formatDate, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getRelativeTime, setDateLocale } from "./date/format.js";
 export { closestDateIndex, isBetweenTime, isDateInRange, isFutureDate, isPastDate } from "./date/test.js";
 export { getDateFromTicks, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks } from "./date/ticks.js";

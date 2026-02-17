@@ -1,8 +1,8 @@
 import type { Dayjs } from "dayjs"
 
 import dayjs from "dayjs"
-import isBetween from "dayjs/plugin/isBetween"
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
+import isBetween from "dayjs/plugin/isBetween.js"
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js"
 
 import { datetimeFormat } from "./constants.js"
 

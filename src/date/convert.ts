@@ -1,8 +1,10 @@
 import dayjs, { type Dayjs } from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat.js"
+import timezone from "dayjs/plugin/timezone.js"
 import utc from "dayjs/plugin/utc.js"
 
 dayjs.extend(customParseFormat)
+dayjs.extend(timezone)
 dayjs.extend(utc)
 
 export const convertDEDateString = (date: string): string => dayjs(date, "DD.MM.YYYY HH:mm", true).toISOString()

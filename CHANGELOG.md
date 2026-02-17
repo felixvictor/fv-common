@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.35.0](/fj.byrtz.de/ibey/fv-common/compare/1.34.0...1.35.0) (2026-02-17)
+
+### Features
+
+* convertBerlinTimeToUTC ([b84f1e3](/fj.byrtz.de/ibey/fv-common/commit/b84f1e3c675c710bfd45a9708ed1751ba0012839))
+
 ## [1.34.0](/fj.byrtz.de/ibey/fv-common/compare/1.33.4...1.34.0) (2026-02-17)
 
 ### Features

@@ -38,10 +38,12 @@ export const getLocalHour = (hour: number): number => {
 export const convertUTCStringToDate = (date: string): Date => dayjs.utc(date).toDate()
 
 export const convertBerlinTimeToUTC = (date: string): Date => {
+    console.log(date)
     const d = dayjs.tz(date, "Europe/Berlin")
     console.log(d)
     const t = d.utc()
     console.log(t)
+    console.log(t.toDate())
     return t.toDate()
 }
 

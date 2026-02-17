@@ -35,6 +35,8 @@ export const getLocalHour = (hour: number): number => {
 
 export const convertUTCStringToDate = (date: string): Date => dayjs.utc(date).toDate()
 
+export const convertBerlinTimeToUTC = (date: string): Date => dayjs.tz(date, "Europe/Berlin").utc().toDate()
+
 export const convertDate = (date: string, fromFormat: string, toFormat: string, locale: string): string | undefined => {
     const from = dayjs(date, fromFormat, locale)
     if (!from.isValid()) return undefined

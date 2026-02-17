@@ -4,7 +4,7 @@ import "dayjs/locale/en.js"
 import "dayjs/locale/en-gb.js"
 import utc from "dayjs/plugin/utc.js"
 
-import { formatTimeRange } from "../date/date.js"
+import { formatTimeRange } from "../date/format.js"
 import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "../locale.js"
 import { hoursPerDay, maxPortBattleHour, serverMaintenanceHour } from "./constants.js"
 

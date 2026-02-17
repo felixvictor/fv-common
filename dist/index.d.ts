@@ -108,7 +108,7 @@ declare const getRange: (dateRange: Date[]) => {
 };
 declare const getLocalHour: (hour: number) => number;
 declare const convertUTCStringToDate: (date: string) => Date;
-declare const convertUTC: (date: string, fromFormat: string, toFormat: string) => string | undefined;
+declare const convertUTC: (date: string, fromFormat: string, toFormat: string, locale?: string) => string | undefined;
 //#endregion
 //#region src/date/format.d.ts
 declare const setDateLocale: (locale: string) => void;

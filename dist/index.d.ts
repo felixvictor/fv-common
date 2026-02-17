@@ -1,8 +1,8 @@
 import Color, { Coords } from "colorjs.io";
+import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/de.js";
 import "dayjs/locale/en.js";
 import "dayjs/locale/en-gb.js";
-import dayjs, { Dayjs } from "dayjs";
 
 //#region src/chunkify.d.ts
 declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];
@@ -100,31 +100,37 @@ declare const clampUnsafe: (x: number, min: number, max: number) => number;
 //#region src/date/constants.d.ts
 declare const datetimeFormat = "YYYY-MM-DD HH:mm";
 //#endregion
-//#region src/date/date.d.ts
+//#region src/date/convert.d.ts
+declare const convertDEDateString: (date: string) => string;
+declare const getRange: (dateRange: Date[]) => {
+  begin: Dayjs;
+  end: Dayjs;
+};
+declare const getLocalHour: (hour: number) => number;
+declare const convertUTCStringToDate: (date: string) => Date;
+declare const convertUTC: (date: string, fromFormat: string, toFormat: string) => string | undefined;
+//#endregion
+//#region src/date/format.d.ts
 declare const setDateLocale: (locale: string) => void;
 declare const getFormattedDate: (date: string, locale?: string) => string;
 declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
 declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
 declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
 declare const getDateDistance: (date: string, locale?: string) => string;
-declare const isDateInRange: (date: Date, hours: number) => boolean;
-declare const isFutureDate: (date: Date | string) => boolean;
-declare const closestDateIndex: (datesString: string[]) => number | undefined;
 declare const getRelativeTime: (time: string) => string;
-declare const isPastDate: (time: string) => boolean;
 declare const formatDate: (time: string) => string;
 declare const formatTime: (time: string) => string;
 declare const formatLocalDate: (time: string) => string;
 declare const formatLocalTime: (time: string) => string;
-declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
-declare const getRange: (dateRange: Date[]) => {
-  begin: Dayjs;
-  end: Dayjs;
-};
-declare const getLocalHour: (hour: number) => number;
 declare const formatFromToTime: (from: number, to: number) => string;
 declare const formatTimeRange: (from: number, to: number) => string;
-declare const convertDEDateString: (date: string) => string;
+//#endregion
+//#region src/date/test.d.ts
+declare const isDateInRange: (date: Date, hours: number) => boolean;
+declare const isFutureDate: (date: Date | string) => boolean;
+declare const isPastDate: (time: string) => boolean;
+declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
+declare const closestDateIndex: (datesString: string[]) => number | undefined;
 //#endregion
 //#region src/date/ticks.d.ts
 declare const getTimeFromTicks: (ticks: bigint | number | string) => string;
@@ -272,5 +278,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertDEDateString, convertNameForEmail, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, loadFile, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, yToLightness };
+export { ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertDEDateString, convertNameForEmail, convertUTC, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, loadFile, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, yToLightness };
 //# sourceMappingURL=index.d.ts.map

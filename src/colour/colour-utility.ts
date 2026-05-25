@@ -1,3 +1,5 @@
+import { getContrastColour } from "@/colour/common"
+
 import { ColourScaleGenerator } from "./colour-at-scale.js"
 import { HslColour } from "./hsl-colour.js"
 
@@ -80,6 +82,11 @@ export class ColourUtility {
     getHarmonisedColourNeutral(colourHex: string) {
         const harmonized = this.colourMixin(new HslColour(colourHex), ColourUtility.neutralHarmonizationMix)
         return this.getTint(harmonized, this.#baseTint, this.#onLight, true)
+    }
+
+    getOnColour(colour: HslColour): HslColour {
+        const hex = getContrastColour(colour.hex, ColourUtility.onLightBase, ColourUtility.onDarkBase)
+        return new HslColour(hex)
     }
 
     getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false) {

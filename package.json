@@ -33,15 +33,15 @@
         "build:gen": "tsdown",
         "build:push": "git push",
         "dev": "tsc --watch",
-        "git:chore": "git add package.json pnpm-lock.yaml && git commit -m 'chore(deps): bump'",
+        "git:chore": "git add package.json pnpm-lock.yaml pnpm-workspace.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "run-s lint:js pretty-print pretty-print-package",
         "lint:js": "eslint . --fix",
         "main:release": "run-s build build:push release",
         "node-modules-inspector": "pnpx node-modules-inspector",
         "pnpm:dedupe": "pnpm dedupe",
-        "pnpm:renew": "rm -rf node_modules pnpm-lock.yaml && pnpm install",
-        "pnpm:update": "corepack use pnpm@latest && pnpm --interactive update",
+        "pnpm:renew": "pnpm clean --lockfile && pnpm install",
+        "pnpm:update": "pnpm self-update && pnpm update --interactive",
         "pretty-print": "prettier --config .prettierrc.json --log-level error --write .",
         "pretty-print-package": "sort-package-json package.json",
         "push": "git push",
@@ -51,46 +51,37 @@
     "dependencies": {
         "atomically": "^2.1.1",
         "colorjs.io": "^0.6.1",
-        "dayjs": "^1.11.19",
-        "svg-path-commander": "^2.1.11"
+        "dayjs": "^1.11.20",
+        "svg-path-commander": "^2.2.1"
     },
     "devDependencies": {
-        "@commitlint/cli": "^20.4.1",
-        "@commitlint/config-conventional": "^20.4.1",
-        "@commitlint/types": "^20.4.0",
-        "@eslint/eslintrc": "^3.3.1",
-        "@eslint/js": "^9.39.2",
-        "@release-it/conventional-changelog": "^10.0.5",
-        "@types/node": "^25.2.3",
-        "eslint": "^9.39.2",
+        "@commitlint/cli": "^21.0.1",
+        "@commitlint/config-conventional": "^21.0.1",
+        "@commitlint/types": "^21.0.1",
+        "@eslint/eslintrc": "^3.3.5",
+        "@eslint/js": "^10.0.1",
+        "@release-it/conventional-changelog": "^11.0.0",
+        "@types/node": "^25.9.1",
+        "eslint": "^10.4.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-perfectionist": "^5.5.0",
-        "eslint-plugin-unicorn": "^63.0.0",
-        "globals": "^17.3.0",
+        "eslint-plugin-perfectionist": "^5.9.0",
+        "eslint-plugin-unicorn": "^64.0.0",
+        "globals": "^17.6.0",
         "husky": "^9.1.7",
-        "npm-run-all2": "^8.0.4",
-        "prettier": "^3.8.1",
-        "release-it": "^19.2.4",
+        "npm-run-all2": "^9.0.1",
+        "prettier": "^3.8.3",
+        "prettier-plugin-pkg": "^0.22.1",
+        "release-it": "^20.0.1",
         "sort-package-json": "^3.6.1",
-        "ts-morph": "^27.0.2",
-        "tsdown": "^0.20.3",
-        "tsx": "^4.7.0",
-        "typescript": "^5.5.3",
-        "typescript-eslint": "^8.56.0"
+        "ts-morph": "^28.0.0",
+        "tsdown": "^0.22.0",
+        "tsx": "^4.22.3",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.59.4"
     },
-    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
     "engines": {
-        "node": ">= 24"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "esbuild"
-        ],
-        "overrides": {
-            "@types/parse-path@7.1.0": "-",
-            "conventional-changelog-conventionalcommits": "^9.1.0",
-            "glob": "^9"
-        }
+        "node": ">= 24",
+        "pnpm": ">= 11"
     },
     "release-it": {
         "git": {

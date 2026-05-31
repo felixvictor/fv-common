@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.38.0](/fj.byrtz.de/ibey/fv-common/compare/1.37.0...1.38.0) (2026-05-31)
+
+### Features
+
+* colour utils with higher saturation possible ([8d60aab](/fj.byrtz.de/ibey/fv-common/commit/8d60aabcb1dac7fdaa5f6f2a7209a58cd6150734))
+
+## [1.36.3](/fj.byrtz.de/ibey/fv-common/compare/1.37.0...1.38.0) (2026-02-17)
+
 ## [1.37.0](https://fj.byrtz.de/ibey/fv-common/compare/1.36.2...1.37.0) (2026-05-25)
 
 ### Features

@@ -1,0 +1,5 @@
+allowBuilds:
+    esbuild: true
+engineStrict: false
+overrides:
+    "@types/parse-path@7.1.0": "-"

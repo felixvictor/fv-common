@@ -1,9 +1,5 @@
 import Color, { Coords } from "colorjs.io";
 import dayjs, { Dayjs } from "dayjs";
-import "dayjs/locale/de.js";
-import "dayjs/locale/en.js";
-import "dayjs/locale/en-gb.js";
-
 //#region src/chunkify.d.ts
 declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];
 //#endregion
@@ -84,6 +80,7 @@ declare class ColourUtility {
   getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral?: boolean): HslColour;
   getHarmonisedColour(colourHex: string, mixAmount?: number): HslColour;
   getHarmonisedColourNeutral(colourHex: string): HslColour;
+  getOnColour(colour: HslColour): HslColour;
   getTint(colour: HslColour, tone: number, backgroundColour?: HslColour, neutral?: boolean): HslColour;
   mixColours(color1: HslColour, color2: HslColour, weightPercentage?: number): HslColour;
 }

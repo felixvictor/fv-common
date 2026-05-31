@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.36.3](/fj.byrtz.de/ibey/fv-common/compare/1.36.2...1.36.3) (2026-02-17)
+## [1.37.0](https://fj.byrtz.de/ibey/fv-common/compare/1.36.2...1.37.0) (2026-05-25)
+
+### Features
+
+* getOnColour ([8d3198f](https://fj.byrtz.de/ibey/fv-common/commit/8d3198f08fe991d6a592cb30cf4ad240b60e67b7))
+>>>>>>> 6d85510d8ba95777b57b780055c8562429093e3f
 
 ## [1.36.2](/fj.byrtz.de/ibey/fv-common/compare/1.36.1...1.36.2) (2026-02-17)
 

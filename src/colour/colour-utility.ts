@@ -1,5 +1,6 @@
-import { ColourScaleGenerator } from "./colour-at-scale.js"
-import { HslColour } from "./hsl-colour.js"
+import { ColourScaleGenerator } from "@/colour/colour-at-scale.js"
+import { getContrastColour } from "@/colour/common"
+import { HslColour } from "@/colour/hsl-colour.js"
 
 export class ColourUtility {
     static readonly defaultBaseTint = 40
@@ -27,12 +28,10 @@ export class ColourUtility {
     get onLight() {
         return this.#onLight
     }
+
     readonly #baseColour: HslColour
-
     readonly #baseTint: number
-
     readonly #onDark: HslColour
-
     readonly #onLight: HslColour
 
     constructor(baseColourHex: string, baseTint = ColourUtility.defaultBaseTint) {
@@ -80,6 +79,11 @@ export class ColourUtility {
     getHarmonisedColourNeutral(colourHex: string) {
         const harmonized = this.colourMixin(new HslColour(colourHex), ColourUtility.neutralHarmonizationMix)
         return this.getTint(harmonized, this.#baseTint, this.#onLight, true)
+    }
+
+    getOnColour(colour: HslColour): HslColour {
+        const hex = getContrastColour(colour.hex, ColourUtility.onLightBase, ColourUtility.onDarkBase)
+        return new HslColour(hex)
     }
 
     getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false) {

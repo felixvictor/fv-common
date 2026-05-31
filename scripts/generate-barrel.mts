@@ -138,5 +138,5 @@ try {
         await generateBarrel(naBarrel, (filePath) => filePath.startsWith(naDirectory))
     }
 } catch (error: unknown) {
-    throw new Error(`Barrel generation failure: ${error as string}`)
+    throw new Error(`Barrel generation failure: ${error as string}`, { cause: error })
 }

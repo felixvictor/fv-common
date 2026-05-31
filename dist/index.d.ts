@@ -61,7 +61,7 @@ declare class ColourUtility {
   static readonly fallbackHue = 0;
   static readonly fallbackLightness = 0;
   static readonly fallbackSaturation = 1;
-  static readonly maxSaturation = 0.25;
+  static readonly maxSaturation = 0.85;
   static readonly maxSaturationNeutral = 0.2;
   static readonly maxTone = 100;
   static readonly minSaturation = 0;
@@ -76,12 +76,12 @@ declare class ColourUtility {
   get onLight(): HslColour;
   constructor(baseColourHex: string, baseTint?: number);
   colourMixin(mixColour: HslColour | string, mixAmount?: number): HslColour;
-  getBaseTintedColour(colourHex: string): HslColour;
-  getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral?: boolean): HslColour;
+  getBaseTintedColour(colourHex: string, customTint?: number, customMaxSat?: number): HslColour;
+  getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral?: boolean, maxSatOverride?: number): HslColour;
   getHarmonisedColour(colourHex: string, mixAmount?: number): HslColour;
   getHarmonisedColourNeutral(colourHex: string): HslColour;
   getOnColour(colour: HslColour): HslColour;
-  getTint(colour: HslColour, tone: number, backgroundColour?: HslColour, neutral?: boolean): HslColour;
+  getTint(colour: HslColour, tone: number, backgroundColour?: HslColour, neutral?: boolean, customMaxSat?: number): HslColour;
   mixColours(color1: HslColour, color2: HslColour, weightPercentage?: number): HslColour;
 }
 //#endregion

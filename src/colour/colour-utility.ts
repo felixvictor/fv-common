@@ -8,7 +8,7 @@ export class ColourUtility {
     static readonly fallbackHue = 0
     static readonly fallbackLightness = 0
     static readonly fallbackSaturation = 1
-    static readonly maxSaturation = 0.25
+    static readonly maxSaturation = 0.85
     static readonly maxSaturationNeutral = 0.2
     static readonly maxTone = 100
     static readonly minSaturation = 0
@@ -47,17 +47,18 @@ export class ColourUtility {
         return this.mixColours(harmonizedBase, targetColour, ColourUtility.percentageScale - mixAmount)
     }
 
-    getBaseTintedColour(colourHex: string) {
-        return this.getTint(new HslColour(colourHex), this.#baseTint)
+    getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {
+        return this.getTint(new HslColour(colourHex), customTint, this.#onLight, false, customMaxSat)
     }
 
-    getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral = false) {
+    getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral = false, maxSatOverride?: number) {
         const invertedTone = ColourUtility.maxTone - tone
         const hue = colour.h
         const saturation = colour.s
-        const maxSaturation = neutral
-            ? ColourUtility.maxSaturationNeutral
-            : Math.max(ColourUtility.maxSaturation, saturation)
+
+        const activeMaxSat = maxSatOverride ?? ColourUtility.maxSaturation
+        const maxSaturation = neutral ? ColourUtility.maxSaturationNeutral : Math.max(activeMaxSat, saturation)
+
         const backgroundLightness = background.l
         const invertedBackgroundLightness = 1 - backgroundLightness
 
@@ -86,8 +87,8 @@ export class ColourUtility {
         return new HslColour(hex)
     }
 
-    getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false) {
-        return this.getColourAtTint(tone, colour, backgroundColour, neutral)
+    getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false, customMaxSat?: number) {
+        return this.getColourAtTint(tone, colour, backgroundColour, neutral, customMaxSat)
     }
 
     mixColours(color1: HslColour, color2: HslColour, weightPercentage = this.#baseTint) {

@@ -54,7 +54,7 @@ export class ColourUtility {
         const targetOklab = targetOkhsl.to("oklab")
         const baseOklab = baseOkhsl.to("oklab")
 
-        // 3. Extract coordinates safely
+        // 3. Extract coordinates safely with null coalescing
         const targetL = targetOklab.coords[0] ?? 0
         const targetA = targetOklab.coords[1] ?? 0
         const targetB = targetOklab.coords[2] ?? 0
@@ -64,7 +64,7 @@ export class ColourUtility {
 
         const mixRatio = mixAmount / ColourUtility.percentageScale
 
-        // 4. Interpolate only the chromatic axis vectors
+        // 4. Interpolate ONLY the chromatic axis vectors
         const harmonizedA = targetA * (1 - mixRatio) + baseA * mixRatio
         const harmonizedB = targetB * (1 - mixRatio) + baseB * mixRatio
 
@@ -72,13 +72,21 @@ export class ColourUtility {
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        // 6. Safeguard NaN hues for unsaturated colours
+        // 6. Safeguard NaN hues for unsaturated colors
         const rawHue = resultOkhsl.coords[0] ?? 0
         const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
 
-        // 7. Explicitly scale 0.0-1.0 back to 0-100 percentage values for HslColour consistency
+        // 7. Extract the 0.0 - 1.0 values from colorjs.io and scale them to 0 - 100 percentage values
         const finalSaturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
         const finalLightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
+
+        // 8. Create a fresh instance and explicitly use the setters.
+        // Your setters use clamp() and write directly to colorjs.io, ensuring that
+        // both .hex and the internal getters (.s, .l) are 100% in sync with the rest of the script.
+        const outputColour = new HslColour([0, 0, 0])
+        outputColour.h = finalHue
+        outputColour.s = finalSaturation
+        outputColour.l = finalLightness
 
         console.log(
             targetL,
@@ -92,16 +100,9 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(
-            rawHue,
-            finalHue,
-            finalSaturation,
-            finalLightness,
-            new HslColour([finalHue, finalSaturation, finalLightness]).hex,
-        )
+        console.log(rawHue, finalHue, finalLightness, finalLightness, outputColour.hex)
 
-        // 8. Return as a fresh coordinates array, ensuring full compatibility across the script
-        return new HslColour([finalHue, finalSaturation, finalLightness])
+        return outputColour
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

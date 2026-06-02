@@ -76,17 +76,9 @@ export class ColourUtility {
         const rawHue = resultOkhsl.coords[0] ?? 0
         const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
 
-        // 7. Extract the 0.0 - 1.0 values from colorjs.io and scale them to 0 - 100 percentage values
-        const finalSaturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
-        const finalLightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
-
-        // 8. Create a fresh instance and explicitly use the setters.
-        // Your setters use clamp() and write directly to colorjs.io, ensuring that
-        // both .hex and the internal getters (.s, .l) are 100% in sync with the rest of the script.
-        const outputColour = new HslColour([0, 0, 0])
-        outputColour.h = finalHue
-        outputColour.s = finalSaturation
-        outputColour.l = finalLightness
+        // 7. Keep the raw 0.0 - 1.0 values from colorjs.io for Saturation and Lightness
+        const finalSaturation = resultOkhsl.coords[1] ?? 0
+        const finalLightness = resultOkhsl.coords[2] ?? 0
 
         console.log(
             targetL,
@@ -100,9 +92,17 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(rawHue, finalHue, finalLightness, finalLightness, outputColour.hex)
+        console.log(
+            rawHue,
+            finalHue,
+            finalLightness,
+            finalLightness,
+            new HslColour([finalHue, finalSaturation, finalLightness]).hex,
+        )
 
-        return outputColour
+        // 8. Pass the raw [0-360, 0-1, 0-1] coordinates directly to your array constructor.
+        // This allows colorjs.io to cleanly instantiate without buggy post-mutation side effects.
+        return new HslColour([finalHue, finalSaturation, finalLightness])
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

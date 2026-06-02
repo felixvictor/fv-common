@@ -64,7 +64,7 @@ export class ColourUtility {
 
         const mixRatio = mixAmount / ColourUtility.percentageScale
 
-        // 4. Interpolate only the chromatic axis vectors using our safe local variables
+        // 4. Interpolate only the chromatic axis vectors
         const harmonizedA = targetA * (1 - mixRatio) + baseA * mixRatio
         const harmonizedB = targetB * (1 - mixRatio) + baseB * mixRatio
 
@@ -72,7 +72,13 @@ export class ColourUtility {
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        return new HslColour([resultOkhsl.coords[0], resultOkhsl.coords[1], resultOkhsl.coords[2]])
+        // 6. Map colorjs.io (0.0 - 1.0) back to your HslColour (0 - 100) percentage space
+        const rawHue = resultOkhsl.coords[0] ?? 0
+        const hue = Number.isNaN(rawHue) ? 0 : rawHue
+        const saturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
+        const lightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
+
+        return new HslColour([hue, saturation, lightness])
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

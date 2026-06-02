@@ -72,10 +72,14 @@ export class ColourUtility {
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        // 6. Fix fallback for un-saturated colors (NaN Hue)
-        if (Number.isNaN(resultOkhsl.coords[0])) {
-            resultOkhsl.coords[0] = 0
-        }
+        // 6. Safeguard NaN hues for unsaturated colours
+        const rawHue = resultOkhsl.coords[0] ?? 0
+        const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
+
+        // 7. Explicitly scale 0.0-1.0 back to 0-100 percentage values for HslColour consistency
+        const finalSaturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
+        const finalLightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
+
         console.log(
             targetL,
             targetA,
@@ -85,11 +89,19 @@ export class ColourUtility {
             mixRatio,
             harmonizedA,
             harmonizedB,
-            resultOklab.toString,
-            resultOkhsl.toString,
+            resultOklab.toString(),
+            resultOkhsl.toString(),
         )
-        console.log(new HslColour(resultOkhsl).hex)
-        return new HslColour(resultOkhsl)
+        console.log(
+            rawHue,
+            finalHue,
+            finalSaturation,
+            finalLightness,
+            new HslColour([finalHue, finalSaturation, finalLightness]).hex,
+        )
+
+        // 8. Return as a fresh coordinates array, ensuring full compatibility across the script
+        return new HslColour([finalHue, finalSaturation, finalLightness])
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

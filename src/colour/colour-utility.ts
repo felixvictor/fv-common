@@ -78,15 +78,13 @@ export class ColourUtility {
         const rawHue = resultOkhsl.coords[0] ?? 0
         const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
 
-        // 7. Werte absolut präzise auf die von deinem Skript erwartete 0-100% Skala transformieren
-        const finalSaturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
-        const finalLightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
+        // 7. Für colorjs.io MÜSSEN die Koordinaten im Bereich 0.0 - 1.0 bleiben!
+        const nativeSaturation = resultOkhsl.coords[1] ?? 0
+        const nativeLightness = resultOkhsl.coords[2] ?? 0
 
-        // 8. Ein native Color-Objekt direkt mit der 0-100% Skala initialisieren.
-        // Das verhindert den colorjs.io internen Konvertierungsfehler beim .hex Aufruf,
-        // stellt aber gleichzeitig sicher, dass deine Instanz echte 0-100 Werte für den Generator liefert.
+        // 8. Ein natives Color-Objekt im Bereich 0.0 - 1.0 erstellen
         const nativeOkhslObject = new Color({
-            coords: [finalHue, finalSaturation, finalLightness],
+            coords: [finalHue, nativeSaturation, nativeLightness],
             space: HslColour.colorSpace,
         })
 
@@ -102,10 +100,19 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(rawHue, finalHue, finalLightness, finalLightness)
-        console.log("-> aus", target.hex, "wird", new HslColour(nativeOkhslObject).hex, "\n")
+        console.log(rawHue, finalHue, nativeSaturation, nativeLightness)
+        console.log(
+            "-> aus",
+            target.hex,
+            "wird",
+            new HslColour(nativeOkhslObject.to("srgb").toString({ format: "hex" })),
+            "\n",
+        )
 
-        return new HslColour(nativeOkhslObject)
+        // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
+        // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
+        // während der Hex-Wert absolut valide bleibt.
+        return new HslColour(nativeOkhslObject.to("srgb").toString({ format: "hex" }))
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

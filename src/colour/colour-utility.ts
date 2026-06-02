@@ -77,7 +77,19 @@ export class ColourUtility {
         const hue = Number.isNaN(rawHue) ? 0 : rawHue
         const saturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
         const lightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
-
+        console.log(
+            targetL,
+            targetA,
+            targetB,
+            baseA,
+            baseB,
+            mixRatio,
+            harmonizedA,
+            harmonizedB,
+            resultOklab,
+            resultOkhsl,
+        )
+        console.log(rawHue, hue, saturation, lightness, new HslColour([hue, saturation, lightness]).hex)
         return new HslColour([hue, saturation, lightness])
     }
 

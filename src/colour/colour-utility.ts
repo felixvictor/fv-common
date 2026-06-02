@@ -76,8 +76,19 @@ export class ColourUtility {
         if (Number.isNaN(resultOkhsl.coords[0])) {
             resultOkhsl.coords[0] = 0
         }
-
-        // 7. Pass the native Color object directly into your domain constructor
+        console.log(
+            targetL,
+            targetA,
+            targetB,
+            baseA,
+            baseB,
+            mixRatio,
+            harmonizedA,
+            harmonizedB,
+            resultOklab.toString,
+            resultOkhsl.toString,
+        )
+        console.log(new HslColour(resultOkhsl).hex)
         return new HslColour(resultOkhsl)
     }
 

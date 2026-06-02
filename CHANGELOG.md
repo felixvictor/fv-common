@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.38.3](/fj.byrtz.de/ibey/fv-common/compare/1.38.2...1.38.3) (2026-06-02)
+
+### Bug Fixes
+
+* colourMixin ([77be4cc](/fj.byrtz.de/ibey/fv-common/commit/77be4cc10977c07e46f5402b2be3b95e4212d5b1))
+
 ## [1.38.2](/fj.byrtz.de/ibey/fv-common/compare/1.38.1...1.38.2) (2026-06-02)
 
 ## [1.38.1](/fj.byrtz.de/ibey/fv-common/compare/1.38.0...1.38.1) (2026-05-31)

@@ -101,12 +101,18 @@ export class ColourUtility {
             resultOkhsl.toString(),
         )
         console.log(rawHue, finalHue, nativeSaturation, nativeLightness, nativeOkhslObject.toString())
-        console.log("-> aus", target.hex, "wird", new HslColour(nativeOkhslObject.toString()), "\n")
+        console.log(
+            "-> aus",
+            target.hex,
+            "wird",
+            new HslColour([nativeOkhslObject.h, nativeOkhslObject.s, nativeOkhslObject.l]),
+            "\n",
+        )
 
         // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
         // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
         // während der Hex-Wert absolut valide bleibt.
-        return new HslColour(nativeOkhslObject.toString())
+        return new HslColour([nativeOkhslObject.h, nativeOkhslObject.s, nativeOkhslObject.l])
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

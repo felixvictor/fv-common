@@ -54,7 +54,7 @@ export class ColourUtility {
         const targetOklab = targetOkhsl.to("oklab")
         const baseOklab = baseOkhsl.to("oklab")
 
-        // 3. Extract coordinates
+        // 3. Extract coordinates safely
         const targetL = targetOklab.coords[0] ?? 0
         const targetA = targetOklab.coords[1] ?? 0
         const targetB = targetOklab.coords[2] ?? 0
@@ -72,25 +72,13 @@ export class ColourUtility {
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        // 6. Map colorjs.io (0.0 - 1.0) back to your HslColour (0 - 100) percentage space
-        const rawHue = resultOkhsl.coords[0] ?? 0
-        const hue = Number.isNaN(rawHue) ? 0 : rawHue
-        const saturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
-        const lightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
-        console.log(
-            targetL,
-            targetA,
-            targetB,
-            baseA,
-            baseB,
-            mixRatio,
-            harmonizedA,
-            harmonizedB,
-            resultOklab,
-            resultOkhsl,
-        )
-        console.log(rawHue, hue, saturation, lightness, new HslColour([hue, saturation, lightness]).hex)
-        return new HslColour([hue, saturation, lightness])
+        // 6. Fix fallback for un-saturated colors (NaN Hue)
+        if (Number.isNaN(resultOkhsl.coords[0])) {
+            resultOkhsl.coords[0] = 0
+        }
+
+        // 7. Pass the native Color object directly into your domain constructor
+        return new HslColour(resultOkhsl)
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

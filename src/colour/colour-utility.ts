@@ -42,7 +42,7 @@ export class ColourUtility {
         this.#onDark = this.colourMixin(new HslColour(ColourUtility.onDarkBase), ColourUtility.onDarkMixAmount)
         this.#onLight = this.colourMixin(new HslColour(ColourUtility.onLightBase), ColourUtility.onLightMixAmount)
 
-        console.log("ColourUtility", this.#baseColour, this.#baseTint, this.#onDark, this.#onLight)
+        console.log("ColourUtility", this.#baseColour.hex, this.#baseTint, this.#onDark.hex, this.#onLight.hex)
     }
 
     colourMixin(mixColour: HslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix): HslColour {
@@ -81,7 +81,7 @@ export class ColourUtility {
             "wird",
             resultOkhsl.toString(),
             resultOkhsl.toString({ format: "hex" }),
-            new HslColour(resultOkhsl.toString({ format: "hex" })),
+            new HslColour(resultOkhsl.toString({ format: "hex" })).hex,
             "\n",
         )
 

@@ -72,15 +72,15 @@ export class ColourUtility {
 
         // 5. Neues Oklab-Objekt bauen und zurück nach Okhsl transformieren
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
-        const resultOkhsl = resultOklab.to("okhsl")
+        const { h, l, s } = resultOklab.to("okhsl")
 
         console.log(targetL, targetA, targetB, baseA, baseB, mixRatio, harmonizedA, harmonizedB, resultOklab.toString())
-        console.log("-> aus", target.hex, "wird", resultOkhsl.toString(), new HslColour(resultOkhsl), "\n")
+        console.log("-> aus", target.hex, "wird", [h, s, l], new HslColour([h, s, l]), "\n")
 
         // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
         // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
         // während der Hex-Wert absolut valide bleibt.
-        return new HslColour(resultOkhsl)
+        return new HslColour([h, s, l])
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

@@ -1,11 +1,7 @@
-import type { Coords } from "colorjs.io"
-
 import { clamp } from "../common.js"
 import {
     applyToeCurve,
     backgroundLightnessThreshold,
-    chromaCurveFactor,
-    hueShiftFactor,
     lightnessContrastExponent,
     lightnessContrastOffset,
     lightnessMax,
@@ -18,11 +14,25 @@ import { HslColour } from "./hsl-colour.js"
 /**
  * {@link https://matthewstrom.com/writing/generating-color-palettes/}
  *
- * Utility class for perceptually-designed HSL color scale generation.
+ * Utility class for perceptually-designed Okhsl color scale generation.
  * Based on Matthew Ström's color palette generation algorithm.
  */
-
 export class ColourScaleGenerator {
+    // Map Oklab perceptual limit (0.975) to Okhsl percentage space (97.5)
+    static readonly #absoluteMaxOkhslLightness = 97.5
+    static readonly #coolHueShiftMagnitude = 15
+    static readonly #darkChromaScalingMultiplier = 2
+    static readonly #lightChromaCompressionFactor = 1.3
+
+    static readonly #lightChromaMinimumRetention = 0.35
+    // --- Perceptual Scaling Constants (Okhsl Bounds) ---
+    static readonly #scaleMidpoint = 0.5
+    static readonly #warmHueShiftMagnitude = 12
+    static readonly #warmHueThresholdHigh = 340
+
+    static readonly #warmHueThresholdLow = 100
+
+    // --- Instance Properties ---
     readonly #backgroundY: number
     readonly #baseHue: number
     readonly #maxChroma: number
@@ -46,20 +56,43 @@ export class ColourScaleGenerator {
         const hue = this.#computeScaleHue(scaleValue)
         const chroma = this.#computeScaleChroma(scaleValue)
 
-        const coords: Coords = [hue, chroma, normalizedLightness]
+        const coords: [number, number, number] = [hue, chroma, normalizedLightness]
         return new HslColour(coords)
     }
 
     #computeScaleChroma(scaleValue: number): number {
         const chromaDifference = this.#maxChroma - this.#minChroma
-        const parabolaFactor = -chromaCurveFactor * chromaDifference
-        const linearFactor = chromaCurveFactor * chromaDifference
 
-        return parabolaFactor * Math.pow(scaleValue, 2) + linearFactor * scaleValue + this.#minChroma
+        if (scaleValue > ColourScaleGenerator.#scaleMidpoint) {
+            // For lighter tones: Flatten the curve to maintain structural pastel saturation
+            const chromaAttenuation =
+                1 -
+                (scaleValue - ColourScaleGenerator.#scaleMidpoint) * ColourScaleGenerator.#lightChromaCompressionFactor
+            return (
+                this.#minChroma +
+                chromaDifference * Math.max(ColourScaleGenerator.#lightChromaMinimumRetention, chromaAttenuation)
+            )
+        } else {
+            // For darker tones: Scale chroma down gracefully to prevent oversaturated dark colors
+            return this.#minChroma + chromaDifference * (scaleValue * ColourScaleGenerator.#darkChromaScalingMultiplier)
+        }
     }
 
     #computeScaleHue(scaleValue: number): number {
-        return this.#baseHue + hueShiftFactor * (1 - scaleValue)
+        const isWarmHue =
+            this.#baseHue < ColourScaleGenerator.#warmHueThresholdLow ||
+            this.#baseHue > ColourScaleGenerator.#warmHueThresholdHigh
+
+        if (isWarmHue) {
+            // Warm tones: Shift warmer (towards yellow) in light, cooler (towards red-violet) in dark
+            const warmShift =
+                ColourScaleGenerator.#warmHueShiftMagnitude * (scaleValue - ColourScaleGenerator.#scaleMidpoint)
+            return this.#baseHue + warmShift
+        } else {
+            // Cool tones: Shift brighter (towards cyan-green) in light, deeper blue in dark
+            const coolShift = ColourScaleGenerator.#coolHueShiftMagnitude * (1 - scaleValue)
+            return this.#baseHue + coolShift
+        }
     }
 
     #computeScaleLightness(scaleValue: number): number {
@@ -71,7 +104,10 @@ export class ColourScaleGenerator {
                 ? adjustedBackground / exponentialTerm - lightnessContrastOffset
                 : exponentialTerm * adjustedBackground - lightnessContrastOffset
 
-        return applyToeCurve(yToLightness(foregroundY))
+        const rawLightness = applyToeCurve(yToLightness(foregroundY))
+
+        // Use Okhsl 0-100 scale limits to cap top value below 100% whiteout
+        return clamp(rawLightness / lightnessScaleFactor, lightnessMin, ColourScaleGenerator.#absoluteMaxOkhslLightness)
     }
 
     #normalizeScaleNumber(scaleNumber: number): number {

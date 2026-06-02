@@ -88,7 +88,7 @@ export class ColourUtility {
         // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
         // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
         // während der Hex-Wert absolut valide bleibt.
-        return new HslColour([h, s, l])
+        return new HslColour(resultOkhsl.toString({ format: "hex" }))
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

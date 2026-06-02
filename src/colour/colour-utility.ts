@@ -100,12 +100,17 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(rawHue, finalHue, nativeSaturation, nativeLightness, nativeOkhslObject.toString())
+        console.log(rawHue, finalHue, nativeSaturation, nativeLightness, nativeOkhslObject.toString(), [
+            nativeOkhslObject.h,
+            nativeOkhslObject.s,
+            nativeOkhslObject.l,
+        ])
         console.log(
             "-> aus",
             target.hex,
             "wird",
             new HslColour([nativeOkhslObject.h, nativeOkhslObject.s, nativeOkhslObject.l]),
+            new HslColour(nativeOkhslObject),
             "\n",
         )
 

@@ -1,5 +1,3 @@
-import Color from "colorjs.io"
-
 import { ColourScaleGenerator } from "@/colour/colour-at-scale.js"
 import { getContrastColour } from "@/colour/common"
 import { HslColour } from "@/colour/hsl-colour.js"
@@ -41,54 +39,12 @@ export class ColourUtility {
         this.#baseTint = baseTint
         this.#onDark = this.colourMixin(new HslColour(ColourUtility.onDarkBase), ColourUtility.onDarkMixAmount)
         this.#onLight = this.colourMixin(new HslColour(ColourUtility.onLightBase), ColourUtility.onLightMixAmount)
-
-        console.log("ColourUtility", this.#baseColour.hex, this.#baseTint, this.#onDark.hex, this.#onLight.hex)
     }
 
-    colourMixin(mixColour: HslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix): HslColour {
-        const target = typeof mixColour === "string" ? new HslColour(mixColour) : mixColour
-
-        // 1. Native colorjs.io Objekte extrahieren
-        const targetOkhsl = target.colourObject
-        const baseOkhsl = this.#baseColour.colourObject
-
-        // 2. In den spatialen Oklab-Farbraum projizieren
-        const targetOklab = targetOkhsl.to("oklab")
-        const baseOklab = baseOkhsl.to("oklab")
-
-        // 3. Koordinaten sicher auslesen (Nullish Coalescing gegen TS2531)
-        const targetL = targetOklab.coords[0] ?? 0
-        const targetA = targetOklab.coords[1] ?? 0
-        const targetB = targetOklab.coords[2] ?? 0
-
-        const baseA = baseOklab.coords[1] ?? 0
-        const baseB = baseOklab.coords[2] ?? 0
-
-        const mixRatio = mixAmount / ColourUtility.percentageScale
-
-        // 4. Nur die chromatischen Farbvektoren (A und B) interpolieren
-        const harmonizedA = targetA * (1 - mixRatio) + baseA * mixRatio
-        const harmonizedB = targetB * (1 - mixRatio) + baseB * mixRatio
-
-        // 5. Neues Oklab-Objekt bauen und zurück nach Okhsl transformieren
-        const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
-        const resultOkhsl = resultOklab.to("okhsl")
-
-        console.log(targetL, targetA, targetB, baseA, baseB, mixRatio, harmonizedA, harmonizedB, resultOklab.toString())
-        console.log(
-            "-> aus",
-            target.hex,
-            "wird",
-            resultOkhsl.toString(),
-            resultOkhsl.toString({ format: "hex" }),
-            new HslColour(resultOkhsl.toString({ format: "hex" })).hex,
-            "\n",
-        )
-
-        // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
-        // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
-        // während der Hex-Wert absolut valide bleibt.
-        return new HslColour(resultOkhsl.toString({ format: "hex" }))
+    colourMixin(mixColour: HslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix) {
+        const targetColour = typeof mixColour === "string" ? new HslColour(mixColour) : mixColour
+        const harmonizedBase = new HslColour([targetColour.h, this.#baseColour.s, this.#baseColour.l])
+        return this.mixColours(harmonizedBase, targetColour, ColourUtility.percentageScale - mixAmount)
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {
@@ -103,8 +59,7 @@ export class ColourUtility {
         const activeMaxSat = maxSatOverride ?? ColourUtility.maxSaturation
         const maxSaturation = neutral ? ColourUtility.maxSaturationNeutral : Math.max(activeMaxSat, saturation)
 
-        // Convert the structural background lightness to its raw 0-1 coordinate equivalent
-        const backgroundLightness = background.l / ColourUtility.percentageScale
+        const backgroundLightness = background.l
         const invertedBackgroundLightness = 1 - backgroundLightness
 
         const generator = new ColourScaleGenerator(

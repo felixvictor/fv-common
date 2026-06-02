@@ -7,10 +7,10 @@ export class HslColour {
     static readonly hexFormat = "hex"
     static readonly hueMax = 360
     static readonly hueMin = 0
-    static readonly lightnessMax = 1
+    static readonly lightnessMax = 100
     static readonly lightnessMin = 0
     static readonly outputColorSpace = "srgb"
-    static readonly saturationMax = 1
+    static readonly saturationMax = 100
     static readonly saturationMin = 0
 
     get colourObject(): Color {

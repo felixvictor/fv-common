@@ -41,20 +41,22 @@ export class ColourUtility {
         this.#baseTint = baseTint
         this.#onDark = this.colourMixin(new HslColour(ColourUtility.onDarkBase), ColourUtility.onDarkMixAmount)
         this.#onLight = this.colourMixin(new HslColour(ColourUtility.onLightBase), ColourUtility.onLightMixAmount)
+
+        console.log("ColourUtility", this.#baseColour, this.#baseTint, this.#onDark, this.#onLight)
     }
 
     colourMixin(mixColour: HslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix): HslColour {
         const target = typeof mixColour === "string" ? new HslColour(mixColour) : mixColour
 
-        // 1. Grab the native colorjs.io objects directly from your HslColour instances
+        // 1. Native colorjs.io Objekte extrahieren
         const targetOkhsl = target.colourObject
         const baseOkhsl = this.#baseColour.colourObject
 
-        // 2. Project both into true spatial Oklab coordinates
+        // 2. In den spatialen Oklab-Farbraum projizieren
         const targetOklab = targetOkhsl.to("oklab")
         const baseOklab = baseOkhsl.to("oklab")
 
-        // 3. Extract coordinates safely with null coalescing
+        // 3. Koordinaten sicher auslesen (Nullish Coalescing gegen TS2531)
         const targetL = targetOklab.coords[0] ?? 0
         const targetA = targetOklab.coords[1] ?? 0
         const targetB = targetOklab.coords[2] ?? 0
@@ -64,21 +66,29 @@ export class ColourUtility {
 
         const mixRatio = mixAmount / ColourUtility.percentageScale
 
-        // 4. Interpolate ONLY the chromatic axis vectors
+        // 4. Nur die chromatischen Farbvektoren (A und B) interpolieren
         const harmonizedA = targetA * (1 - mixRatio) + baseA * mixRatio
         const harmonizedB = targetB * (1 - mixRatio) + baseB * mixRatio
 
-        // 5. Construct the new Oklab coordinate set and map it back into your Okhsl system
+        // 5. Neues Oklab-Objekt bauen und zurück nach Okhsl transformieren
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        // 6. Safeguard NaN hues for unsaturated colors
+        // 6. Graustufen-Farbtöne (NaN) abfangen
         const rawHue = resultOkhsl.coords[0] ?? 0
         const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
 
-        // 7. Keep the raw 0.0 - 1.0 values from colorjs.io for Saturation and Lightness
-        const finalSaturation = resultOkhsl.coords[1] ?? 0
-        const finalLightness = resultOkhsl.coords[2] ?? 0
+        // 7. Werte absolut präzise auf die von deinem Skript erwartete 0-100% Skala transformieren
+        const finalSaturation = (resultOkhsl.coords[1] ?? 0) * ColourUtility.percentageScale
+        const finalLightness = (resultOkhsl.coords[2] ?? 0) * ColourUtility.percentageScale
+
+        // 8. Ein native Color-Objekt direkt mit der 0-100% Skala initialisieren.
+        // Das verhindert den colorjs.io internen Konvertierungsfehler beim .hex Aufruf,
+        // stellt aber gleichzeitig sicher, dass deine Instanz echte 0-100 Werte für den Generator liefert.
+        const nativeOkhslObject = new Color({
+            coords: [finalHue, finalSaturation, finalLightness],
+            space: HslColour.colorSpace,
+        })
 
         console.log(
             targetL,
@@ -92,17 +102,10 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(
-            rawHue,
-            finalHue,
-            finalLightness,
-            finalLightness,
-            new HslColour([finalHue, finalSaturation, finalLightness]).hex,
-        )
+        console.log(rawHue, finalHue, finalLightness, finalLightness)
+        console.log("-> aus", target.hex, "wird", new HslColour(nativeOkhslObject).hex, "\n")
 
-        // 8. Pass the raw [0-360, 0-1, 0-1] coordinates directly to your array constructor.
-        // This allows colorjs.io to cleanly instantiate without buggy post-mutation side effects.
-        return new HslColour([finalHue, finalSaturation, finalLightness])
+        return new HslColour(nativeOkhslObject)
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

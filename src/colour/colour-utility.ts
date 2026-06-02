@@ -74,20 +74,6 @@ export class ColourUtility {
         const resultOklab = new Color("oklab", [targetL, harmonizedA, harmonizedB])
         const resultOkhsl = resultOklab.to(HslColour.colorSpace)
 
-        // 6. Graustufen-Farbtöne (NaN) abfangen
-        const rawHue = resultOkhsl.coords[0] ?? 0
-        const finalHue = Number.isNaN(rawHue) ? 0 : rawHue
-
-        // 7. Für colorjs.io MÜSSEN die Koordinaten im Bereich 0.0 - 1.0 bleiben!
-        const nativeSaturation = resultOkhsl.coords[1] ?? 0
-        const nativeLightness = resultOkhsl.coords[2] ?? 0
-
-        // 8. Ein natives Color-Objekt im Bereich 0.0 - 1.0 erstellen
-        const nativeOkhslObject = new Color({
-            coords: [finalHue, nativeSaturation, nativeLightness],
-            space: HslColour.colorSpace,
-        })
-
         console.log(
             targetL,
             targetA,
@@ -100,24 +86,21 @@ export class ColourUtility {
             resultOklab.toString(),
             resultOkhsl.toString(),
         )
-        console.log(rawHue, finalHue, nativeSaturation, nativeLightness, nativeOkhslObject.toString(), [
-            nativeOkhslObject.h,
-            nativeOkhslObject.s,
-            nativeOkhslObject.l,
-        ])
+
         console.log(
             "-> aus",
             target.hex,
             "wird",
-            new HslColour([nativeOkhslObject.h, nativeOkhslObject.s, nativeOkhslObject.l]),
-            new HslColour(nativeOkhslObject),
+            new HslColour(resultOkhsl),
+            [resultOkhsl.h, resultOkhsl.s, resultOkhsl.l],
+            new HslColour([resultOkhsl.h, resultOkhsl.s, resultOkhsl.l]),
             "\n",
         )
 
         // 9. Über den fehlerfreien Hex-String in deine Domänenklasse konvertieren.
         // Das garantiert, dass HslColour intern die Werte für dein Skript wieder auf 0-100% mapped,
         // während der Hex-Wert absolut valide bleibt.
-        return new HslColour([nativeOkhslObject.h, nativeOkhslObject.s, nativeOkhslObject.l])
+        return new HslColour(resultOkhsl)
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {

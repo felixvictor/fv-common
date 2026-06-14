@@ -1,25 +1,21 @@
-node_modules
 tsconfig.tsbuildinfo
 tsconfig.browser.tsbuildinfo
 tsconfig.node.tsbuildinfo
+/.eslintcache
 
 # Logs
 logs
 *.log
 npm-debug.log*
 pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
 
-# OS
+*.local
 .DS_Store
+dist
+node_modules
 
-# IDEs and editors
+# Editor directories and files
 .idea
-.project
-.classpath
-.c9
-*.launch
-.settings
-*.sublime-workspace
+
+package-lock.json
+yarn.lock

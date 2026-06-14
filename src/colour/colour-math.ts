@@ -1,7 +1,7 @@
 export const backgroundLightnessThreshold = 0.18 as const
 export const chromaCurveFactor = 4 as const
-export const cieExponent = 1 / 3
 
+export const cieExponent = 1 / 3
 export const cieMultiplierHigh = 116 as const
 export const cieMultiplierLow = 903.2962962 as const
 export const cieOffset = 16 as const
@@ -12,11 +12,6 @@ export const hueShiftFactor = 5 as const
 
 export const lightnessContrastExponent = 3.04 as const
 export const lightnessContrastOffset = 0.05 as const
-export const lightnessMax = 1 as const
-export const lightnessMin = 0 as const
-
-// Normalization constants
-export const lightnessScaleFactor = 100 as const
 
 // Toe function coefficients for perceptual lightness adjustment
 const toeK1 = 0.206 as const

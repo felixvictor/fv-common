@@ -1,6 +1,5 @@
 import type { Coords } from "colorjs.io"
 
-import { clamp } from "../common.js"
 import {
     applyToeCurve,
     backgroundLightnessThreshold,
@@ -8,12 +7,9 @@ import {
     hueShiftFactor,
     lightnessContrastExponent,
     lightnessContrastOffset,
-    lightnessMax,
-    lightnessMin,
-    lightnessScaleFactor,
     yToLightness,
 } from "./colour-math"
-import { okHslColour } from "./ok-hsl-colour.js"
+import { okHslColour } from "./okhsl-colour.js"
 
 /**
  * {@link https://matthewstrom.com/writing/generating-color-palettes/}
@@ -40,13 +36,11 @@ export class ColourScaleGenerator {
     computeColour(scaleNumber: number): okHslColour {
         const scaleValue = this.#normalizeScaleNumber(scaleNumber)
 
-        const rawLightness = this.#computeScaleLightness(scaleValue)
-        const normalizedLightness = clamp(rawLightness / lightnessScaleFactor, lightnessMin, lightnessMax)
-
+        const lightness = this.#computeScaleLightness(scaleValue)
         const hue = this.#computeScaleHue(scaleValue)
         const chroma = this.#computeScaleChroma(scaleValue)
 
-        const coords: Coords = [hue, chroma, normalizedLightness]
+        const coords: Coords = [hue, chroma, lightness]
         return new okHslColour(coords)
     }
 

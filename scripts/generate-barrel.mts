@@ -10,7 +10,7 @@ const fsDirectory = path.resolve(sourceDirectory, "node")
 const naDirectory = path.resolve(sourceDirectory, "na")
 
 const isDryRun = process.argv.includes("--dry-run")
-const targetArgument = process.argv.find((argument) => argument.startsWith("--target="))?.split("=")[1]
+const targetArgument = process.argv.find((argument) => argument.startsWith("--target="))?.split("=", 2)[1]
 
 const filename = path.basename(import.meta.filename)
 const header = `//

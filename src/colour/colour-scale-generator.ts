@@ -57,13 +57,15 @@ export class ColourScaleGenerator {
     }
 
     #computeScaleLightness(scaleValue: number): number {
-        const exponentialTerm = Math.exp(lightnessContrastExponent * scaleValue)
+        const isLightBackground = this.#backgroundY > backgroundLightnessThreshold
+        const adjustedScaleValue = isLightBackground ? 1 - scaleValue : scaleValue
+
+        const exponentialTerm = Math.exp(lightnessContrastExponent * adjustedScaleValue)
         const adjustedBackground = this.#backgroundY + lightnessContrastOffset
 
-        const foregroundY =
-            this.#backgroundY > backgroundLightnessThreshold
-                ? adjustedBackground / exponentialTerm - lightnessContrastOffset
-                : exponentialTerm * adjustedBackground - lightnessContrastOffset
+        const foregroundY = isLightBackground
+            ? adjustedBackground / exponentialTerm - lightnessContrastOffset
+            : exponentialTerm * adjustedBackground - lightnessContrastOffset
 
         return applyToeCurve(yToLightness(foregroundY))
     }

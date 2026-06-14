@@ -1,3 +1,5 @@
+import { clamp } from "@/common"
+
 export const backgroundLightnessThreshold = 0.18 as const
 export const chromaCurveFactor = 4 as const
 
@@ -12,6 +14,8 @@ export const hueShiftFactor = 5 as const
 
 export const lightnessContrastExponent = 3.04 as const
 export const lightnessContrastOffset = 0.05 as const
+export const lightnessMin = 0 as const
+export const lightnessMax = 1 as const
 
 // Toe function coefficients for perceptual lightness adjustment
 const toeK1 = 0.206 as const
@@ -20,14 +24,14 @@ const toeK3 = (1 + toeK1) / (1 + toeK2)
 
 export const applyToeCurve = (lightness: number): number => {
     // Ensure input is clamped cleanly within bounds before applying curve
-    const stableLightness = Math.max(0, Math.min(1, lightness))
+    const stableLightness = clamp(lightness, lightnessMin, lightnessMax)
     const term = toeK3 * stableLightness - toeK1
     return 0.5 * (term + Math.sqrt(term * term + 4 * toeK2 * toeK3 * stableLightness))
 }
 
 export const yToLightness = (y: number): number => {
     // Normalized CIE Y to Perceptual Lightness conversion (0 to 1 range)
-    const stableY = Math.max(0, y)
+    const stableY = Math.max(lightnessMin, y)
     return stableY <= cieThreshold
         ? stableY * cieMultiplierLow
         : cieMultiplierHigh * Math.pow(stableY, cieExponent) - cieOffset

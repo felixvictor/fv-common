@@ -5,7 +5,8 @@ import {
     backgroundLightnessThreshold,
     chromaCurveFactor,
     hueShiftFactor,
-    lightnessContrastExponent,
+    lightnessContrastExponentDark,
+    lightnessContrastExponentLight,
     lightnessContrastOffset,
     yToLightness,
 } from "./colour-math"
@@ -58,9 +59,11 @@ export class ColourScaleGenerator {
 
     #computeScaleLightness(scaleValue: number): number {
         const isLightBackground = this.#backgroundY > backgroundLightnessThreshold
-        const adjustedScaleValue = isLightBackground ? 1 - scaleValue : scaleValue
 
-        const exponentialTerm = Math.exp(lightnessContrastExponent * adjustedScaleValue)
+        const adjustedScaleValue = isLightBackground ? 1 - scaleValue : scaleValue
+        const activeExponent = isLightBackground ? lightnessContrastExponentLight : lightnessContrastExponentDark
+
+        const exponentialTerm = Math.exp(activeExponent * adjustedScaleValue)
         const adjustedBackground = this.#backgroundY + lightnessContrastOffset
 
         const foregroundY = isLightBackground

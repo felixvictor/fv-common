@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.39.3](/fj.byrtz.de/ibey/fv-common/compare/1.39.2...1.39.3) (2026-06-14)
+
+### Bug Fixes
+
+* okhsl lightness 0-1, not 0-100 ([b13f3dc](/fj.byrtz.de/ibey/fv-common/commit/b13f3dca24c9eae18183c39752d21ea5045e1135))
+
 ## [1.39.2](/fj.byrtz.de/ibey/fv-common/compare/1.39.1...1.39.2) (2026-06-14)
 
 ## [1.39.1](/fj.byrtz.de/ibey/fv-common/compare/1.39.0...1.39.1) (2026-06-14)

@@ -19,7 +19,7 @@ declare const lightnessMin: 0;
 declare const lightnessMax: 1;
 declare const applyToeCurve: (lightness: number) => number;
 declare const yToLightness: (y: number) => number;
-declare const luminanceY: (hex: string) => number | undefined;
+declare const luminanceY: (hex: string | undefined) => number | undefined;
 declare const hueDelta: (hex1: string, hex2: string) => number;
 //#endregion
 //#region src/colour/okhsl-colour.d.ts
@@ -84,7 +84,7 @@ declare const validateSeed: (name: string, hex: string, options?: {
   neutral?: boolean;
 }) => void;
 declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string) => void;
-declare const validateTheme: (theme: Record<string, string>, label: string) => void;
+declare const validateTheme: (theme: Record<string, string | undefined>, label: string) => void;
 //#endregion
 //#region src/common.d.ts
 declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;

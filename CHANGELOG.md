@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.39.6](/fj.byrtz.de/ibey/fv-common/compare/1.39.5...1.39.6) (2026-06-14)
+
+### Bug Fixes
+
+* color gen lightness contrast exponent 3.04 -> 2.2 ([54a3897](/fj.byrtz.de/ibey/fv-common/commit/54a3897ffb2c58c550121aebf9e4fe8e26923785))
+
 ## [1.39.5](/fj.byrtz.de/ibey/fv-common/compare/1.39.4...1.39.5) (2026-06-14)
 
 ### Bug Fixes

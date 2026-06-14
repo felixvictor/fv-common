@@ -19,6 +19,8 @@ declare const lightnessMin: 0;
 declare const lightnessMax: 1;
 declare const applyToeCurve: (lightness: number) => number;
 declare const yToLightness: (y: number) => number;
+declare const luminanceY: (hex: string) => number | undefined;
+declare const hueDelta: (hex1: string, hex2: string) => number;
 //#endregion
 //#region src/colour/okhsl-colour.d.ts
 declare class okHslColour {
@@ -53,6 +55,36 @@ declare class ColourScaleGenerator {
 //#endregion
 //#region src/colour/common.d.ts
 declare const getContrastColour: (colour: string, colourBlack?: string, colourWhite?: string) => string;
+//#endregion
+//#region src/colour/contrast.d.ts
+declare const wcagTextMinRatio = 4.5;
+declare const wcagUiMinRatio = 3;
+declare const minSurfaceLightnessDelta = 0.02;
+declare const contrastRatio: (hex1: string, hex2: string) => number;
+//#endregion
+//#region src/colour/make-surface.d.ts
+declare class MakeSurface {
+  #private;
+  constructor(baseHex: string);
+  getSurface: (lightness: number, chromaFraction: number) => string | undefined;
+  makeSurface(): {
+    darkSurfaceBrightHex: string | undefined;
+    darkSurfaceLightHex: string | undefined;
+    darkSurfaceMainHex: string | undefined;
+    darkSurfaceVariantHex: string | undefined;
+    lightSurfaceBrightHex: string | undefined;
+    lightSurfaceLightHex: string | undefined;
+    lightSurfaceMainHex: string | undefined;
+    lightSurfaceVariantHex: string | undefined;
+  };
+}
+//#endregion
+//#region src/colour/validation.d.ts
+declare const validateSeed: (name: string, hex: string, options?: {
+  neutral?: boolean;
+}) => void;
+declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string) => void;
+declare const validateTheme: (theme: Record<string, string>, label: string) => void;
 //#endregion
 //#region src/common.d.ts
 declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
@@ -242,5 +274,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { ColourScaleGenerator, type CurvePoint, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, yToLightness };
+export { ColourScaleGenerator, type CurvePoint, MakeSurface, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, contrastRatio, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, minSurfaceLightnessDelta, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, yToLightness };
 //# sourceMappingURL=index.d.ts.map

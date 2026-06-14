@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.39.4](/fj.byrtz.de/ibey/fv-common/compare/1.39.3...1.39.4) (2026-06-14)
+
+### Bug Fixes
+
+* color gen lightness 0-1, not 0-100 ([0b708a4](/fj.byrtz.de/ibey/fv-common/commit/0b708a45af693241323c9f3f8c02a801d915a771))
+
 ## [1.39.3](/fj.byrtz.de/ibey/fv-common/compare/1.39.2...1.39.3) (2026-06-14)
 
 ### Bug Fixes

@@ -1,3 +1,6 @@
+import Color from "colorjs.io"
+
+import { okHslColour } from "@/colour/okhsl-colour"
 import { clamp } from "@/common"
 
 export const backgroundLightnessThreshold = 0.18 as const
@@ -36,4 +39,15 @@ export const yToLightness = (y: number): number => {
     return stableY <= cieThreshold
         ? stableY * cieMultiplierLow
         : cieMultiplierHigh * Math.pow(stableY, cieExponent) - cieOffset
+}
+
+export const luminanceY = (hex: string): number | undefined => {
+    const c = new Color(hex).to("xyz-d65")
+    return c.coords[1] ?? undefined
+}
+
+export const hueDelta = (hex1: string, hex2: string) => {
+    const h1 = new okHslColour(hex1).h
+    const h2 = new okHslColour(hex2).h
+    return Math.abs(((h2 - h1 + 540) % 360) - 180)
 }

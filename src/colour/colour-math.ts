@@ -41,7 +41,8 @@ export const yToLightness = (y: number): number => {
         : cieMultiplierHigh * Math.pow(stableY, cieExponent) - cieOffset
 }
 
-export const luminanceY = (hex: string): number | undefined => {
+export const luminanceY = (hex: string | undefined): number | undefined => {
+    if (hex === undefined) return
     const c = new Color(hex).to("xyz-d65")
     return c.coords[1] ?? undefined
 }

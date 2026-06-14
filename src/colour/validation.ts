@@ -40,7 +40,7 @@ export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hex
     }
 }
 
-export const validateTheme = (theme: Record<string, string>, label: string) => {
+export const validateTheme = (theme: Record<string, string | undefined>, label: string) => {
     // WCAG text contrast: on-X against X
     const textPairs: [string, string][] = [
         ["on-primary", "primary"],

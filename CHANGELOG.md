@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.40.0](/fj.byrtz.de/ibey/fv-common/compare/1.39.7...1.40.0) (2026-06-14)
+
+### Features
+
+* color theme generation ([c70aa69](/fj.byrtz.de/ibey/fv-common/commit/c70aa690c355cf1b1c387907b9289ffbf85e844f))
+
 ## [1.39.7](/fj.byrtz.de/ibey/fv-common/compare/1.39.6...1.39.7) (2026-06-14)
 
 ### Bug Fixes

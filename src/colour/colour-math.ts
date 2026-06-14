@@ -12,7 +12,7 @@ export const cieThreshold = 0.0088564516 as const
 // Scale computation constants
 export const hueShiftFactor = 5 as const
 
-export const lightnessContrastExponent = 3.04 as const
+export const lightnessContrastExponent = 2.2 as const
 export const lightnessContrastOffset = 0.05 as const
 export const lightnessMin = 0 as const
 export const lightnessMax = 1 as const

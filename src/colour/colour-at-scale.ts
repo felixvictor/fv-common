@@ -13,7 +13,7 @@ import {
     lightnessScaleFactor,
     yToLightness,
 } from "./colour-math"
-import { HslColour } from "./hsl-colour.js"
+import { okHslColour } from "./ok-hsl-colour.js"
 
 /**
  * {@link https://matthewstrom.com/writing/generating-color-palettes/}
@@ -37,7 +37,7 @@ export class ColourScaleGenerator {
         this.#backgroundY = backgroundY
     }
 
-    computeColour(scaleNumber: number): HslColour {
+    computeColour(scaleNumber: number): okHslColour {
         const scaleValue = this.#normalizeScaleNumber(scaleNumber)
 
         const rawLightness = this.#computeScaleLightness(scaleValue)
@@ -47,7 +47,7 @@ export class ColourScaleGenerator {
         const chroma = this.#computeScaleChroma(scaleValue)
 
         const coords: Coords = [hue, chroma, normalizedLightness]
-        return new HslColour(coords)
+        return new okHslColour(coords)
     }
 
     #computeScaleChroma(scaleValue: number): number {

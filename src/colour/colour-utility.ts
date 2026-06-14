@@ -1,6 +1,6 @@
 import { ColourScaleGenerator } from "@/colour/colour-at-scale.js"
 import { getContrastColour } from "@/colour/common"
-import { HslColour } from "@/colour/hsl-colour.js"
+import { okHslColour } from "@/colour/ok-hsl-colour.js"
 
 export class ColourUtility {
     static readonly defaultBaseTint = 40
@@ -29,29 +29,35 @@ export class ColourUtility {
         return this.#onLight
     }
 
-    readonly #baseColour: HslColour
+    readonly #baseColour: okHslColour
     readonly #baseTint: number
-    readonly #onDark: HslColour
-    readonly #onLight: HslColour
+    readonly #onDark: okHslColour
+    readonly #onLight: okHslColour
 
     constructor(baseColourHex: string, baseTint = ColourUtility.defaultBaseTint) {
-        this.#baseColour = new HslColour(baseColourHex)
+        this.#baseColour = new okHslColour(baseColourHex)
         this.#baseTint = baseTint
-        this.#onDark = this.colourMixin(new HslColour(ColourUtility.onDarkBase), ColourUtility.onDarkMixAmount)
-        this.#onLight = this.colourMixin(new HslColour(ColourUtility.onLightBase), ColourUtility.onLightMixAmount)
+        this.#onDark = this.colourMixin(new okHslColour(ColourUtility.onDarkBase), ColourUtility.onDarkMixAmount)
+        this.#onLight = this.colourMixin(new okHslColour(ColourUtility.onLightBase), ColourUtility.onLightMixAmount)
     }
 
-    colourMixin(mixColour: HslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix) {
-        const targetColour = typeof mixColour === "string" ? new HslColour(mixColour) : mixColour
-        const harmonizedBase = new HslColour([targetColour.h, this.#baseColour.s, this.#baseColour.l])
+    colourMixin(mixColour: okHslColour | string, mixAmount = ColourUtility.defaultHarmonizationMix) {
+        const targetColour = typeof mixColour === "string" ? new okHslColour(mixColour) : mixColour
+        const harmonizedBase = new okHslColour([targetColour.h, this.#baseColour.s, this.#baseColour.l])
         return this.mixColours(harmonizedBase, targetColour, ColourUtility.percentageScale - mixAmount)
     }
 
     getBaseTintedColour(colourHex: string, customTint = this.#baseTint, customMaxSat?: number) {
-        return this.getTint(new HslColour(colourHex), customTint, this.#onLight, false, customMaxSat)
+        return this.getTint(new okHslColour(colourHex), customTint, this.#onLight, false, customMaxSat)
     }
 
-    getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral = false, maxSatOverride?: number) {
+    getColourAtTint(
+        tone: number,
+        colour: okHslColour,
+        background: okHslColour,
+        neutral = false,
+        maxSatOverride?: number,
+    ) {
         const invertedTone = ColourUtility.maxTone - tone
         const hue = colour.h
         const saturation = colour.s
@@ -73,26 +79,32 @@ export class ColourUtility {
     }
 
     getHarmonisedColour(colourHex: string, mixAmount?: number) {
-        const harmonized = this.colourMixin(new HslColour(colourHex), mixAmount)
+        const harmonized = this.colourMixin(new okHslColour(colourHex), mixAmount)
         return this.getTint(harmonized, this.#baseTint)
     }
 
     getHarmonisedColourNeutral(colourHex: string) {
-        const harmonized = this.colourMixin(new HslColour(colourHex), ColourUtility.neutralHarmonizationMix)
+        const harmonized = this.colourMixin(new okHslColour(colourHex), ColourUtility.neutralHarmonizationMix)
         return this.getTint(harmonized, this.#baseTint, this.#onLight, true)
     }
 
-    getOnColour(colour: HslColour): HslColour {
+    getOnColour(colour: okHslColour): okHslColour {
         const hex = getContrastColour(colour.hex, ColourUtility.onLightBase, ColourUtility.onDarkBase)
-        return new HslColour(hex)
+        return new okHslColour(hex)
     }
 
-    getTint(colour: HslColour, tone: number, backgroundColour = this.#onLight, neutral = false, customMaxSat?: number) {
+    getTint(
+        colour: okHslColour,
+        tone: number,
+        backgroundColour = this.#onLight,
+        neutral = false,
+        customMaxSat?: number,
+    ) {
         return this.getColourAtTint(tone, colour, backgroundColour, neutral, customMaxSat)
     }
 
-    mixColours(color1: HslColour, color2: HslColour, weightPercentage = this.#baseTint) {
+    mixColours(color1: okHslColour, color2: okHslColour, weightPercentage = this.#baseTint) {
         const weightScale = weightPercentage / ColourUtility.percentageScale
-        return HslColour.mix(color1, color2, weightScale)
+        return okHslColour.mix(color1, color2, weightScale)
     }
 }

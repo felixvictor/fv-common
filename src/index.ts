@@ -7,7 +7,7 @@ export { ColourScaleGenerator } from "./colour/colour-at-scale.js";
 export { applyToeCurve, backgroundLightnessThreshold, chromaCurveFactor, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, hueShiftFactor, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, yToLightness } from "./colour/colour-math.js";
 export { ColourUtility } from "./colour/colour-utility.js";
 export { getContrastColour } from "./colour/common.js";
-export { HslColour } from "./colour/hsl-colour.js";
+export { okHslColour } from "./colour/ok-hsl-colour.js";
 export { clamp, clampUnsafe, isEmpty, isObject } from "./common.js";
 export { datetimeFormat } from "./date/constants.js";
 export { convertBerlinTimeToUTC, convertDate, convertDEDateString, convertUTCStringToDate, getLocalHour, getRange } from "./date/convert.js";

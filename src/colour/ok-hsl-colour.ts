@@ -1,8 +1,8 @@
 import Color, { type Coords } from "colorjs.io"
 
-import { clamp } from "../common.js"
+import { clamp } from "@/common"
 
-export class HslColour {
+export class okHslColour {
     static readonly colorSpace = "okhsl"
     static readonly hexFormat = "hex"
     static readonly hueMax = 360
@@ -18,79 +18,79 @@ export class HslColour {
     }
 
     get h(): number {
-        return (this.#colour.h as number | undefined) ?? HslColour.hueMin
+        return (this.#colour.h as number | undefined) ?? okHslColour.hueMin
     }
 
     set h(value: number | string) {
         const h = Number(value)
         if (Number.isNaN(h)) {
             console.warn(
-                `${HslColour.name}: Cannot set hue to invalid value "${value}" (${h}), ` +
+                `${okHslColour.name}: Cannot set hue to invalid value "${value}" (${h}), ` +
                     `keeping current value "${this.#colour.h}"`,
             )
             return
         }
-        this.#colour.h = ((h % HslColour.hueMax) + HslColour.hueMax) % HslColour.hueMax
+        this.#colour.h = ((h % okHslColour.hueMax) + okHslColour.hueMax) % okHslColour.hueMax
     }
 
     get hex(): string {
-        return this.#colour.to(HslColour.outputColorSpace).toString({ format: HslColour.hexFormat })
+        return this.#colour.to(okHslColour.outputColorSpace).toString({ format: okHslColour.hexFormat })
     }
 
     get l(): number {
-        return (this.#colour.l as number | undefined) ?? HslColour.lightnessMin
+        return (this.#colour.l as number | undefined) ?? okHslColour.lightnessMin
     }
 
     set l(value: number | string) {
         const l = Number(value)
         if (Number.isNaN(l)) {
             console.warn(
-                `${HslColour.name}: Cannot set lightness to invalid value "${value}" (${l}), ` +
+                `${okHslColour.name}: Cannot set lightness to invalid value "${value}" (${l}), ` +
                     `keeping current value "${this.#colour.l}"`,
             )
             return
         }
-        this.#colour.l = clamp(l, HslColour.lightnessMin, HslColour.lightnessMax)
+        this.#colour.l = clamp(l, okHslColour.lightnessMin, okHslColour.lightnessMax)
     }
 
     get s(): number {
-        return (this.#colour.s as number | undefined) ?? HslColour.saturationMin
+        return (this.#colour.s as number | undefined) ?? okHslColour.saturationMin
     }
 
     set s(value: number | string) {
         const s = Number(value)
         if (Number.isNaN(s)) {
             console.warn(
-                `${HslColour.name}: Cannot set saturation to invalid value "${value}" (${s}), ` +
+                `${okHslColour.name}: Cannot set saturation to invalid value "${value}" (${s}), ` +
                     `keeping current value "${this.#colour.s}"`,
             )
             return
         }
-        this.#colour.s = clamp(s, HslColour.saturationMin, HslColour.saturationMax)
+        this.#colour.s = clamp(s, okHslColour.saturationMin, okHslColour.saturationMax)
     }
 
     readonly #colour: Color
 
     constructor(argument: Color | Coords | string) {
         if (typeof argument === "string") {
-            this.#colour = new Color(argument).to(HslColour.colorSpace)
+            this.#colour = new Color(argument).to(okHslColour.colorSpace)
         } else if (argument instanceof Color) {
-            this.#colour = new Color(argument).to(HslColour.colorSpace)
+            this.#colour = new Color(argument).to(okHslColour.colorSpace)
         } else {
-            this.#colour = new Color({ coords: argument, space: HslColour.colorSpace })
+            this.#colour = new Color({ coords: argument, space: okHslColour.colorSpace })
         }
     }
 
-    static mix(color1: HslColour, color2: HslColour, weight: number): HslColour {
+    static mix(color1: okHslColour, color2: okHslColour, weight: number): okHslColour {
         const mix = Color.mix(color1.colourObject, color2.colourObject, weight, {
-            outputSpace: HslColour.colorSpace,
-            space: HslColour.colorSpace,
+            outputSpace: okHslColour.colorSpace,
+            space: okHslColour.colorSpace,
         })
-        return new HslColour(mix)
+        return new okHslColour(mix)
     }
 
-    clone(): HslColour {
-        return new HslColour(this.#colour)
+    clone(): okHslColour {
+        return new okHslColour(this.#colour)
     }
 
     toString(): string {

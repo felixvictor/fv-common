@@ -3,8 +3,8 @@ import dayjs, { Dayjs } from "dayjs";
 //#region src/chunkify.d.ts
 declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];
 //#endregion
-//#region src/colour/hsl-colour.d.ts
-declare class HslColour {
+//#region src/colour/ok-hsl-colour.d.ts
+declare class okHslColour {
   #private;
   static readonly colorSpace = "okhsl";
   static readonly hexFormat = "hex";
@@ -24,8 +24,8 @@ declare class HslColour {
   get s(): number;
   set s(value: number | string);
   constructor(argument: Color | Coords | string);
-  static mix(color1: HslColour, color2: HslColour, weight: number): HslColour;
-  clone(): HslColour;
+  static mix(color1: okHslColour, color2: okHslColour, weight: number): okHslColour;
+  clone(): okHslColour;
   toString(): string;
 }
 //#endregion
@@ -33,7 +33,7 @@ declare class HslColour {
 declare class ColourScaleGenerator {
   #private;
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
-  computeColour(scaleNumber: number): HslColour;
+  computeColour(scaleNumber: number): okHslColour;
 }
 //#endregion
 //#region src/colour/colour-math.d.ts
@@ -72,17 +72,17 @@ declare class ColourUtility {
   static readonly onLightMixAmount = 40;
   static readonly percentageScale = 100;
   get baseTint(): number;
-  get onDark(): HslColour;
-  get onLight(): HslColour;
+  get onDark(): okHslColour;
+  get onLight(): okHslColour;
   constructor(baseColourHex: string, baseTint?: number);
-  colourMixin(mixColour: HslColour | string, mixAmount?: number): HslColour;
-  getBaseTintedColour(colourHex: string, customTint?: number, customMaxSat?: number): HslColour;
-  getColourAtTint(tone: number, colour: HslColour, background: HslColour, neutral?: boolean, maxSatOverride?: number): HslColour;
-  getHarmonisedColour(colourHex: string, mixAmount?: number): HslColour;
-  getHarmonisedColourNeutral(colourHex: string): HslColour;
-  getOnColour(colour: HslColour): HslColour;
-  getTint(colour: HslColour, tone: number, backgroundColour?: HslColour, neutral?: boolean, customMaxSat?: number): HslColour;
-  mixColours(color1: HslColour, color2: HslColour, weightPercentage?: number): HslColour;
+  colourMixin(mixColour: okHslColour | string, mixAmount?: number): okHslColour;
+  getBaseTintedColour(colourHex: string, customTint?: number, customMaxSat?: number): okHslColour;
+  getColourAtTint(tone: number, colour: okHslColour, background: okHslColour, neutral?: boolean, maxSatOverride?: number): okHslColour;
+  getHarmonisedColour(colourHex: string, mixAmount?: number): okHslColour;
+  getHarmonisedColourNeutral(colourHex: string): okHslColour;
+  getOnColour(colour: okHslColour): okHslColour;
+  getTint(colour: okHslColour, tone: number, backgroundColour?: okHslColour, neutral?: boolean, customMaxSat?: number): okHslColour;
+  mixColours(color1: okHslColour, color2: okHslColour, weightPercentage?: number): okHslColour;
 }
 //#endregion
 //#region src/colour/common.d.ts
@@ -276,5 +276,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { ColourScaleGenerator, ColourUtility, type CurvePoint, HslColour, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, loadFile, nearestPow2, nextPow2, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, yToLightness };
+export { ColourScaleGenerator, ColourUtility, type CurvePoint, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponent, lightnessContrastOffset, lightnessMax, lightnessMin, lightnessScaleFactor, loadFile, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, yToLightness };
 //# sourceMappingURL=index.d.ts.map

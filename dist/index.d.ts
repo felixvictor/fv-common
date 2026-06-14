@@ -12,7 +12,7 @@ declare const cieMultiplierLow: 9.032962962;
 declare const cieOffset: 0.16;
 declare const cieThreshold: 0.0088564516;
 declare const hueShiftFactor: 5;
-declare const lightnessContrastExponent: 3.04;
+declare const lightnessContrastExponent: 2.2;
 declare const lightnessContrastOffset: 0.05;
 declare const lightnessMin: 0;
 declare const lightnessMax: 1;

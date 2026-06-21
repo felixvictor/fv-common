@@ -1,6 +1,6 @@
 {
     "name": "fv-common",
-    "version": "1.45.6",
+    "version": "1.45.7",
     "type": "module",
     "description": "Common helper functions",
     "repository": "https://fj.byrtz.de/ibey/fv-common.git",

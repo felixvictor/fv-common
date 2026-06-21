@@ -22,23 +22,6 @@ declare const yToLightness: (y: number) => number;
 declare const luminanceY: (hex: string | undefined) => number | undefined;
 declare const hueDelta: (hex1: string, hex2: string) => number;
 //#endregion
-//#region src/colour/md3-tones.d.ts
-interface ToneProfile {
-  readonly dark: Md3Tone;
-  readonly light: Md3Tone;
-  readonly lightLightenMilestones: readonly Md3Tone[];
-}
-declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
-type Md3Tone = (typeof md3Tones)[number];
-type Md3ToneArray = readonly string[];
-declare const ti: (tone: Md3Tone) => number;
-declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
-declare const minTone: 0;
-declare const buildGenerator: (hex: string, backgroundY: number) => ColourScaleGenerator;
-declare const buildMd3Range: (generator: ColourScaleGenerator) => Md3ToneArray;
-declare const colourAtScale: (generator: ColourScaleGenerator, scaleNumber: number) => string;
-declare function descendingScales(from: number, step: number): Generator<number>;
-//#endregion
 //#region src/colour/okhsl-colour.d.ts
 declare class okHslColour {
   #private;
@@ -67,10 +50,7 @@ declare class okHslColour {
 declare class ColourScaleGenerator {
   #private;
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
-  buildDarkLightenScaleNumbers: (profile: ToneProfile, referenceGenerator: ColourScaleGenerator) => readonly number[];
   computeColour(scaleNumber: number): okHslColour;
-  deriveLightenFractions: (profile: ToneProfile) => readonly number[];
-  findLightnessCeiling: (generator: ColourScaleGenerator) => number;
 }
 //#endregion
 //#region src/colour/constant.d.ts
@@ -99,6 +79,30 @@ declare class MakeSurface {
     lightSurfaceMainHex: string | undefined;
     lightSurfaceVariantHex: string | undefined;
   };
+}
+//#endregion
+//#region src/colour/md3-tones.d.ts
+interface ToneProfile {
+  readonly dark: Md3Tone;
+  readonly light: Md3Tone;
+  readonly lightLightenMilestones: readonly Md3Tone[];
+}
+declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+type Md3Tone = (typeof md3Tones)[number];
+type Md3ToneArray = readonly string[];
+declare const ti: (tone: Md3Tone) => number;
+declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const minTone: 0;
+declare const buildGenerator: (hex: string, backgroundY: number) => ColourScaleGenerator;
+declare const buildMd3Range: (generator: ColourScaleGenerator) => Md3ToneArray;
+declare const colourAtScale: (generator: ColourScaleGenerator, scaleNumber: number) => string;
+declare function descendingScales(from: number, step: number): Generator<number>;
+//#endregion
+//#region src/colour/md3-scale-generator.d.ts
+declare class Md3ScaleGenerator extends ColourScaleGenerator {
+  #private;
+  constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
+  buildDarkLightenScaleNumbers: (profile: ToneProfile) => readonly number[];
 }
 //#endregion
 //#region src/colour/validation.d.ts
@@ -296,5 +300,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { ColourScaleGenerator, type CurvePoint, MakeSurface, type SortArgument, type ToneProfile, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, buildGenerator, buildMd3Range, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, colourAtScale, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, descendingScales, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, minSurfaceLightnessDelta, minTone, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
+export { ColourScaleGenerator, type CurvePoint, MakeSurface, Md3ScaleGenerator, type Md3Tone, type Md3ToneArray, type SortArgument, type ToneProfile, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, buildGenerator, buildMd3Range, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, colourAtScale, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, descendingScales, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, minSurfaceLightnessDelta, minTone, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
 //# sourceMappingURL=index.d.ts.map

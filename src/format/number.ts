@@ -1,20 +1,25 @@
-import { cSpaceFigure, cSpaceNarrowNoBreaking, cSpacePunctuation } from "../unicode.js"
+import { cSpaceFigure, cSpaceNarrowNoBreaking, cSpacePunctuation } from "@/unicode"
+
 import { formatUnit } from "./helpers.js"
 import { formatWithIntl } from "./intl.js"
 
 /**
  * Base number formatter with decimal precision.
  */
-const formatNumber = (value: number, decimals = 2, options: Intl.NumberFormatOptions = {}, svg = false): string => {
-    return formatWithIntl(value, { maximumFractionDigits: decimals, ...options, style: "decimal" }, svg)
+const formatNumber = (value: number, decimals = 2, options: Intl.NumberFormatOptions = {}, isSvg = false): string => {
+    return formatWithIntl(value, { maximumFractionDigits: decimals, ...options, style: "decimal" }, isSvg)
 }
 
 /**
  * Formats a floating-point number with specified decimal places.
  * @example formatFloat(1234.5678, 2) → "1 234.57"
  */
-export const formatFloat = (value: number, decimals = 2, options: Intl.NumberFormatOptions = {}, svg = false): string =>
-    formatNumber(value, decimals, options, svg)
+export const formatFloat = (
+    value: number,
+    decimals = 2,
+    options: Intl.NumberFormatOptions = {},
+    isSvg = false,
+): string => formatNumber(value, decimals, options, isSvg)
 
 /**
  * Formats a float with explicit sign (+/-).
@@ -29,7 +34,7 @@ export const formatSignFloat = (value: number, decimals = 2): string => {
  * Formats a number with SI compact notation (K, M suffixes).
  * @example formatSiFloat(1234567) → "1.2 m" (where m is styled)
  */
-export const formatSiFloat = (value: number, svg = false): string => {
+export const formatSiFloat = (value: number, isSvg = false): string => {
     return formatFloat(
         value,
         2,
@@ -37,7 +42,7 @@ export const formatSiFloat = (value: number, svg = false): string => {
             maximumSignificantDigits: 2,
             notation: "compact",
         },
-        svg,
+        isSvg,
     )
 }
 
@@ -49,9 +54,9 @@ export const formatSiFloat = (value: number, svg = false): string => {
  */
 export const formatFloatFixed = (value: number, decimals = 2): string => {
     return formatFloat(value, decimals, { minimumFractionDigits: decimals })
-        .replace(/\.00$/, cSpacePunctuation + cSpaceFigure + cSpaceFigure)
-        .replace(/\.0$/, cSpacePunctuation + cSpaceFigure)
-        .replaceAll(/\.(\d)0$/g, `.$1${cSpaceFigure}`)
+        .replace(/\.00$/, () => cSpacePunctuation + cSpaceFigure + cSpaceFigure)
+        .replace(/\.0$/, () => cSpacePunctuation + cSpaceFigure)
+        .replaceAll(/\.(\d)0$/g, () => `.$1${cSpaceFigure}`)
 }
 
 export const formatFloatWithUnit = (x: number, u: string): string =>

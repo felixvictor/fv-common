@@ -1,4 +1,4 @@
-import { getLocale } from "../locale.js"
+import { getLocale } from "@/locale"
 
 const ordinalRulesCache = new Map<string, Intl.PluralRules>()
 
@@ -28,16 +28,16 @@ const suffixesSuper = new Map([
 /**
  * Format ordinal number with appropriate suffix.
  * @param n - Integer
- * @param sup - True if superscript suffixes needed
+ * @param isSuperscript - True if superscript suffixes needed
  * @param locale - Optional locale override
  * @example getOrdinal(1) → "1ˢᵗ"
  * @example getOrdinal(2, false) → "2nd"
  * @example getOrdinal(3) → "3ʳᵈ"
  */
-export const getOrdinal = (n: number, sup = true, locale?: string): string => {
+export const getOrdinal = (n: number, isSuperscript = true, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     const ordinalRules = getOrdinalRules(effectiveLocale)
     const rule = ordinalRules.select(n)
-    const suffix = sup ? suffixesSuper.get(rule) : suffixes.get(rule)
+    const suffix = (isSuperscript ? suffixesSuper : suffixes).get(rule)
     return `${n}${suffix ?? ""}`
 }

@@ -61,11 +61,11 @@ export const getStatAsync = async (path: string): Promise<fs.Stats | undefined> 
  * @returns True if path exists, false otherwise.
  *
  * @example
- * if (pathExists('/path/to/something')) {
+ * if (doesPathExist('/path/to/something')) {
  *   console.log('Path exists')
  * }
  */
-export const pathExists = (path: string): boolean => {
+export const doesPathExist = (path: string): boolean => {
     return getStatSync(path) !== undefined
 }
 
@@ -76,10 +76,10 @@ export const pathExists = (path: string): boolean => {
  * @returns Promise resolving to true if path exists, false otherwise.
  *
  * @example
- * if (await pathExistsAsync('/path/to/something')) {
+ * if (await doesPathExistAsync('/path/to/something')) {
  *   console.log('Path exists')
  * }
  */
-export const pathExistsAsync = async (path: string): Promise<boolean> => {
+export const doesPathExistAsync = async (path: string): Promise<boolean> => {
     return (await getStatAsync(path)) !== undefined
 }

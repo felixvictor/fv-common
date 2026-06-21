@@ -116,7 +116,7 @@ export const compassDirectionFromSlider = (compassDirection: number | undefined)
  * Formats a wind direction as both compass direction and degrees.
  *
  * @param wind - Wind direction as compass string or degrees number.
- * @param svg - If true, uses 'tspan' tags instead of 'span' (for SVG context).
+ * @param isSvg - If true, uses 'tspan' tags instead of 'span' (for SVG context).
  * @returns HTML string with formatted compass and degrees.
  *
  * @example
@@ -124,7 +124,7 @@ export const compassDirectionFromSlider = (compassDirection: number | undefined)
  * displayCompassAndDegrees("NE")   // "<span class="caps">NE</span> (45°)"
  * displayCompassAndDegrees(90, true) // "<tspan class="caps">E</tspan> (90°)"
  */
-export const displayCompassAndDegrees = (wind: number | string, svg = false): string => {
+export const displayCompassAndDegrees = (wind: number | string, isSvg = false): string => {
     let compass: string
     let degrees: number
 
@@ -137,7 +137,7 @@ export const displayCompassAndDegrees = (wind: number | string, svg = false): st
         compass = degreesToCompass(degrees)
     }
 
-    const tag = svg ? "tspan" : "span"
+    const tag = isSvg ? "tspan" : "span"
     return `<${tag} class="caps">${compass}</${tag}> (${degrees}°)`
 }
 

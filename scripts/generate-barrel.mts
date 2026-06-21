@@ -54,9 +54,9 @@ const analyzeFileExports = (file: SourceFile) => {
         const declarations = symbol.getDeclarations()
         if (declarations.length === 0) continue
 
-        const decl = declarations[0]
+        const declaration = declarations[0]
 
-        const kind = decl?.getKind() ?? SyntaxKind.Unknown
+        const kind = declaration?.getKind() ?? SyntaxKind.Unknown
         if (isRuntimeValueKind(kind)) values.push(name)
         else types.push(name)
     }
@@ -81,7 +81,7 @@ const generateExportStatements = (file: SourceFile): string => {
     return out
 }
 
-const generateBarrel = async (targetFilePath: string, fileFilter: (filePath: string) => boolean) => {
+const generateBarrel = async (targetFilePath: string, isFileFilter: (filePath: string) => boolean) => {
     const project = new Project({ tsConfigFilePath: "./tsconfig.base.json" })
 
     const sourceFiles = project
@@ -92,7 +92,7 @@ const generateBarrel = async (targetFilePath: string, fileFilter: (filePath: str
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "node.ts"))
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "na.ts"))
         .filter((f) => !f.getBaseName().startsWith("index."))
-        .filter((f) => fileFilter(f.getFilePath()))
+        .filter((f) => isFileFilter(f.getFilePath()))
         .toSorted((a, b) => a.getFilePath().localeCompare(b.getFilePath()))
 
     let body = ""

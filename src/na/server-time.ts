@@ -4,7 +4,9 @@ import utc from "dayjs/plugin/utc.js"
 
 import { serverMaintenanceHour } from "./constants.js"
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(customParseFormat)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(utc)
 
 /**

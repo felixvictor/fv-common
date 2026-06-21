@@ -28,7 +28,7 @@ export const clamp = (value: number | string, min: number | string, max: number 
     let maxNumber = Number(max)
 
     // eslint-disable-next-line unicorn/prefer-number-properties
-    if (isNaN(valueNumber) || isNaN(minNumber) || isNaN(maxNumber)) return Number.NaN
+    if (isNaN(valueNumber) || isNaN(minNumber) || isNaN(maxNumber)) return NaN
 
     if (minNumber > maxNumber) {
         const temporary = minNumber

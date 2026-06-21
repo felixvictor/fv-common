@@ -42,12 +42,11 @@ const logCommandError = (command: string, error: unknown): void => {
     if (isNodeError(error)) {
         if (error.code === "ENOENT") {
             console.error("Command not found:", command)
-            console.error("Error details:", error.message)
         } else {
             console.error("Command execution failed:", command)
             console.error("Error code:", error.code)
-            console.error("Error details:", error.message)
         }
+        console.error("Error details:", error.message)
     } else {
         putError(String(error))
     }
@@ -154,7 +153,7 @@ export const executeCommandString = (command: string, options?: ExecSyncOptions)
  *   console.log("Git is available")
  * }
  */
-export const commandExists = (command: string): boolean => {
+export const doesCommandExist = (command: string): boolean => {
     try {
         const checkCommand = process.platform === "win32" ? "where" : "which"
         execFileSync(checkCommand, [command], { stdio: "ignore" })

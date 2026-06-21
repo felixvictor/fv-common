@@ -12,9 +12,13 @@ import { cDashEn, cSpaceNoBreak } from "../unicode.js"
 import { datetimeFormat } from "./constants.js"
 import { getLocalHour } from "./convert"
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(relativeTime)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(customParseFormat)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(timezone)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(utc)
 
 // Wrapper to sync dayjs locale with library locale
@@ -24,11 +28,13 @@ export const setDateLocale = (locale: string): void => {
 }
 
 // Sync dayjs locale on any locale changes
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 onLocaleChange(() => {
     dayjs.locale(getLocale())
 })
 
 // Initialise with default
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 setDateLocale("en-GB")
 
 /**

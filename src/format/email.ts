@@ -1,4 +1,4 @@
-import { cCombiningDiaeresis } from "../unicode"
+import { cCombiningDiaeresis } from "@/unicode"
 
 export const convertNameForEmail = (name: string): string => {
     return (

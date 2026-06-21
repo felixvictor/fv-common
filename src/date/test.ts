@@ -6,7 +6,9 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js"
 
 import { datetimeFormat } from "./constants.js"
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(isBetween)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(isSameOrBefore)
 
 /**

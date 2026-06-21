@@ -71,19 +71,16 @@ export class okHslColour {
     readonly #colour: Color
 
     constructor(argument: Color | Coords | string) {
-        if (typeof argument === "string") {
-            this.#colour = new Color(argument).to(okHslColour.colorSpace)
-        } else if (argument instanceof Color) {
-            this.#colour = new Color(argument).to(okHslColour.colorSpace)
-        } else {
-            this.#colour = new Color({ coords: argument, space: okHslColour.colorSpace })
-        }
+        this.#colour =
+            typeof argument === "string" || argument instanceof Color
+                ? new Color(argument).to(okHslColour.colorSpace)
+                : new Color({ coords: argument, space: okHslColour.colorSpace })
     }
 
     static mix(color1: okHslColour, color2: okHslColour, weight: number): okHslColour {
         const mix = Color.mix(color1.colourObject, color2.colourObject, weight, {
-            outputSpace: okHslColour.colorSpace,
-            space: okHslColour.colorSpace,
+            outputSpace: this.colorSpace,
+            space: this.colorSpace,
         })
         return new okHslColour(mix)
     }

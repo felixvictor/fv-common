@@ -1,18 +1,19 @@
-import { getLocale } from "../locale.js"
-import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "../unicode.js"
+import { getLocale } from "@/locale"
+import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "@/unicode"
+
 import { beautifySuffix } from "./helpers.js"
 
 /**
  * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
  * Applies thin spaces, proper minus signs, and styled compact notation.
  */
-export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, svg = false): string =>
+export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, isSvg = false): string =>
     new Intl.NumberFormat(getLocale(), options)
         .formatToParts(value)
         .map((part) => {
             switch (part.type) {
                 case "compact": {
-                    return beautifySuffix(part.value, svg)
+                    return beautifySuffix(part.value, isSvg)
                 }
 
                 case "currency": {

@@ -1,4 +1,5 @@
-import { getLocale } from "../locale.js"
+import { getLocale } from "@/locale"
+
 import { getCardinalRules } from "./cardinal.js"
 
 /**

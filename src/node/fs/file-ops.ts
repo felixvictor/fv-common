@@ -62,7 +62,7 @@ export const removeFileAsync = async (fileName: string): Promise<void> => {
  *   console.log("Config file found")
  * }
  */
-export const fileExists = (fileName: string): boolean => {
+export const doesFileExist = (fileName: string): boolean => {
     const stat = getStatSync(fileName)
     return stat?.isFile() === true
 }
@@ -78,14 +78,14 @@ export const fileExists = (fileName: string): boolean => {
  *   console.log("Log file is empty")
  * }
  */
-export const fileEmpty = (fileName: string): boolean => {
+export const isFileEmpty = (fileName: string): boolean => {
     const stat = fs.statSync(fileName, { throwIfNoEntry: fileSystemOptions.throwIfNoEntry })
     return stat?.size === 0
 }
 
 /**
  * Checks if a path exists and is a regular file (not a directory or symlink).
- * Async version of fileExists.
+ * Async version of doesFileExist.
  *
  * @param fileName - Path to check.
  * @returns Promise resolving to true if path exists and is a file, false otherwise.
@@ -95,7 +95,7 @@ export const fileEmpty = (fileName: string): boolean => {
  *   console.log("Config file found")
  * }
  */
-export const fileExistsAsync = async (fileName: string): Promise<boolean> => {
+export const doesFileExistAsync = async (fileName: string): Promise<boolean> => {
     try {
         const stats = await fsPromises.stat(fileName)
         return stats.isFile()

@@ -3,7 +3,7 @@
  *
  * @param array - The source array to be split.
  * @param n - The number of pieces to create (must be >= 1).
- * @param balanced - If true, chunk sizes differ by at most 1 element.
+ * @param isBalanced - If true, chunk sizes differ by at most 1 element.
  *                    If false, creates n-1 equal chunks with remainder in the last chunk.
  * @returns An array of n (or fewer) arrays containing the split pieces.
  * @throws {Error} If n is less than 1.
@@ -16,13 +16,13 @@
  * // Unbalanced split
  * chunkify([1,2,3,4,5,6,7], 3, false) // [[1,2], [3,4], [5,6,7]]
  */
-export const chunkify = <T>(array: T[], n: number, balanced = true): T[][] => {
+export const chunkify = <T>(array: T[], n: number, isBalanced = true): T[][] => {
     // Input validation
     if (n < 1) {
         throw new Error("n must be at least 1")
     }
 
-    if (!Number.isInteger(n)) {
+    if (!Number.isSafeInteger(n)) {
         throw new TypeError("n must be an integer")
     }
 
@@ -43,7 +43,7 @@ export const chunkify = <T>(array: T[], n: number, balanced = true): T[][] => {
 
     const result: T[][] = []
 
-    if (balanced) {
+    if (isBalanced) {
         // Balanced: distribute elements so chunk sizes differ by at most 1
         // This ensures chunks are as even as possible
         let index = 0

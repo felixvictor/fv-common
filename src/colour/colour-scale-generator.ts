@@ -66,9 +66,9 @@ export class ColourScaleGenerator {
         const exponentialTerm = Math.exp(activeExponent * adjustedScaleValue)
         const adjustedBackground = this.#backgroundY + lightnessContrastOffset
 
-        const foregroundY = isLightBackground
-            ? adjustedBackground / exponentialTerm - lightnessContrastOffset
-            : exponentialTerm * adjustedBackground - lightnessContrastOffset
+        const foregroundY =
+            (isLightBackground ? adjustedBackground / exponentialTerm : exponentialTerm * adjustedBackground) -
+            lightnessContrastOffset
 
         return applyToeCurve(yToLightness(foregroundY))
     }

@@ -28,7 +28,7 @@ export { formatPercent, formatPP, formatSignPercent } from "./format/percent.js"
 export { capitalizeFirstLetter, pluralise } from "./format/text.js";
 export { getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth } from "./html.js";
 export { getLocale, onLocaleChange, setLocale } from "./locale.js";
-export { between } from "./math/common.js";
+export { isBetween } from "./math/common.js";
 export { getCurveValue, getCurveValueClamped } from "./math/find-segment.js";
 export type { CurvePoint } from "./math/find-segment.js";
 export { nearestPow2, nextPow2 } from "./math/power.js";

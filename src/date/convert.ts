@@ -3,8 +3,11 @@ import customParseFormat from "dayjs/plugin/customParseFormat.js"
 import timezone from "dayjs/plugin/timezone.js"
 import utc from "dayjs/plugin/utc.js"
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(customParseFormat)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(timezone)
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(utc)
 
 export const convertDEDateString = (date: string): string => dayjs(date, "DD.MM.YYYY HH:mm", true).toISOString()

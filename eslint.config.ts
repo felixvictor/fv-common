@@ -48,7 +48,7 @@ export default defineConfig(
                 {
                     custom: {
                         match: true,
-                        regex: "^(is|has|can|should|will|did)[A-Z]",
+                        regex: "^(is|has|can|should|will|did|does)[A-Z]",
                     },
                     format: ["camelCase"],
                     selector: "variable",
@@ -59,6 +59,15 @@ export default defineConfig(
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
             "prefer-template": "error",
+            "unicorn/consistent-boolean-name": [
+                "error",
+                {
+                    prefixes: {
+                        does: true,
+                    },
+                },
+            ],
+            "unicorn/consistent-class-member-order": "off",
         },
     },
     {
@@ -76,7 +85,7 @@ export default defineConfig(
                 {
                     custom: {
                         match: true,
-                        regex: "^(is|has|can|should|will|did)[A-Z]",
+                        regex: "^(is|has|can|should|will|did|does)[A-Z]",
                     },
                     format: ["camelCase"],
                     selector: "variable",
@@ -87,6 +96,15 @@ export default defineConfig(
             "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
             curly: ["error", "multi-line"],
             "prefer-template": "error",
+            "unicorn/consistent-boolean-name": [
+                "error",
+                {
+                    prefixes: {
+                        does: true,
+                    },
+                },
+            ],
+            "unicorn/consistent-class-member-order": "off",
         },
     },
     {

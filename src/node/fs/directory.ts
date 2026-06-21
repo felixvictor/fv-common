@@ -149,14 +149,14 @@ export const removeDirectoryAsync = async (directoryPath: string): Promise<void>
  *   console.log("Logs directory exists")
  * }
  */
-export const directoryExists = (directoryPath: string): boolean => {
+export const doesDirectoryExist = (directoryPath: string): boolean => {
     const stat = getStatSync(directoryPath)
     return stat?.isDirectory() === true
 }
 
 /**
  * Checks if a path exists and is a directory (not a file).
- * Async version of directoryExists.
+ * Async version of doesDirectoryExist.
  *
  * @param directoryPath - Path to check.
  * @returns Promise resolving to true if path exists and is a directory, false otherwise.
@@ -166,7 +166,7 @@ export const directoryExists = (directoryPath: string): boolean => {
  *   console.log("Logs directory exists")
  * }
  */
-export const directoryExistsAsync = async (directoryPath: string): Promise<boolean> => {
+export const doesDirectoryExistAsync = async (directoryPath: string): Promise<boolean> => {
     try {
         const stats = await fsPromises.stat(directoryPath)
         return stats.isDirectory()

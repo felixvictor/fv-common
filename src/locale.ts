@@ -2,11 +2,14 @@ let currentLocale = "en-GB"
 const localeChangeCallbacks: (() => void)[] = []
 
 export const setLocale = (locale: string): void => {
-    if (currentLocale !== locale) {
-        currentLocale = locale
-        // Notify all registered callbacks
-        for (const callback of localeChangeCallbacks) callback()
+    if (currentLocale === locale) {
+        return
     }
+
+    // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
+    currentLocale = locale
+    // Notify all registered callbacks
+    for (const callback of localeChangeCallbacks) callback()
 }
 
 export const getLocale = (): string => currentLocale

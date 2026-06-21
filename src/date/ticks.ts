@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 dayjs.extend(utc)
 
 /**

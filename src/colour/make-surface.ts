@@ -1,7 +1,7 @@
 import { okHslColour } from "@/colour/okhsl-colour"
 
 export class MakeSurface {
-    #baseOkhsl: okHslColour | undefined
+    readonly #baseOkhsl: okHslColour
 
     readonly #darkSurfaceChromaBright = 0.16
     readonly #darkSurfaceChromaLight = 0.14
@@ -17,17 +17,15 @@ export class MakeSurface {
     readonly #lightSurfaceChromaMain = 0.18
     readonly #lightSurfaceChromaVariant = 0.38
     readonly #lightSurfaceLightnessBright = 0.985
-    readonly #lightSurfaceLightnessLight = 0.945
+    readonly #lightSurfaceLightnessLight = 0.94
     readonly #lightSurfaceLightnessMain = 0.962
-    readonly #lightSurfaceLightnessVariant = 0.92
+    readonly #lightSurfaceLightnessVariant = 0.915
 
     constructor(baseHex: string) {
         this.#baseOkhsl = new okHslColour(baseHex)
     }
 
-    getSurface = (lightness: number, chromaFraction: number): string | undefined => {
-        if (this.#baseOkhsl === undefined) return
-
+    getSurface = (lightness: number, chromaFraction: number): string => {
         const h = this.#baseOkhsl.h
         const s = this.#baseOkhsl.s
         return new okHslColour([h, s * chromaFraction, lightness]).hex
@@ -47,6 +45,6 @@ export class MakeSurface {
                 this.#lightSurfaceLightnessVariant,
                 this.#lightSurfaceChromaVariant,
             ),
-        }
+        } as const
     }
 }

@@ -68,16 +68,16 @@ declare const getContrastColour: (colour: string, colourBlack?: string, colourWh
 declare class MakeSurface {
   #private;
   constructor(baseHex: string);
-  getSurface: (lightness: number, chromaFraction: number) => string | undefined;
+  getSurface: (lightness: number, chromaFraction: number) => string;
   makeSurface(): {
-    darkSurfaceBrightHex: string | undefined;
-    darkSurfaceLightHex: string | undefined;
-    darkSurfaceMainHex: string | undefined;
-    darkSurfaceVariantHex: string | undefined;
-    lightSurfaceBrightHex: string | undefined;
-    lightSurfaceLightHex: string | undefined;
-    lightSurfaceMainHex: string | undefined;
-    lightSurfaceVariantHex: string | undefined;
+    readonly darkSurfaceBrightHex: string;
+    readonly darkSurfaceLightHex: string;
+    readonly darkSurfaceMainHex: string;
+    readonly darkSurfaceVariantHex: string;
+    readonly lightSurfaceBrightHex: string;
+    readonly lightSurfaceLightHex: string;
+    readonly lightSurfaceMainHex: string;
+    readonly lightSurfaceVariantHex: string;
   };
 }
 //#endregion

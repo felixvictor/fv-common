@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.45.8](/fj.byrtz.de/ibey/fv-common/compare/1.45.7...1.45.8) (2026-06-21)
+
+### Bug Fixes
+
+* make surface with calculated constants ([b1da34b](/fj.byrtz.de/ibey/fv-common/commit/b1da34b1de63075be274934370de17fe4472afbd))
+
 ## [1.45.7](/fj.byrtz.de/ibey/fv-common/compare/1.45.6...1.45.7) (2026-06-21)
 
 ### Bug Fixes

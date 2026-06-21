@@ -23,8 +23,8 @@ export interface ToneProfile {
 // ---------------------------------------------------------------------------
 
 const md3Tones = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100] as const
-type Md3Tone = (typeof md3Tones)[number]
-type Md3ToneArray = readonly string[]
+export type Md3Tone = (typeof md3Tones)[number]
+export type Md3ToneArray = readonly string[]
 
 export const ti = (tone: Md3Tone): number => md3Tones.indexOf(tone)
 

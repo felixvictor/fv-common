@@ -93,9 +93,9 @@ type Md3ToneArray = readonly string[];
 declare const ti: (tone: Md3Tone) => number;
 declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
 declare const minTone: 0;
-declare const buildGenerator: (hex: string, backgroundY: number) => ColourScaleGenerator;
-declare const buildMd3Range: (generator: ColourScaleGenerator) => Md3ToneArray;
-declare const colourAtScale: (generator: ColourScaleGenerator, scaleNumber: number) => string;
+declare const buildGenerator: (hex: string, backgroundY: number) => Md3ScaleGenerator;
+declare const buildMd3Range: (generator: Md3ScaleGenerator) => Md3ToneArray;
+declare const colourAtScale: (generator: Md3ScaleGenerator, scaleNumber: number) => string;
 declare function descendingScales(from: number, step: number): Generator<number>;
 //#endregion
 //#region src/colour/md3-scale-generator.d.ts

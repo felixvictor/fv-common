@@ -1,6 +1,7 @@
 import { hueDelta } from "@/colour/colour-math"
 import { getContrastRatio, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
 import { okHslColour } from "@/colour/okhsl-colour"
+import { round } from "@/format/number"
 
 export const seedLightnessMin = 0.35
 export const seedLightnessMax = 0.65
@@ -15,17 +16,17 @@ export const validateSeed = (name: string, hex: string, options: { neutral?: boo
     const s = c.s
     if (l < seedLightnessMin || l > seedLightnessMax) {
         console.warn(
-            `${name} (${hex}): lightness ${l.toFixed(2)} outside ideal range ${seedLightnessMin}–${seedLightnessMax} – generated tones may lack contrast`,
+            `${name} (${hex}): lightness ${round(l, 2)} outside ideal range ${seedLightnessMin}–${seedLightnessMax} – generated tones may lack contrast`,
         )
     }
     if (options.neutral && s > neutralChromaMax) {
         console.warn(
-            `${name} (${hex}): saturation ${s.toFixed(2)} > ${neutralChromaMax} – neutral seeds should be near-grey`,
+            `${name} (${hex}): saturation ${round(s, 2)} > ${neutralChromaMax} – neutral seeds should be near-grey`,
         )
     }
     if (!options.neutral && s < seedChromaMin) {
         console.warn(
-            `${name} (${hex}): saturation ${s.toFixed(2)} < ${seedChromaMin} – low chroma may produce washed-out tones`,
+            `${name} (${hex}): saturation ${round(s, 2)} < ${seedChromaMin} – low chroma may produce washed-out tones`,
         )
     }
 }
@@ -34,7 +35,7 @@ export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hex
     const delta = hueDelta(hexA, hexB)
     if (delta < minSeedHueDelta) {
         console.warn(
-            `${nameA} and ${nameB} are only ${delta.toFixed(1)}° apart in hue – their tonal ranges may be indistinguishable`,
+            `${nameA} and ${nameB} are only ${round(delta, 1)}° apart in hue – their tonal ranges may be indistinguishable`,
         )
     }
 }
@@ -55,7 +56,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
     for (const [fg, bg] of textPairs) {
         const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagTextMinRatio) {
-            console.warn(`${label}: ${fg}/${bg} contrast ${ratio.toFixed(2)}:1 < ${wcagTextMinRatio}:1 (WCAG AA)`)
+            console.warn(`${label}: ${fg}/${bg} contrast ${ratio} < ${wcagTextMinRatio} (WCAG AA)`)
         }
     }
 
@@ -66,9 +67,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
     for (const [fg, bg] of uiPairs) {
         const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagUiMinRatio) {
-            console.warn(
-                `${label}: ${fg}/${bg} contrast ${ratio.toFixed(2)}:1 < ${wcagUiMinRatio}:1 (WCAG AA non-text)`,
-            )
+            console.warn(`${label}: ${fg}/${bg} contrast ${ratio} < ${wcagUiMinRatio} (WCAG AA non-text)`)
         }
     }
 
@@ -83,7 +82,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         const delta = Math.abs(lA - lB)
         if (delta < minSurfaceLightnessDelta) {
             console.warn(
-                `${label}: ${a} and ${b} are too similar (ΔL=${delta.toFixed(3)} < ${minSurfaceLightnessDelta}) – surfaces may be indistinguishable`,
+                `${label}: ${a} and ${b} are too similar (ΔL=${round(delta, 3)} < ${minSurfaceLightnessDelta}) – surfaces may be indistinguishable`,
             )
         }
     }

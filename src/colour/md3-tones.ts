@@ -1,5 +1,5 @@
-import { ColourScaleGenerator } from "@/colour/colour-scale-generator"
 import { blackHex, whiteHex } from "@/colour/constant"
+import { Md3ScaleGenerator } from "@/colour/md3-scale-generator"
 import { okHslColour } from "@/colour/okhsl-colour"
 
 export interface ToneProfile {
@@ -42,24 +42,23 @@ const maxTone = md3Tones.at(-1)!
 // ---------------------------------------------------------------------------
 // Generator plumbing
 //
-// `ColourScaleGenerator.computeColour(n)` accepts *any* scale number from
+// `Md3ScaleGenerator.computeColour(n)` accepts *any* scale number from
 // 0–100, not just the thirteen named MD3 milestones above. Keeping the
 // generator itself around (rather than only the resolved hex array) is
 // what lets the dark-theme "lighten" fix below request bespoke, in-between
 // scale numbers instead of being limited to those thirteen milestones.
 // ---------------------------------------------------------------------------
-
-export const buildGenerator = (hex: string, backgroundY: number): ColourScaleGenerator => {
+export const buildGenerator = (hex: string, backgroundY: number): Md3ScaleGenerator => {
     const seed = new okHslColour(hex)
     const minChroma = Math.max(0, seed.s - chromaMinOffset)
     const maxChroma = Math.min(1, seed.s + chromaMaxOffset)
-    return new ColourScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
+    return new Md3ScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
 }
 
-export const buildMd3Range = (generator: ColourScaleGenerator): Md3ToneArray =>
+export const buildMd3Range = (generator: Md3ScaleGenerator): Md3ToneArray =>
     md3Tones.map((tone) => colourAtScale(generator, tone))
 
-export const colourAtScale = (generator: ColourScaleGenerator, scaleNumber: number): string => {
+export const colourAtScale = (generator: Md3ScaleGenerator, scaleNumber: number): string => {
     if (scaleNumber <= minTone) return blackHex
     if (scaleNumber >= maxTone) return whiteHex
     return generator.computeColour(scaleNumber).hex

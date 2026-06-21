@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.45.9](/fj.byrtz.de/ibey/fv-common/compare/1.45.8...1.45.9) (2026-06-21)
+
+### Bug Fixes
+
+* validation with rounded numbers ([05d5242](/fj.byrtz.de/ibey/fv-common/commit/05d52427be734b6596b00db28cc30b4bbb04d852))
+
 ## [1.45.8](/fj.byrtz.de/ibey/fv-common/compare/1.45.7...1.45.8) (2026-06-21)
 
 ### Bug Fixes

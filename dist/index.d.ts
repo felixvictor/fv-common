@@ -67,6 +67,7 @@ declare const getContrastColour: (colour: string, colourBlack?: string, colourWh
 declare class MakeSurface {
   #private;
   constructor(baseHex: string);
+  calculateSurface(lightness: number, chromaFactor: number): string;
   makeSurface(): {
     readonly darkSurfaceBrightHex: string;
     readonly darkSurfaceLightHex: string;

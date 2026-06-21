@@ -1,16 +1,8 @@
+import type { Md3ToneArray, ToneProfile } from "@/colour/md3-tones"
+
 import { ColourScaleGenerator } from "@/colour/colour-scale-generator"
 import { blackHex, whiteHex } from "@/colour/constant"
-import {
-    descendingScales,
-    fallback,
-    maxTone,
-    type Md3ToneArray,
-    md3Tones,
-    minTone,
-    scaleNumberMax,
-    ti,
-    type ToneProfile,
-} from "@/colour/md3-tones"
+import { descendingScales, fallback, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "@/colour/md3-tones"
 
 export class Md3ScaleGenerator extends ColourScaleGenerator {
     #ceiling: number

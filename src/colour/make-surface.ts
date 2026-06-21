@@ -17,7 +17,7 @@ export class MakeSurface {
     readonly #lightSurfaceChromaMain = 0.42
     readonly #lightSurfaceChromaVariant = 0.65
     readonly #lightSurfaceLightnessBright = 0.985
-    readonly #lightSurfaceLightnessLight = 0.94
+    readonly #lightSurfaceLightnessLight = 0.92
     readonly #lightSurfaceLightnessMain = 0.95
     readonly #lightSurfaceLightnessVariant = 0.915
 

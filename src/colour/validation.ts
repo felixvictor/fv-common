@@ -1,5 +1,5 @@
 import { hueDelta } from "@/colour/colour-math"
-import { contrastRatio, minSurfaceLightnessDelta, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
+import { getContrastRatio, minSurfaceLightnessDelta, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
 import { okHslColour } from "@/colour/okhsl-colour"
 
 const seedLightnessMin = 0.35
@@ -55,7 +55,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
     ]
 
     for (const [fg, bg] of textPairs) {
-        const ratio = contrastRatio(theme[fg] ?? "", theme[bg] ?? "")
+        const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagTextMinRatio) {
             console.warn(`${label}: ${fg}/${bg} contrast ${ratio.toFixed(2)}:1 < ${wcagTextMinRatio}:1 (WCAG AA)`)
         }
@@ -66,7 +66,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         ["outline-variant", "surface"],
     ]
     for (const [fg, bg] of uiPairs) {
-        const ratio = contrastRatio(theme[fg] ?? "", theme[bg] ?? "")
+        const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagUiMinRatio) {
             console.warn(
                 `${label}: ${fg}/${bg} contrast ${ratio.toFixed(2)}:1 < ${wcagUiMinRatio}:1 (WCAG AA non-text)`,

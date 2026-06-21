@@ -5,9 +5,11 @@
 export { chunkify } from "./chunkify.js";
 export { applyToeCurve, backgroundLightnessThreshold, chromaCurveFactor, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, hueDelta, hueShiftFactor, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, luminanceY, yToLightness } from "./colour/colour-math.js";
 export { ColourScaleGenerator } from "./colour/colour-scale-generator.js";
-export { getContrastColour } from "./colour/common.js";
-export { contrastRatio, minSurfaceLightnessDelta, wcagTextMinRatio, wcagUiMinRatio } from "./colour/contrast.js";
+export { blackHex, whiteHex } from "./colour/constant.js";
+export { getContrastColour, getContrastRatio, minSurfaceLightnessDelta, wcagTextMinRatio, wcagUiMinRatio } from "./colour/contrast.js";
 export { MakeSurface } from "./colour/make-surface.js";
+export { buildGenerator, buildMd3Range, colourAtScale, descendingScales, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
+export type { ToneProfile } from "./colour/md3-tones.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";
 export { clamp, clampUnsafe, isEmpty, isObject } from "./common.js";

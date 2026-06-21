@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.42.0](/fj.byrtz.de/ibey/fv-common/compare/1.41.0...1.42.0) (2026-06-21)
+
+### Features
+
+* md3 tone scales ([74b2f04](/fj.byrtz.de/ibey/fv-common/commit/74b2f0478414efa1beaac855116bbfcde33c3718))
+
 ## [1.41.0](/fj.byrtz.de/ibey/fv-common/compare/1.40.0...1.41.0) (2026-06-14)
 
 ### Features

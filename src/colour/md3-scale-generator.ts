@@ -1,5 +1,16 @@
 import { ColourScaleGenerator } from "@/colour/colour-scale-generator"
-import { descendingScales, scaleNumberMax, type ToneProfile } from "@/colour/md3-tones"
+import { blackHex, whiteHex } from "@/colour/constant"
+import {
+    descendingScales,
+    fallback,
+    maxTone,
+    type Md3ToneArray,
+    md3Tones,
+    minTone,
+    scaleNumberMax,
+    ti,
+    type ToneProfile,
+} from "@/colour/md3-tones"
 
 export class Md3ScaleGenerator extends ColourScaleGenerator {
     #ceiling: number
@@ -20,6 +31,25 @@ export class Md3ScaleGenerator extends ColourScaleGenerator {
         return this.#deriveLightenFractions(profile).map(
             (fraction) => Math.round((profile.dark + fraction * (this.#ceiling - profile.dark)) * 10) / 10,
         )
+    }
+
+    /** Resolves a family's "lighten" colours for the given theme – dynamically computed in the dark theme, milestone-based in the light theme. */
+    buildLightenSteps = (
+        light: Md3ToneArray,
+        profile: ToneProfile,
+        darkScaleNumbers: readonly number[],
+        isDark: boolean,
+    ): readonly string[] =>
+        isDark
+            ? darkScaleNumbers.map((scale) => this.colourAtScale(scale))
+            : profile.lightLightenMilestones.map((tone) => fallback(light, ti(tone)))
+
+    buildMd3Range = (): Md3ToneArray => md3Tones.map((tone) => this.colourAtScale(tone))
+
+    colourAtScale = (scaleNumber: number): string => {
+        if (scaleNumber <= minTone) return blackHex
+        if (scaleNumber >= maxTone) return whiteHex
+        return this.computeColour(scaleNumber).hex
     }
 
     /** Converts a family's light-theme milestones into fractional positions between its base tone and white. */

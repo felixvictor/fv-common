@@ -1,4 +1,4 @@
-import { blackHex, whiteHex } from "@/colour/constant"
+import { blackHex } from "@/colour/constant"
 import { Md3ScaleGenerator } from "@/colour/md3-scale-generator"
 import { okHslColour } from "@/colour/okhsl-colour"
 
@@ -22,7 +22,7 @@ export interface ToneProfile {
 // md3Tones[index] = tone value: ti(10) = index 1, ti(99) = index 11, etc.
 // ---------------------------------------------------------------------------
 
-const md3Tones = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100] as const
+export const md3Tones = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100] as const
 export type Md3Tone = (typeof md3Tones)[number]
 export type Md3ToneArray = readonly string[]
 
@@ -37,7 +37,7 @@ export const scaleNumberMax = md3Tones[ti(100)] ?? 100
 /** Resolves a single scale number to a hex colour, snapping the two extremes to true black/white. */
 export const minTone = md3Tones[0]
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const maxTone = md3Tones.at(-1)!
+export const maxTone = md3Tones.at(-1)!
 
 // ---------------------------------------------------------------------------
 // Generator plumbing
@@ -55,16 +55,10 @@ export const buildGenerator = (hex: string, backgroundY: number): Md3ScaleGenera
     return new Md3ScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
 }
 
-export const buildMd3Range = (generator: Md3ScaleGenerator): Md3ToneArray =>
-    md3Tones.map((tone) => colourAtScale(generator, tone))
-
-export const colourAtScale = (generator: Md3ScaleGenerator, scaleNumber: number): string => {
-    if (scaleNumber <= minTone) return blackHex
-    if (scaleNumber >= maxTone) return whiteHex
-    return generator.computeColour(scaleNumber).hex
-}
-
 /** Yields descending scale numbers; an ES2025 iterator so the search below never has to materialise an array. */
 export function* descendingScales(from: number, step: number): Generator<number> {
     for (let scale = from; scale > minTone; scale -= step) yield scale
 }
+
+/** Looks up a value by MD3 tone, falling back to true black if the array is somehow short. */
+export const fallback = (array: Md3ToneArray, index: number): string => array[index] ?? blackHex

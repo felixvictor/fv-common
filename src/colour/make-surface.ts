@@ -1,50 +1,55 @@
 import { okHslColour } from "@/colour/okhsl-colour"
+import { minSurfaceLightnessDelta } from "@/colour/validation"
 
 export class MakeSurface {
+    static readonly #darkChromaMain = 0.12
+    static readonly #darkChromaBright = MakeSurface.#darkChromaMain * 1.3
+    static readonly #darkChromaLight = MakeSurface.#darkChromaMain * 1.1
+    static readonly #darkChromaVariant = MakeSurface.#darkChromaMain * 1.8
+    static readonly #darkMainL = 0.06
+
+    static readonly #lightChromaMain = 0.42
+    static readonly #lightChromaBright = MakeSurface.#lightChromaMain * 0.6
+    static readonly #lightChromaLight = MakeSurface.#lightChromaMain * 1.2
+    static readonly #lightChromaVariant = MakeSurface.#lightChromaMain * 1.5
+    static readonly #lightMainL = 0.95
+
+    static readonly #paddingL = 0.005
+    static readonly #stepL = minSurfaceLightnessDelta + MakeSurface.#paddingL
+
     readonly #baseOkhsl: okHslColour
-
-    readonly #darkSurfaceChromaBright = 0.16
-    readonly #darkSurfaceChromaLight = 0.14
-    readonly #darkSurfaceChromaMain = 0.12
-    readonly #darkSurfaceChromaVariant = 0.22
-    readonly #darkSurfaceLightnessBright = 0.13
-    readonly #darkSurfaceLightnessLight = 0.09
-    readonly #darkSurfaceLightnessMain = 0.06
-    readonly #darkSurfaceLightnessVariant = 0.16
-
-    readonly #lightSurfaceChromaBright = 0.25
-    readonly #lightSurfaceChromaLight = 0.5
-    readonly #lightSurfaceChromaMain = 0.42
-    readonly #lightSurfaceChromaVariant = 0.65
-    readonly #lightSurfaceLightnessBright = 0.985
-    readonly #lightSurfaceLightnessLight = 0.92
-    readonly #lightSurfaceLightnessMain = 0.95
-    readonly #lightSurfaceLightnessVariant = 0.915
 
     constructor(baseHex: string) {
         this.#baseOkhsl = new okHslColour(baseHex)
     }
 
-    getSurface = (lightness: number, chromaFraction: number): string => {
-        const h = this.#baseOkhsl.h
-        const s = this.#baseOkhsl.s
-        return new okHslColour([h, s * chromaFraction, lightness]).hex
+    makeSurface() {
+        const lightMain = MakeSurface.#lightMainL
+        const lightBright = lightMain + MakeSurface.#stepL
+        const lightLight = lightMain - MakeSurface.#stepL
+        const lightVariant = lightLight - MakeSurface.#stepL
+
+        const darkMain = MakeSurface.#darkMainL
+        const darkLight = darkMain + MakeSurface.#stepL
+        const darkBright = darkLight + MakeSurface.#stepL
+        const darkVariant = darkBright + MakeSurface.#stepL
+
+        return {
+            darkSurfaceBrightHex: this.#calculateSurface(darkBright, MakeSurface.#darkChromaBright),
+            darkSurfaceLightHex: this.#calculateSurface(darkLight, MakeSurface.#darkChromaLight),
+            darkSurfaceMainHex: this.#calculateSurface(darkMain, MakeSurface.#darkChromaMain),
+            darkSurfaceVariantHex: this.#calculateSurface(darkVariant, MakeSurface.#darkChromaVariant),
+
+            lightSurfaceBrightHex: this.#calculateSurface(lightBright, MakeSurface.#lightChromaBright),
+            lightSurfaceLightHex: this.#calculateSurface(lightLight, MakeSurface.#lightChromaLight),
+            lightSurfaceMainHex: this.#calculateSurface(lightMain, MakeSurface.#lightChromaMain),
+            lightSurfaceVariantHex: this.#calculateSurface(lightVariant, MakeSurface.#lightChromaVariant),
+        } as const
     }
 
-    makeSurface() {
-        return {
-            darkSurfaceBrightHex: this.getSurface(this.#darkSurfaceLightnessBright, this.#darkSurfaceChromaBright),
-            darkSurfaceLightHex: this.getSurface(this.#darkSurfaceLightnessLight, this.#darkSurfaceChromaLight),
-            darkSurfaceMainHex: this.getSurface(this.#darkSurfaceLightnessMain, this.#darkSurfaceChromaMain),
-            darkSurfaceVariantHex: this.getSurface(this.#darkSurfaceLightnessVariant, this.#darkSurfaceChromaVariant),
-
-            lightSurfaceBrightHex: this.getSurface(this.#lightSurfaceLightnessBright, this.#lightSurfaceChromaBright),
-            lightSurfaceLightHex: this.getSurface(this.#lightSurfaceLightnessLight, this.#lightSurfaceChromaLight),
-            lightSurfaceMainHex: this.getSurface(this.#lightSurfaceLightnessMain, this.#lightSurfaceChromaMain),
-            lightSurfaceVariantHex: this.getSurface(
-                this.#lightSurfaceLightnessVariant,
-                this.#lightSurfaceChromaVariant,
-            ),
-        } as const
+    #calculateSurface(lightness: number, chromaFactor: number): string {
+        const h = this.#baseOkhsl.h
+        const s = this.#baseOkhsl.s * chromaFactor
+        return new okHslColour([h, s, lightness]).hex
     }
 }

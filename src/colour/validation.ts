@@ -1,14 +1,13 @@
 import { hueDelta } from "@/colour/colour-math"
-import { getContrastRatio, minSurfaceLightnessDelta, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
+import { getContrastRatio, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
 import { okHslColour } from "@/colour/okhsl-colour"
 
-const seedLightnessMin = 0.35
-const seedLightnessMax = 0.65
-const seedChromaMin = 0.4
-const neutralChromaMax = 0.15
-
-/** Minimum hue separation between seeds that share a semantic role boundary. */
-const minSeedHueDelta = 5
+export const seedLightnessMin = 0.35
+export const seedLightnessMax = 0.65
+export const seedChromaMin = 0.38
+export const neutralChromaMax = 0.15
+export const minSeedHueDelta = 5
+export const minSurfaceLightnessDelta = 0.02 // minimum ΔL between adjacent surface levels
 
 export const validateSeed = (name: string, hex: string, options: { neutral?: boolean } = {}) => {
     const c = new okHslColour(hex)
@@ -41,7 +40,6 @@ export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hex
 }
 
 export const validateTheme = (theme: Record<string, string | undefined>, label: string) => {
-    // WCAG text contrast: on-X against X
     const textPairs: [string, string][] = [
         ["on-primary", "primary"],
         ["on-secondary", "secondary"],

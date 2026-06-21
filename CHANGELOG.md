@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.45.2](/fj.byrtz.de/ibey/fv-common/compare/1.45.1...1.45.2) (2026-06-21)
+
+### Bug Fixes
+
+* md3 surface colours ([de5c67f](/fj.byrtz.de/ibey/fv-common/commit/de5c67fc955d3d415d78d2cad8c3d53bec9e606c))
+
 ## [1.45.1](/fj.byrtz.de/ibey/fv-common/compare/1.45.0...1.45.1) (2026-06-21)
 
 ## [1.45.0](/fj.byrtz.de/ibey/fv-common/compare/1.44.0...1.45.0) (2026-06-21)

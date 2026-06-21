@@ -17,7 +17,7 @@ interface CommandResult {
 declare const executeCommand: (command: string, options?: ExecSyncOptions) => string;
 declare const executeCommandWithResult: (command: string, options?: ExecSyncOptions) => CommandResult;
 declare const executeCommandString: (command: string, options?: ExecSyncOptions) => string;
-declare const commandExists: (command: string) => boolean;
+declare const doesCommandExist: (command: string) => boolean;
 declare const executeCommandAsync: (command: string, options?: ExecSyncOptions) => Promise<string>;
 declare const executeCommandAsyncWithResult: (command: string, options?: ExecSyncOptions) => Promise<AsyncCommandResult>;
 declare const commandExistsAsync: (command: string) => Promise<boolean>;
@@ -57,8 +57,8 @@ declare const readDirectoryNotRecursive: (directoryPath: string) => string[];
 declare const readDirectoryNotRecursiveAsync: (directoryPath: string) => Promise<string[]>;
 declare const removeDirectorySync: (directoryPath: string) => void;
 declare const removeDirectoryAsync: (directoryPath: string) => Promise<void>;
-declare const directoryExists: (directoryPath: string) => boolean;
-declare const directoryExistsAsync: (directoryPath: string) => Promise<boolean>;
+declare const doesDirectoryExist: (directoryPath: string) => boolean;
+declare const doesDirectoryExistAsync: (directoryPath: string) => Promise<boolean>;
 //#endregion
 //#region src/node/fs/file-io.d.ts
 declare const readTextFileSync: (fileName: string) => string | undefined;
@@ -81,9 +81,9 @@ declare const saveImageAsync: (fileName: string, data: Buffer) => Promise<void>;
 //#region src/node/fs/file-ops.d.ts
 declare const removeFileSync: (fileName: string) => void;
 declare const removeFileAsync: (fileName: string) => Promise<void>;
-declare const fileExists: (fileName: string) => boolean;
-declare const fileEmpty: (fileName: string) => boolean;
-declare const fileExistsAsync: (fileName: string) => Promise<boolean>;
+declare const doesFileExist: (fileName: string) => boolean;
+declare const isFileEmpty: (fileName: string) => boolean;
+declare const doesFileExistAsync: (fileName: string) => Promise<boolean>;
 declare const getFileSize: (fileName: string) => number | undefined;
 //#endregion
 //#region src/node/fs/fs.d.ts
@@ -122,8 +122,8 @@ declare const joinPaths: (path1: string, path2: string) => string;
 //#region src/node/fs/stat.d.ts
 declare const getStatSync: (path: string) => fs.Stats | undefined;
 declare const getStatAsync: (path: string) => Promise<fs.Stats | undefined>;
-declare const pathExists: (path: string) => boolean;
-declare const pathExistsAsync: (path: string) => Promise<boolean>;
+declare const doesPathExist: (path: string) => boolean;
+declare const doesPathExistAsync: (path: string) => Promise<boolean>;
 //#endregion
-export { appendToFileName, changeExtension, changeFileName, commandExists, commandExistsAsync, defaultEncoding, directoryExists, directoryExistsAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, fileEmpty, fileExists, fileExistsAsync, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isFileOlderThan, isFileOlderThanAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, pathExists, pathExistsAsync, prependToFileName, putError, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync };
+export { appendToFileName, changeExtension, changeFileName, commandExistsAsync, defaultEncoding, doesCommandExist, doesDirectoryExist, doesDirectoryExistAsync, doesFileExist, doesFileExistAsync, doesPathExist, doesPathExistAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isFileEmpty, isFileOlderThan, isFileOlderThanAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, prependToFileName, putError, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync };
 //# sourceMappingURL=node.d.mts.map

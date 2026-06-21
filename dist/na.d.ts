@@ -6,7 +6,7 @@ declare const compassToDegrees: (compass: string) => number;
 declare const degreesToCompass: (degrees: number | undefined) => string;
 declare const degreesToCompassSlider: (degrees: number | undefined) => string;
 declare const compassDirectionFromSlider: (compassDirection: number | undefined) => number;
-declare const displayCompassAndDegrees: (wind: number | string, svg?: boolean) => string;
+declare const displayCompassAndDegrees: (wind: number | string, isSvg?: boolean) => string;
 declare const isCardinalOrIntercardinal: (index: number) => boolean;
 declare const isCardinal: (index: number) => boolean;
 //#endregion

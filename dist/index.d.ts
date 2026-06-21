@@ -1,7 +1,7 @@
 import Color, { Coords } from "colorjs.io";
 import dayjs, { Dayjs } from "dayjs";
 //#region src/chunkify.d.ts
-declare const chunkify: <T>(array: T[], n: number, balanced?: boolean) => T[][];
+declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
 //#region src/colour/colour-math.d.ts
 declare const backgroundLightnessThreshold: 0.18;
@@ -21,6 +21,23 @@ declare const applyToeCurve: (lightness: number) => number;
 declare const yToLightness: (y: number) => number;
 declare const luminanceY: (hex: string | undefined) => number | undefined;
 declare const hueDelta: (hex1: string, hex2: string) => number;
+//#endregion
+//#region src/colour/md3-tones.d.ts
+interface ToneProfile {
+  readonly dark: Md3Tone;
+  readonly light: Md3Tone;
+  readonly lightLightenMilestones: readonly Md3Tone[];
+}
+declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+type Md3Tone = (typeof md3Tones)[number];
+type Md3ToneArray = readonly string[];
+declare const ti: (tone: Md3Tone) => number;
+declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const minTone: 0;
+declare const buildGenerator: (hex: string, backgroundY: number) => ColourScaleGenerator;
+declare const buildMd3Range: (generator: ColourScaleGenerator) => Md3ToneArray;
+declare const colourAtScale: (generator: ColourScaleGenerator, scaleNumber: number) => string;
+declare function descendingScales(from: number, step: number): Generator<number>;
 //#endregion
 //#region src/colour/okhsl-colour.d.ts
 declare class okHslColour {
@@ -50,17 +67,22 @@ declare class okHslColour {
 declare class ColourScaleGenerator {
   #private;
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
+  buildDarkLightenScaleNumbers: (profile: ToneProfile, referenceGenerator: ColourScaleGenerator) => readonly number[];
   computeColour(scaleNumber: number): okHslColour;
+  deriveLightenFractions: (profile: ToneProfile) => readonly number[];
+  findLightnessCeiling: (generator: ColourScaleGenerator) => number;
 }
 //#endregion
-//#region src/colour/common.d.ts
-declare const getContrastColour: (colour: string, colourBlack?: string, colourWhite?: string) => string;
+//#region src/colour/constant.d.ts
+declare const blackHex = "#000";
+declare const whiteHex = "#fff";
 //#endregion
 //#region src/colour/contrast.d.ts
 declare const wcagTextMinRatio = 4.5;
 declare const wcagUiMinRatio = 3;
 declare const minSurfaceLightnessDelta = 0.02;
-declare const contrastRatio: (hex1: string, hex2: string) => number;
+declare const getContrastRatio: (hex1: string, hex2: string) => number;
+declare const getContrastColour: (colour: string, colourBlack?: string, colourWhite?: string) => string;
 //#endregion
 //#region src/colour/make-surface.d.ts
 declare class MakeSurface {
@@ -147,18 +169,18 @@ declare const getCardinalRules: (locale: string) => Intl.PluralRules;
 declare const convertNameForEmail: (name: string) => string;
 //#endregion
 //#region src/format/helpers.d.ts
-declare const addSpan: (suffix: string, svg: boolean) => string;
-declare const beautifySuffix: (suffix: string, svg: boolean) => string;
-declare const formatUnit: (u: string, svg?: boolean) => string;
+declare const addSpan: (suffix: string, isSvg: boolean) => string;
+declare const beautifySuffix: (suffix: string, isSvg: boolean) => string;
+declare const formatUnit: (u: string, isSvg?: boolean) => string;
 declare const truncate: (string: string, n: number) => string;
 //#endregion
 //#region src/format/intl.d.ts
-declare const formatWithIntl: (value: number, options: Intl.NumberFormatOptions, svg?: boolean) => string;
+declare const formatWithIntl: (value: number, options: Intl.NumberFormatOptions, isSvg?: boolean) => string;
 //#endregion
 //#region src/format/number.d.ts
-declare const formatFloat: (value: number, decimals?: number, options?: Intl.NumberFormatOptions, svg?: boolean) => string;
+declare const formatFloat: (value: number, decimals?: number, options?: Intl.NumberFormatOptions, isSvg?: boolean) => string;
 declare const formatSignFloat: (value: number, decimals?: number) => string;
-declare const formatSiFloat: (value: number, svg?: boolean) => string;
+declare const formatSiFloat: (value: number, isSvg?: boolean) => string;
 declare const formatFloatFixed: (value: number, decimals?: number) => string;
 declare const formatFloatWithUnit: (x: number, u: string) => string;
 declare const formatReales: (x: number) => string;
@@ -170,7 +192,7 @@ declare const formatSignInt: (value: number) => string;
 declare const formatSiInt: (x: number, max?: number, options?: Intl.NumberFormatOptions) => string;
 //#endregion
 //#region src/format/ordinal.d.ts
-declare const getOrdinal: (n: number, sup?: boolean, locale?: string) => string;
+declare const getOrdinal: (n: number, isSuperscript?: boolean, locale?: string) => string;
 //#endregion
 //#region src/format/percent.d.ts
 declare const formatPercent: (value: number, decimals?: number, options?: Intl.NumberFormatOptions) => string;
@@ -209,7 +231,7 @@ declare const getLocale: () => string;
 declare const onLocaleChange: (callback: () => void) => void;
 //#endregion
 //#region src/math/common.d.ts
-declare const between: (value: number, a: number, b: number, inclusive?: boolean) => boolean;
+declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
 //#endregion
 //#region src/math/find-segment.d.ts
 interface CurvePoint {
@@ -274,5 +296,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { ColourScaleGenerator, type CurvePoint, MakeSurface, type SortArgument, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, between, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, contrastRatio, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, minSurfaceLightnessDelta, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, yToLightness };
+export { ColourScaleGenerator, type CurvePoint, MakeSurface, type SortArgument, type ToneProfile, addSpan, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, buildGenerator, buildMd3Range, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, colourAtScale, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, descendingScales, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, minSurfaceLightnessDelta, minTone, nearestPow2, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
 //# sourceMappingURL=index.d.ts.map

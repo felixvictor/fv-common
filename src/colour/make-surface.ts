@@ -18,7 +18,7 @@ export class MakeSurface {
     readonly #lightSurfaceChromaVariant = 0.65
     readonly #lightSurfaceLightnessBright = 0.985
     readonly #lightSurfaceLightnessLight = 0.94
-    readonly #lightSurfaceLightnessMain = 0.962
+    readonly #lightSurfaceLightnessMain = 0.95
     readonly #lightSurfaceLightnessVariant = 0.915
 
     constructor(baseHex: string) {

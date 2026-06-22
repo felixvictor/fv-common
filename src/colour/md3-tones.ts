@@ -1,7 +1,3 @@
-import { blackHex } from "@/colour/constant"
-import { Md3ScaleGenerator } from "@/colour/md3-scale-generator"
-import { okHslColour } from "@/colour/okhsl-colour"
-
 export interface ToneProfile {
     /** Base tone used in the dark theme. */
     readonly dark: Md3Tone
@@ -29,36 +25,12 @@ export type Md3ToneArray = readonly string[]
 export const ti = (tone: Md3Tone): number => md3Tones.indexOf(tone)
 
 /** How far below the seed's saturation the chroma falls at the dark extreme. */
-const chromaMinOffset = 0.35
+export const chromaMinOffset = 0.35
 /** How far above the seed's saturation the chroma peaks at mid-tones. */
-const chromaMaxOffset = 0.05
+export const chromaMaxOffset = 0.05
 /** Scale number ceiling passed to ColourScaleGenerator (tones run 0–100). */
 export const scaleNumberMax = md3Tones[ti(100)] ?? 100
 /** Resolves a single scale number to a hex colour, snapping the two extremes to true black/white. */
 export const minTone = md3Tones[0]
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const maxTone = md3Tones.at(-1)!
-
-// ---------------------------------------------------------------------------
-// Generator plumbing
-//
-// `Md3ScaleGenerator.computeColour(n)` accepts *any* scale number from
-// 0–100, not just the thirteen named MD3 milestones above. Keeping the
-// generator itself around (rather than only the resolved hex array) is
-// what lets the dark-theme "lighten" fix below request bespoke, in-between
-// scale numbers instead of being limited to those thirteen milestones.
-// ---------------------------------------------------------------------------
-export const buildGenerator = (hex: string, backgroundY: number): Md3ScaleGenerator => {
-    const seed = new okHslColour(hex)
-    const minChroma = Math.max(0, seed.s - chromaMinOffset)
-    const maxChroma = Math.min(1, seed.s + chromaMaxOffset)
-    return new Md3ScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
-}
-
-/** Yields descending scale numbers; an ES2025 iterator so the search below never has to materialise an array. */
-export function* descendingScales(from: number, step: number): Generator<number> {
-    for (let scale = from; scale > minTone; scale -= step) yield scale
-}
-
-/** Looks up a value by MD3 tone, falling back to true black if the array is somehow short. */
-export const fallback = (array: Md3ToneArray, index: number): string => array[index] ?? blackHex

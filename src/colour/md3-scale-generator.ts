@@ -1,40 +1,22 @@
-import type { Md3ToneArray, ToneProfile } from "@/colour/md3-tones"
+import type { Md3ToneArray } from "@/colour/md3-tones"
 
 import { ColourScaleGenerator } from "@/colour/colour-scale-generator"
 import { blackHex, whiteHex } from "@/colour/constant"
-import { descendingScales, fallback, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "@/colour/md3-tones"
+import { maxTone, md3Tones, minTone, scaleNumberMax } from "@/colour/md3-tones"
+import { okHslColour } from "@/colour/okhsl-colour"
 
 export class Md3ScaleGenerator extends ColourScaleGenerator {
-    #ceiling: number
-    /**
-     * How close lightness must get to 1 before a scale number is treated as
-     * "already white". Slightly below 1 rather than exactly 1 to tolerate the
-     * toe curve's own clamping arriving at the ceiling a touch early.
-     */
-    readonly #lightnessSaturationThreshold = 0.999
-
-    constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number) {
-        super(maxScaleNumber, baseHue, minChroma, maxChroma, backgroundY)
-        this.#ceiling = this.#findLightnessCeiling()
+    static fromSeed(
+        hex: string,
+        backgroundY: number,
+        chromaMinOffset: number,
+        chromaMaxOffset: number,
+    ): Md3ScaleGenerator {
+        const seed = new okHslColour(hex)
+        const minChroma = Math.max(0, seed.s - chromaMinOffset)
+        const maxChroma = Math.min(1, seed.s + chromaMaxOffset)
+        return new Md3ScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
     }
-
-    /** Reapplies those fractional positions to the dark base tone and its real (not nominal) lightness ceiling. */
-    buildDarkLightenScaleNumbers = (profile: ToneProfile): readonly number[] => {
-        return this.#deriveLightenFractions(profile).map(
-            (fraction) => Math.round((profile.dark + fraction * (this.#ceiling - profile.dark)) * 10) / 10,
-        )
-    }
-
-    /** Resolves a family's "lighten" colours for the given theme – dynamically computed in the dark theme, milestone-based in the light theme. */
-    buildLightenSteps = (
-        light: Md3ToneArray,
-        profile: ToneProfile,
-        darkScaleNumbers: readonly number[],
-        isDark: boolean,
-    ): readonly string[] =>
-        isDark
-            ? darkScaleNumbers.map((scale) => this.colourAtScale(scale))
-            : profile.lightLightenMilestones.map((tone) => fallback(light, ti(tone)))
 
     buildMd3Range = (): Md3ToneArray => md3Tones.map((tone) => this.colourAtScale(tone))
 
@@ -43,16 +25,4 @@ export class Md3ScaleGenerator extends ColourScaleGenerator {
         if (scaleNumber >= maxTone) return whiteHex
         return this.computeColour(scaleNumber).hex
     }
-
-    /** Converts a family's light-theme milestones into fractional positions between its base tone and white. */
-    #deriveLightenFractions = (profile: ToneProfile): readonly number[] =>
-        profile.lightLightenMilestones.map(
-            (milestone) => (milestone - profile.light) / (scaleNumberMax - profile.light),
-        )
-
-    /** First scale number (walking down from the ceiling) whose lightness has not yet saturated to white. */
-    #findLightnessCeiling = (): number =>
-        descendingScales(scaleNumberMax, 0.5).find(
-            (scale) => this.computeColour(scale).l < this.#lightnessSaturationThreshold,
-        ) ?? scaleNumberMax
 }

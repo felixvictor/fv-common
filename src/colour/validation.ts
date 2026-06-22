@@ -52,7 +52,6 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         ["on-surface", "surface"],
         ["on-background", "background"],
     ]
-
     for (const [fg, bg] of textPairs) {
         const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagTextMinRatio) {
@@ -60,10 +59,10 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         }
     }
 
-    const uiPairs: [string, string][] = [
-        ["outline", "surface"],
-        ["outline-variant", "surface"],
-    ]
+    // Interactive UI elements require 3:1 against their background (WCAG AA non-text).
+    // outline-variant is intentionally excluded: MD3 spec uses it solely for decorative
+    // dividers and borders, not interactive components or states, so 3:1 does not apply.
+    const uiPairs: [string, string][] = [["outline", "surface"]]
     for (const [fg, bg] of uiPairs) {
         const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
         if (ratio < wcagUiMinRatio) {

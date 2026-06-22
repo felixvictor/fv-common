@@ -57,3 +57,10 @@ export const hueDelta = (hex1: string, hex2: string) => {
     const h2 = new okHslColour(hex2).h
     return Math.abs(((h2 - h1 + 540) % 360) - 180)
 }
+
+/**
+ * Computes a chroma min offset such that the resulting minimum chroma
+ * never falls below the given floor, regardless of seed saturation.
+ */
+export const chromaMinOffsetForFloor = (hex: string, chromaFloor: number): number =>
+    Math.max(0, new okHslColour(hex).s - chromaFloor)

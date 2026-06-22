@@ -1,3 +1,5 @@
+import { blackHex } from "@/colour/constant"
+
 export interface ToneProfile {
     /** Base tone used in the dark theme. */
     readonly dark: Md3Tone
@@ -34,3 +36,6 @@ export const scaleNumberMax = md3Tones[ti(100)] ?? 100
 export const minTone = md3Tones[0]
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const maxTone = md3Tones.at(-1)!
+
+/** Looks up a value by MD3 tone, falling back to true black if the array is somehow short. */
+export const fallback = (array: Md3ToneArray, index: number): string => array[index] ?? blackHex

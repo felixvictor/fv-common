@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.46.1](/fj.byrtz.de/ibey/fv-common/compare/1.46.0...1.46.1) (2026-06-22)
+
+### Bug Fixes
+
+* contrast validation w/o surface colours ([006bef1](/fj.byrtz.de/ibey/fv-common/commit/006bef1a7d528b86daa81e84b0d51679d23a5827))
+
 ## [1.46.0](/fj.byrtz.de/ibey/fv-common/compare/1.45.12...1.46.0) (2026-06-22)
 
 ### Features

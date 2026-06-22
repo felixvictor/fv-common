@@ -26,10 +26,6 @@ export type Md3ToneArray = readonly string[]
 
 export const ti = (tone: Md3Tone): number => md3Tones.indexOf(tone)
 
-/** How far below the seed's saturation the chroma falls at the dark extreme. */
-export const chromaMinOffset = 0.35
-/** How far above the seed's saturation the chroma peaks at mid-tones. */
-export const chromaMaxOffset = 0.05
 /** Scale number ceiling passed to ColourScaleGenerator (tones run 0–100). */
 export const scaleNumberMax = md3Tones[ti(100)] ?? 100
 /** Resolves a single scale number to a hex colour, snapping the two extremes to true black/white. */

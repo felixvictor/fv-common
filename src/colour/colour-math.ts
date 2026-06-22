@@ -21,6 +21,11 @@ export const lightnessContrastOffset = 0.05 as const
 export const lightnessMin = 0 as const
 export const lightnessMax = 1 as const
 
+/** How far below the seed's saturation the chroma falls at the dark extreme. */
+export const chromaMinOffset = 0.35
+/** How far above the seed's saturation the chroma peaks at mid-tones. */
+export const chromaMaxOffset = 0.05
+
 // Toe function coefficients for perceptual lightness adjustment
 const toeK1 = 0.206 as const
 const toeK2 = 0.03 as const

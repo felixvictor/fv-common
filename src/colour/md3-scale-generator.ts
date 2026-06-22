@@ -1,5 +1,6 @@
 import type { Md3ToneArray } from "@/colour/md3-tones"
 
+import { chromaMaxOffset, chromaMinOffset } from "@/colour/colour-math"
 import { ColourScaleGenerator } from "@/colour/colour-scale-generator"
 import { blackHex, whiteHex } from "@/colour/constant"
 import { maxTone, md3Tones, minTone, scaleNumberMax } from "@/colour/md3-tones"
@@ -9,12 +10,12 @@ export class Md3ScaleGenerator extends ColourScaleGenerator {
     static fromSeed(
         hex: string,
         backgroundY: number,
-        chromaMinOffset: number,
-        chromaMaxOffset: number,
+        minOffset = chromaMinOffset,
+        maxOffset = chromaMaxOffset,
     ): Md3ScaleGenerator {
         const seed = new okHslColour(hex)
-        const minChroma = Math.max(0, seed.s - chromaMinOffset)
-        const maxChroma = Math.min(1, seed.s + chromaMaxOffset)
+        const minChroma = Math.max(0, seed.s - minOffset)
+        const maxChroma = Math.min(1, seed.s + maxOffset)
         return new Md3ScaleGenerator(scaleNumberMax, seed.h, minChroma, maxChroma, backgroundY)
     }
 

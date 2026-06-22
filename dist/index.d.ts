@@ -17,6 +17,8 @@ declare const lightnessContrastExponentDark: 3.08;
 declare const lightnessContrastOffset: 0.05;
 declare const lightnessMin: 0;
 declare const lightnessMax: 1;
+declare const chromaMinOffset = 0.35;
+declare const chromaMaxOffset = 0.05;
 declare const applyToeCurve: (lightness: number) => number;
 declare const yToLightness: (y: number) => number;
 declare const luminanceY: (hex: string | undefined) => number | undefined;
@@ -90,8 +92,6 @@ declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99,
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
 declare const ti: (tone: Md3Tone) => number;
-declare const chromaMinOffset = 0.35;
-declare const chromaMaxOffset = 0.05;
 declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
 declare const minTone: 0;
 declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
@@ -99,7 +99,7 @@ declare const fallback: (array: Md3ToneArray, index: number) => string;
 //#endregion
 //#region src/colour/md3-scale-generator.d.ts
 declare class Md3ScaleGenerator extends ColourScaleGenerator {
-  static fromSeed(hex: string, backgroundY: number, chromaMinOffset: number, chromaMaxOffset: number): Md3ScaleGenerator;
+  static fromSeed(hex: string, backgroundY: number, minOffset?: number, maxOffset?: number): Md3ScaleGenerator;
   buildMd3Range: () => Md3ToneArray;
   colourAtScale: (scaleNumber: number) => string;
 }

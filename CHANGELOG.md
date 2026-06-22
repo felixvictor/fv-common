@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.46.0](/fj.byrtz.de/ibey/fv-common/compare/1.45.12...1.46.0) (2026-06-22)
+
+### Features
+
+* chromaMinOffsetForFloor ([181e589](/fj.byrtz.de/ibey/fv-common/commit/181e589b9c1d687b8aa0bca1b63d57faf1522714))
+
 ## [1.45.12](/fj.byrtz.de/ibey/fv-common/compare/1.45.11...1.45.12) (2026-06-22)
 
 ## [1.45.11](/fj.byrtz.de/ibey/fv-common/compare/1.45.10...1.45.11) (2026-06-22)

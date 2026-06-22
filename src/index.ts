@@ -9,7 +9,7 @@ export { blackHex, whiteHex } from "./colour/constant.js";
 export { getContrastColour, getContrastRatio, wcagTextMinRatio, wcagUiMinRatio } from "./colour/contrast.js";
 export { MakeSurface } from "./colour/make-surface.js";
 export { Md3ScaleGenerator } from "./colour/md3-scale-generator.js";
-export { buildGenerator, descendingScales, fallback, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
+export { chromaMaxOffset, chromaMinOffset, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
 export type { Md3Tone, Md3ToneArray, ToneProfile } from "./colour/md3-tones.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { minSeedHueDelta, minSurfaceLightnessDelta, neutralChromaMax, seedChromaMin, seedLightnessMax, seedLightnessMin, validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";

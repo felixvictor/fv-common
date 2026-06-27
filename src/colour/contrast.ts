@@ -17,7 +17,8 @@ export const getContrastColour = (colour: string, colourBlack = blackHex, colour
     const colourBReference = new Color(colourBlack)
     const colourWReference = new Color(colourWhite)
 
-    const contrastB = Math.abs(colour2.contrast(colourBReference, "WCAG21"))
-    const contrastW = Math.abs(colour2.contrast(colourWReference, "WCAG21"))
-    return contrastB > contrastW ? colourBlack : colourWhite
+    const contrastB = colour2.contrast(colourBReference, "APCA")
+    const contrastW = colour2.contrast(colourWReference, "APCA")
+
+    return Math.abs(contrastB) > Math.abs(contrastW) ? colourBlack : colourWhite
 }

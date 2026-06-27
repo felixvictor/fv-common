@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.47.0](/fj.byrtz.de/ibey/fv-common/compare/1.46.2...1.47.0) (2026-06-27)
+
+### Features
+
+* colour contrast using APCA algorithm ([740dcfa](/fj.byrtz.de/ibey/fv-common/commit/740dcfa53720e675e42a1deec1b89bb58be27845))
+
 ## [1.46.2](/fj.byrtz.de/ibey/fv-common/compare/1.46.1...1.46.2) (2026-06-27)
 
 ### Bug Fixes

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.46.2](/fj.byrtz.de/ibey/fv-common/compare/1.46.1...1.46.2) (2026-06-27)
+
+### Bug Fixes
+
+* contrast calculation ([e037b09](/fj.byrtz.de/ibey/fv-common/commit/e037b09caaf218404f4e4ae0e2b8adea3219b137))
+
 ## [1.46.1](/fj.byrtz.de/ibey/fv-common/compare/1.46.0...1.46.1) (2026-06-22)
 
 ### Bug Fixes

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.48.0](/fj.byrtz.de/ibey/fv-common/compare/1.47.0...1.48.0) (2026-06-28)
+
+### Features
+
+* isNumeric, toFiniteNumber and some refactoring ([23dc448](/fj.byrtz.de/ibey/fv-common/commit/23dc4481983f657d83c02a379420a2649fe09b3e))
+
 ## [1.47.0](/fj.byrtz.de/ibey/fv-common/compare/1.46.2...1.47.0) (2026-06-27)
 
 ### Features

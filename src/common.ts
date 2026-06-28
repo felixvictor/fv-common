@@ -8,13 +8,54 @@ export const isObject = (value: unknown): value is Record<PropertyKey, unknown> 
 /**
  * Checks if an object has no own enumerable properties.
  * Returns false if the input is not an object.
+ * Note: inherited enumerable properties are not considered.
  */
 export const isEmpty = (value: unknown): boolean => {
     if (!isObject(value)) return false
-
-    // High-performance check to avoid array allocation from Object.keys()
-    for (const _ in value) return false
+    for (const key in value) {
+        if (Object.hasOwn(value, key)) return false
+    }
     return true
+}
+
+/**
+ * Check if a value is nullish (null or undefined).
+ */
+export const isNullish = (value: unknown): value is null | undefined => value == undefined
+
+/**
+ * Determines whether a given value of any type is a finite, real number.
+ */
+export const isNumeric = (value: unknown): value is number => toFiniteNumber(value) !== undefined
+
+/**
+ * Attempts to coerce a value of any type to a finite number.
+ *
+ * Explicitly rejects values that are not meaningfully numeric:
+ * booleans, bigints, symbols, functions, arrays, and objects are all
+ * treated as non-numeric regardless of their coercion behaviour.
+ * Whitespace-only strings and values that produce `Infinity` are likewise rejected.
+ *
+ * Returns the numeric representation, or `undefined` if the value cannot be
+ * safely treated as a finite number.
+ */
+export const toFiniteNumber = (value: unknown): number | undefined => {
+    if (
+        value === null ||
+        value === undefined ||
+        typeof value === "boolean" ||
+        typeof value === "bigint" ||
+        typeof value === "symbol" ||
+        typeof value === "function" ||
+        Array.isArray(value) ||
+        typeof value === "object"
+    ) {
+        return
+    }
+
+    const coerced = value as number | string
+    const n = Number(coerced)
+    return Number.isFinite(n) && String(coerced).trim() !== "" ? n : undefined
 }
 
 /**

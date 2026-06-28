@@ -11,6 +11,7 @@
     "include": [
         "src/node.ts",
         "src/node/**/*",
+        "src/common.ts",
         "src/locale.ts",
         "src/sort.ts",
         "scripts/**/*",

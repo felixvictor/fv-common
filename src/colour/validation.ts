@@ -1,5 +1,11 @@
 import { hueDelta } from "@/colour/colour-math"
-import { getContrastRatio, wcagTextMinRatio, wcagUiMinRatio } from "@/colour/contrast"
+import {
+    apcaMinLcByRole,
+    apcaMinLcUiComponent,
+    type ApcaTextRole,
+    getApcaContrast,
+    isMeetingApcaContrast,
+} from "@/colour/contrast"
 import { okHslColour } from "@/colour/okhsl-colour"
 import { round } from "@/format/number"
 
@@ -41,32 +47,33 @@ export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hex
 }
 
 export const validateTheme = (theme: Record<string, string | undefined>, label: string) => {
-    const textPairs: [string, string][] = [
-        ["on-primary", "primary"],
-        ["on-secondary", "secondary"],
-        ["on-tertiary", "tertiary"],
-        ["on-error", "error"],
-        ["on-success", "success"],
-        ["on-info", "info"],
-        ["on-warning", "warning"],
-        ["on-surface", "surface"],
-        ["on-background", "background"],
+    const textPairs: [string, string, ApcaTextRole][] = [
+        ["on-primary", "primary", "bodyText"],
+        ["on-secondary", "secondary", "bodyText"],
+        ["on-tertiary", "tertiary", "bodyText"],
+        ["on-error", "error", "bodyText"],
+        ["on-success", "success", "bodyText"],
+        ["on-info", "info", "bodyText"],
+        ["on-warning", "warning", "bodyText"],
+        ["on-surface", "surface", "bodyText"],
+        ["on-background", "background", "bodyText"],
     ]
-    for (const [fg, bg] of textPairs) {
-        const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
-        if (ratio < wcagTextMinRatio) {
-            console.warn(`${label}: ${fg}/${bg} contrast ${ratio} < ${wcagTextMinRatio} (WCAG AA)`)
+    for (const [fg, bg, role] of textPairs) {
+        const fgHex = theme[fg] ?? ""
+        const bgHex = theme[bg] ?? ""
+        const lc = getApcaContrast(fgHex, bgHex)
+        if (!isMeetingApcaContrast(fgHex, bgHex, role)) {
+            console.warn(`${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcByRole[role]} (role: ${role})`)
         }
     }
 
-    // Interactive UI elements require 3:1 against their background (WCAG AA non-text).
-    // outline-variant is intentionally excluded: MD3 spec uses it solely for decorative
-    // dividers and borders, not interactive components or states, so 3:1 does not apply.
     const uiPairs: [string, string][] = [["outline", "surface"]]
     for (const [fg, bg] of uiPairs) {
-        const ratio = getContrastRatio(theme[fg] ?? "", theme[bg] ?? "")
-        if (ratio < wcagUiMinRatio) {
-            console.warn(`${label}: ${fg}/${bg} contrast ${ratio} < ${wcagUiMinRatio} (WCAG AA non-text)`)
+        const fgHex = theme[fg] ?? ""
+        const bgHex = theme[bg] ?? ""
+        const lc = getApcaContrast(fgHex, bgHex)
+        if (Math.abs(lc) < apcaMinLcUiComponent) {
+            console.warn(`${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcUiComponent} (UI component, own threshold)`)
         }
     }
 

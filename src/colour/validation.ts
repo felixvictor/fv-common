@@ -55,6 +55,8 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         ["on-success", "success", "otherContentText"],
         ["on-info", "info", "otherContentText"],
         ["on-warning", "warning", "otherContentText"],
+        ["on-betty-green", "betty-green", "otherContentText"],
+        ["on-betty-red", "betty-red", "otherContentText"],
         ["on-surface", "surface", "bodyText"],
         ["on-background", "background", "bodyText"],
     ]
@@ -73,7 +75,9 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         const bgHex = theme[bg] ?? ""
         const lc = getApcaContrast(fgHex, bgHex)
         if (Math.abs(lc) < apcaMinLcUiComponent) {
-            console.warn(`${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcUiComponent} (UI component, own threshold)`)
+            console.warn(
+                `${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcUiComponent} (UI component, bespoke threshold)`,
+            )
         }
     }
 

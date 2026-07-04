@@ -1,16 +1,9 @@
 import { blackHex } from "@/colour/constant"
 
 export interface ToneProfile {
-    /** Base tone used in the dark theme. */
     readonly dark: Md3Tone
-    /** Base tone used in the light theme. */
     readonly light: Md3Tone
-    /**
-     * The "lighten" milestones that already work correctly in the light
-     * theme (each one sits above `light`). They are reinterpreted as
-     * fractional positions and reapplied relative to `dark` and its real
-     * lightness ceiling – see `buildDarkLightenScaleNumbers`.
-     */
+    readonly lightDarkenMilestones: readonly Md3Tone[]
     readonly lightLightenMilestones: readonly Md3Tone[]
 }
 

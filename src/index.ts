@@ -10,7 +10,7 @@ export { apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, getApc
 export type { ApcaTextRole } from "./colour/contrast.js";
 export { MakeSurface } from "./colour/make-surface.js";
 export { Md3ScaleGenerator } from "./colour/md3-scale-generator.js";
-export { fallback, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
+export { buildDarkDarkenScaleNumbers, buildDarkLightenScaleNumbers, fallback, maxTone, md3Tones, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
 export type { Md3Tone, Md3ToneArray, ToneProfile } from "./colour/md3-tones.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { minSeedHueDelta, minSurfaceLightnessDelta, neutralChromaMax, seedChromaMin, seedLightnessMax, seedLightnessMin, validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";

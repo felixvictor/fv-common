@@ -90,12 +90,6 @@ declare class MakeSurface {
 }
 //#endregion
 //#region src/colour/md3-tones.d.ts
-interface ToneProfile {
-  readonly dark: Md3Tone;
-  readonly light: Md3Tone;
-  readonly lightDarkenMilestones: readonly Md3Tone[];
-  readonly lightLightenMilestones: readonly Md3Tone[];
-}
 declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
@@ -104,10 +98,17 @@ declare const scaleNumberMax: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 9
 declare const minTone: 0;
 declare const maxTone: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 95 | 99 | 100;
 declare const fallback: (array: Md3ToneArray, index: number) => string;
-declare const buildDarkLightenScaleNumbers: (profile: ToneProfile) => Md3Tone[];
-declare const buildDarkDarkenScaleNumbers: (profile: ToneProfile & {
-  readonly lightDarkenMilestones: readonly Md3Tone[];
-}) => Md3Tone[];
+declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
+declare const md3AccentToneLight: Md3Tone;
+declare const md3AccentToneDark: Md3Tone;
+declare const md3AccentOnToneLight: Md3Tone;
+declare const md3AccentOnToneDark: Md3Tone;
+declare const md3ContainerToneLight: Md3Tone;
+declare const md3ContainerToneDark: Md3Tone;
+declare const md3OnContainerToneLight: Md3Tone;
+declare const md3OnContainerToneDark: Md3Tone;
+declare const md3ScrimHex = "#000000";
+declare const md3ShadowHex = "#000000";
 //#endregion
 //#region src/colour/md3-scale-generator.d.ts
 declare class Md3ScaleGenerator extends ColourScaleGenerator {
@@ -320,5 +321,5 @@ declare const createUrl: (options: {
   protocol: string;
 }, name?: string) => URL;
 //#endregion
-export { type ApcaTextRole, ColourScaleGenerator, type CurvePoint, MakeSurface, Md3ScaleGenerator, type Md3Tone, type Md3ToneArray, type SortArgument, type ToneProfile, addSpan, apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, buildDarkDarkenScaleNumbers, buildDarkLightenScaleNumbers, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chromaMaxOffset, chromaMinOffset, chromaMinOffsetForFloor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, fallback, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getApcaContrast, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isMeetingApcaContrast, isNullish, isNumeric, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, maxTone, md3Tones, minSeedHueDelta, minSurfaceLightnessDelta, minTone, nearestPow2, neutralChromaMax, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, seedChromaMin, seedLightnessMax, seedLightnessMin, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, toFiniteNumber, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
+export { type ApcaTextRole, ColourScaleGenerator, type CurvePoint, MakeSurface, Md3ScaleGenerator, type Md3Tone, type Md3ToneArray, type SortArgument, addSpan, apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chromaMaxOffset, chromaMinOffset, chromaMinOffsetForFloor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, fallback, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getApcaContrast, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getThemeTone, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isMeetingApcaContrast, isNullish, isNumeric, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, maxTone, md3AccentOnToneDark, md3AccentOnToneLight, md3AccentToneDark, md3AccentToneLight, md3ContainerToneDark, md3ContainerToneLight, md3OnContainerToneDark, md3OnContainerToneLight, md3ScrimHex, md3ShadowHex, md3Tones, minSeedHueDelta, minSurfaceLightnessDelta, minTone, nearestPow2, neutralChromaMax, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, seedChromaMin, seedLightnessMax, seedLightnessMin, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, toFiniteNumber, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
 //# sourceMappingURL=index.d.ts.map

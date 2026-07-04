@@ -10,7 +10,7 @@ export { apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, getApc
 export type { ApcaTextRole } from "./colour/contrast.js";
 export { MakeSurface } from "./colour/make-surface.js";
 export { Md3ScaleGenerator } from "./colour/md3-scale-generator.js";
-export { fallback, getThemeTone, maxTone, md3AccentOnToneDark, md3AccentOnToneLight, md3AccentToneDark, md3AccentToneLight, md3ContainerToneDark, md3ContainerToneLight, md3OnContainerToneDark, md3OnContainerToneLight, md3ScrimHex, md3ShadowHex, md3Tones, minTone, ti } from "./colour/md3-tones.js";
+export { fallback, getThemeTone, maxTone, md3AccentOnToneDark, md3AccentOnToneLight, md3AccentToneDark, md3AccentToneLight, md3ContainerToneDark, md3ContainerToneLight, md3OnContainerToneDark, md3OnContainerToneLight, md3ScrimHex, md3ShadowHex, md3Tones, minTone, scaleNumberMax, ti } from "./colour/md3-tones.js";
 export type { Md3Tone, Md3ToneArray } from "./colour/md3-tones.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { minSeedHueDelta, minSurfaceLightnessDelta, neutralChromaMax, seedChromaMin, seedLightnessMax, seedLightnessMin, validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";

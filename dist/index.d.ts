@@ -93,15 +93,16 @@ declare class MakeSurface {
 interface ToneProfile {
   readonly dark: Md3Tone;
   readonly light: Md3Tone;
+  readonly lightDarkenMilestones: readonly Md3Tone[];
   readonly lightLightenMilestones: readonly Md3Tone[];
 }
 declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
 declare const ti: (tone: Md3Tone) => number;
-declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const scaleNumberMax: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 95 | 99 | 100;
 declare const minTone: 0;
-declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const maxTone: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 95 | 99 | 100;
 declare const fallback: (array: Md3ToneArray, index: number) => string;
 declare const buildDarkLightenScaleNumbers: (profile: ToneProfile) => Md3Tone[];
 declare const buildDarkDarkenScaleNumbers: (profile: ToneProfile & {

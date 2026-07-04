@@ -21,15 +21,7 @@ export class okHslColour {
     }
 
     set h(value: number | string) {
-        const h = Number(value)
-        if (Number.isNaN(h)) {
-            console.warn(
-                `${okHslColour.name}: Cannot set hue to invalid value "${value}" (${h}), ` +
-                    `keeping current value "${this.#colour.h}"`,
-            )
-            return
-        }
-        this.#colour.h = ((h % okHslColour.hueMax) + okHslColour.hueMax) % okHslColour.hueMax
+        this.#safeSet("hue", "h", value, (v) => ((v % okHslColour.hueMax) + okHslColour.hueMax) % okHslColour.hueMax)
     }
 
     get hex(): string {
@@ -41,15 +33,7 @@ export class okHslColour {
     }
 
     set l(value: number | string) {
-        const l = Number(value)
-        if (Number.isNaN(l)) {
-            console.warn(
-                `${okHslColour.name}: Cannot set lightness to invalid value "${value}" (${l}), ` +
-                    `keeping current value "${this.#colour.l}"`,
-            )
-            return
-        }
-        this.#colour.l = clamp(l, lightnessMin, lightnessMax)
+        this.#safeSet("lightness", "l", value, (v) => clamp(v, lightnessMin, lightnessMax))
     }
 
     get s(): number {
@@ -57,15 +41,7 @@ export class okHslColour {
     }
 
     set s(value: number | string) {
-        const s = Number(value)
-        if (Number.isNaN(s)) {
-            console.warn(
-                `${okHslColour.name}: Cannot set saturation to invalid value "${value}" (${s}), ` +
-                    `keeping current value "${this.#colour.s}"`,
-            )
-            return
-        }
-        this.#colour.s = clamp(s, okHslColour.saturationMin, okHslColour.saturationMax)
+        this.#safeSet("saturation", "s", value, (v) => clamp(v, okHslColour.saturationMin, okHslColour.saturationMax))
     }
 
     readonly #colour: Color
@@ -78,11 +54,12 @@ export class okHslColour {
     }
 
     static mix(color1: okHslColour, color2: okHslColour, weight: number): okHslColour {
-        const mix = Color.mix(color1.colourObject, color2.colourObject, weight, {
-            outputSpace: this.colorSpace,
-            space: this.colorSpace,
-        })
-        return new okHslColour(mix)
+        return new okHslColour(
+            Color.mix(color1.colourObject, color2.colourObject, weight, {
+                outputSpace: this.colorSpace,
+                space: this.colorSpace,
+            }),
+        )
     }
 
     clone(): okHslColour {
@@ -91,5 +68,19 @@ export class okHslColour {
 
     toString(): string {
         return this.hex
+    }
+
+    #safeSet(label: string, property: "h" | "l" | "s", value: number | string, transform: (v: number) => number): void {
+        const parsed = Number(value)
+
+        if (Number.isNaN(parsed)) {
+            console.warn(
+                `${okHslColour.name}: Cannot set ${label} to invalid value "${value}" (${parsed}), ` +
+                    `keeping current value "${this.#colour[property]}"`,
+            )
+            return
+        }
+
+        this.#colour[property] = transform(parsed)
     }
 }

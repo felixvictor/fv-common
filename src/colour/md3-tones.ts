@@ -35,3 +35,61 @@ export const maxTone = md3Tones.at(-1)!
 
 /** Looks up a value by MD3 tone, falling back to true black if the array is somehow short. */
 export const fallback = (array: Md3ToneArray, index: number): string => array[index] ?? blackHex
+
+export const buildDarkLightenScaleNumbers = (profile: ToneProfile): Md3Tone[] => {
+    const lightIndex = ti(profile.light)
+    const darkIndex = ti(profile.dark)
+    const topIndex = md3Tones.length - 1
+
+    const lightRemaining = topIndex - lightIndex
+    const darkRemaining = topIndex - darkIndex
+    if (lightRemaining <= 0 || darkRemaining <= 0) return []
+
+    const seen = new Set<Md3Tone>()
+    const result: Md3Tone[] = []
+
+    for (const milestone of profile.lightLightenMilestones) {
+        const stepsAboveLight = ti(milestone) - lightIndex
+        if (stepsAboveLight <= 0) continue // Milestone liegt nicht oberhalb von light, überspringen
+
+        const fraction = stepsAboveLight / lightRemaining
+        const rawIndex = darkIndex + fraction * darkRemaining
+        const snappedIndex = Math.min(topIndex, Math.max(darkIndex + 1, Math.round(rawIndex)))
+        const tone = md3Tones[snappedIndex]
+
+        if (tone !== undefined && !seen.has(tone)) {
+            seen.add(tone)
+            result.push(tone)
+        }
+    }
+
+    return result
+}
+
+export const buildDarkDarkenScaleNumbers = (
+    profile: ToneProfile & { readonly lightDarkenMilestones: readonly Md3Tone[] },
+): Md3Tone[] => {
+    const lightIndex = ti(profile.light)
+    const darkIndex = ti(profile.dark)
+    if (lightIndex <= 0 || darkIndex <= 0) return []
+
+    const seen = new Set<Md3Tone>()
+    const result: Md3Tone[] = []
+
+    for (const milestone of profile.lightDarkenMilestones) {
+        const stepsBelowLight = lightIndex - ti(milestone)
+        if (stepsBelowLight <= 0) continue
+
+        const fraction = stepsBelowLight / lightIndex
+        const rawIndex = darkIndex - fraction * darkIndex
+        const snappedIndex = Math.max(0, Math.min(darkIndex - 1, Math.round(rawIndex)))
+        const tone = md3Tones[snappedIndex]
+
+        if (tone !== undefined && !seen.has(tone)) {
+            seen.add(tone)
+            result.push(tone)
+        }
+    }
+
+    return result
+}

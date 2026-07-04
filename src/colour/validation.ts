@@ -48,13 +48,13 @@ export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hex
 
 export const validateTheme = (theme: Record<string, string | undefined>, label: string) => {
     const textPairs: [string, string, ApcaTextRole][] = [
-        ["on-primary", "primary", "bodyText"],
-        ["on-secondary", "secondary", "bodyText"],
-        ["on-tertiary", "tertiary", "bodyText"],
-        ["on-error", "error", "bodyText"],
-        ["on-success", "success", "bodyText"],
-        ["on-info", "info", "bodyText"],
-        ["on-warning", "warning", "bodyText"],
+        ["on-primary", "primary", "otherContentText"],
+        ["on-secondary", "secondary", "otherContentText"],
+        ["on-tertiary", "tertiary", "otherContentText"],
+        ["on-error", "error", "otherContentText"],
+        ["on-success", "success", "otherContentText"],
+        ["on-info", "info", "otherContentText"],
+        ["on-warning", "warning", "otherContentText"],
         ["on-surface", "surface", "bodyText"],
         ["on-background", "background", "bodyText"],
     ]

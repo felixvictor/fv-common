@@ -73,28 +73,102 @@ declare const apcaMinLcUiComponent = 30;
 declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
 //#endregion
 //#region src/colour/make-surface.d.ts
+type ThemeMode = "dark" | "light";
+declare const semanticTones: {
+  readonly onSurface: {
+    readonly dark: {
+      readonly chroma: 0.06;
+      readonly lightness: 0.92;
+    };
+    readonly light: {
+      readonly chroma: 0.1;
+      readonly lightness: 0.12;
+    };
+  };
+  readonly onSurfaceVariant: {
+    readonly dark: {
+      readonly chroma: 0.1;
+      readonly lightness: 0.78;
+    };
+    readonly light: {
+      readonly chroma: 0.16;
+      readonly lightness: 0.32;
+    };
+  };
+  readonly outline: {
+    readonly dark: {
+      readonly chroma: 0.14;
+      readonly lightness: 0.62;
+    };
+    readonly light: {
+      readonly chroma: 0.2;
+      readonly lightness: 0.48;
+    };
+  };
+  readonly outlineVariant: {
+    readonly dark: {
+      readonly chroma: 0.1;
+      readonly lightness: 0.32;
+    };
+    readonly light: {
+      readonly chroma: 0.14;
+      readonly lightness: 0.82;
+    };
+  };
+};
+type SemanticRole = keyof typeof semanticTones;
+declare const surfaceLadder: {
+  readonly dark: {
+    readonly anchorLightness: 0.06;
+    readonly baseChroma: 0.12;
+    readonly rungs: {
+      readonly bright: {
+        readonly chromaFactor: 1.3;
+        readonly stepDelta: 2;
+      };
+      readonly light: {
+        readonly chromaFactor: 1.1;
+        readonly stepDelta: 1;
+      };
+      readonly main: {
+        readonly chromaFactor: 1;
+        readonly stepDelta: 0;
+      };
+      readonly variant: {
+        readonly chromaFactor: 1.8;
+        readonly stepDelta: 3;
+      };
+    };
+  };
+  readonly light: {
+    readonly anchorLightness: 0.95;
+    readonly baseChroma: 0.42;
+    readonly rungs: {
+      readonly bright: {
+        readonly chromaFactor: 0.6;
+        readonly stepDelta: 1;
+      };
+      readonly light: {
+        readonly chromaFactor: 1.2;
+        readonly stepDelta: -1;
+      };
+      readonly main: {
+        readonly chromaFactor: 1;
+        readonly stepDelta: 0;
+      };
+      readonly variant: {
+        readonly chromaFactor: 1.5;
+        readonly stepDelta: -2;
+      };
+    };
+  };
+};
+type SurfaceRung = keyof typeof surfaceLadder.light.rungs;
 declare class MakeSurface {
   #private;
   constructor(baseHex: string);
   calculateSurface(lightness: number, chromaFactor: number): string;
-  makeSurface(): {
-    readonly darkSurfaceBrightHex: string;
-    readonly darkSurfaceLightHex: string;
-    readonly darkSurfaceMainHex: string;
-    readonly darkSurfaceVariantHex: string;
-    readonly lightSurfaceBrightHex: string;
-    readonly lightSurfaceLightHex: string;
-    readonly lightSurfaceMainHex: string;
-    readonly lightSurfaceVariantHex: string;
-    readonly onSurfaceDarkHex: string;
-    readonly onSurfaceLightHex: string;
-    readonly onSurfaceVariantDarkHex: string;
-    readonly onSurfaceVariantLightHex: string;
-    readonly outlineDarkHex: string;
-    readonly outlineLightHex: string;
-    readonly outlineVariantDarkHex: string;
-    readonly outlineVariantLightHex: string;
-  };
+  makeSurface(): Record<ThemeMode, Record<SemanticRole, string> & Record<SurfaceRung, string>>;
 }
 //#endregion
 //#region src/colour/md3-tones.d.ts

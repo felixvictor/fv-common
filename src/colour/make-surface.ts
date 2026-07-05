@@ -1,89 +1,124 @@
 import { okHslColour } from "@/colour/okhsl-colour"
 import { minSurfaceLightnessDelta } from "@/colour/validation"
 
-export class MakeSurface {
-    static readonly #darkChromaMain = 0.12
-    static readonly #darkChromaBright = MakeSurface.#darkChromaMain * 1.3
-    static readonly #darkChromaLight = MakeSurface.#darkChromaMain * 1.1
-    static readonly #darkChromaVariant = MakeSurface.#darkChromaMain * 1.8
-    static readonly #darkMainL = 0.06
-    static readonly #lightChromaMain = 0.42
-    static readonly #lightChromaBright = MakeSurface.#lightChromaMain * 0.6
-    static readonly #lightChromaLight = MakeSurface.#lightChromaMain * 1.2
-    static readonly #lightChromaVariant = MakeSurface.#lightChromaMain * 1.5
-    static readonly #lightMainL = 0.95
-    static readonly #onSurfaceChromaDark = 0.06
-    static readonly #onSurfaceChromaLight = 0.1
-    static readonly #onSurfaceDarkL = 0.92
-    static readonly #onSurfaceLightL = 0.12
-    static readonly #onSurfaceVariantChromaDark = 0.1
-    static readonly #onSurfaceVariantChromaLight = 0.16
-    static readonly #onSurfaceVariantDarkL = 0.78
-    static readonly #onSurfaceVariantLightL = 0.32
-    static readonly #outlineChromaDark = 0.14
-    static readonly #outlineChromaLight = 0.2
-    static readonly #outlineDarkL = 0.62
-    static readonly #outlineLightL = 0.48
-    static readonly #outlineVariantChromaDark = 0.1
-    static readonly #outlineVariantChromaLight = 0.14
-    static readonly #outlineVariantDarkL = 0.32
-    static readonly #outlineVariantLightL = 0.82
-    static readonly #paddingL = 0.005
-    static readonly #stepL = minSurfaceLightnessDelta + MakeSurface.#paddingL
+type ThemeMode = "dark" | "light"
 
-    readonly #baseOkhsl: okHslColour
+interface Tone {
+    /** Multiplier applied to the seed's own saturation – not an absolute value. */
+    readonly chroma: number
+    readonly lightness: number
+}
+
+type ToneByMode = Record<ThemeMode, Tone>
+
+/**
+ * Roles resolved from absolute lightness/chroma pairs – no relative
+ * stepping, unlike the surface ladder below.
+ */
+const semanticTones = {
+    onSurface: {
+        dark: { chroma: 0.06, lightness: 0.92 },
+        light: { chroma: 0.1, lightness: 0.12 },
+    },
+    onSurfaceVariant: {
+        dark: { chroma: 0.1, lightness: 0.78 },
+        light: { chroma: 0.16, lightness: 0.32 },
+    },
+    outline: {
+        dark: { chroma: 0.14, lightness: 0.62 },
+        light: { chroma: 0.2, lightness: 0.48 },
+    },
+    outlineVariant: {
+        dark: { chroma: 0.1, lightness: 0.32 },
+        light: { chroma: 0.14, lightness: 0.82 },
+    },
+} as const satisfies Record<string, ToneByMode>
+
+/**
+ * The four surface roles form a ladder around a per-theme anchor: each
+ * rung sits `stepDelta` lightness-steps away from `main`, with its own
+ * chroma multiplier on top of the theme's base chroma. Step direction
+ * differs between themes (light theme darkens towards `variant`, dark
+ * theme lightens towards it), so direction is encoded per rung rather
+ * than assumed.
+ */
+interface LadderRung {
+    readonly chromaFactor: number
+    readonly stepDelta: number
+}
+
+type SemanticRole = keyof typeof semanticTones
+
+const surfaceLadder = {
+    dark: {
+        anchorLightness: 0.06,
+        baseChroma: 0.12,
+        rungs: {
+            bright: { chromaFactor: 1.3, stepDelta: 2 },
+            light: { chromaFactor: 1.1, stepDelta: 1 },
+            main: { chromaFactor: 1, stepDelta: 0 },
+            variant: { chromaFactor: 1.8, stepDelta: 3 },
+        },
+    },
+    light: {
+        anchorLightness: 0.95,
+        baseChroma: 0.42,
+        rungs: {
+            bright: { chromaFactor: 0.6, stepDelta: 1 },
+            light: { chromaFactor: 1.2, stepDelta: -1 },
+            main: { chromaFactor: 1, stepDelta: 0 },
+            variant: { chromaFactor: 1.5, stepDelta: -2 },
+        },
+    },
+} as const satisfies Record<
+    ThemeMode,
+    { anchorLightness: number; baseChroma: number; rungs: Record<string, LadderRung> }
+>
+
+type SurfaceRung = keyof typeof surfaceLadder.light.rungs
+
+const paddingL = 0.005
+const stepL = minSurfaceLightnessDelta + paddingL
+
+export class MakeSurface {
+    readonly #base: okHslColour
 
     constructor(baseHex: string) {
-        this.#baseOkhsl = new okHslColour(baseHex)
+        this.#base = new okHslColour(baseHex)
     }
 
+    /** Direct, absolute lookup for one-off tones not covered by the tables above. */
     calculateSurface(lightness: number, chromaFactor: number): string {
-        const h = this.#baseOkhsl.h
-        const s = this.#baseOkhsl.s * chromaFactor
-        return new okHslColour([h, s, lightness]).hex
+        return this.#resolve({ chroma: chromaFactor, lightness })
     }
 
-    makeSurface() {
-        const lightMain = MakeSurface.#lightMainL
-        const lightBright = lightMain + MakeSurface.#stepL
-        const lightLight = lightMain - MakeSurface.#stepL
-        const lightVariant = lightLight - MakeSurface.#stepL
-        const darkMain = MakeSurface.#darkMainL
-        const darkLight = darkMain + MakeSurface.#stepL
-        const darkBright = darkLight + MakeSurface.#stepL
-        const darkVariant = darkBright + MakeSurface.#stepL
-
+    makeSurface(): Record<ThemeMode, Record<SemanticRole, string> & Record<SurfaceRung, string>> {
         return {
-            darkSurfaceBrightHex: this.calculateSurface(darkBright, MakeSurface.#darkChromaBright),
-            darkSurfaceLightHex: this.calculateSurface(darkLight, MakeSurface.#darkChromaLight),
-            darkSurfaceMainHex: this.calculateSurface(darkMain, MakeSurface.#darkChromaMain),
-            darkSurfaceVariantHex: this.calculateSurface(darkVariant, MakeSurface.#darkChromaVariant),
-            lightSurfaceBrightHex: this.calculateSurface(lightBright, MakeSurface.#lightChromaBright),
-            lightSurfaceLightHex: this.calculateSurface(lightLight, MakeSurface.#lightChromaLight),
-            lightSurfaceMainHex: this.calculateSurface(lightMain, MakeSurface.#lightChromaMain),
-            lightSurfaceVariantHex: this.calculateSurface(lightVariant, MakeSurface.#lightChromaVariant),
+            dark: { ...this.#ladderFamily("dark"), ...this.#semanticFamily("dark") },
+            light: { ...this.#ladderFamily("light"), ...this.#semanticFamily("light") },
+        }
+    }
 
-            onSurfaceDarkHex: this.calculateSurface(MakeSurface.#onSurfaceDarkL, MakeSurface.#onSurfaceChromaDark),
-            onSurfaceLightHex: this.calculateSurface(MakeSurface.#onSurfaceLightL, MakeSurface.#onSurfaceChromaLight),
-            onSurfaceVariantDarkHex: this.calculateSurface(
-                MakeSurface.#onSurfaceVariantDarkL,
-                MakeSurface.#onSurfaceVariantChromaDark,
-            ),
-            onSurfaceVariantLightHex: this.calculateSurface(
-                MakeSurface.#onSurfaceVariantLightL,
-                MakeSurface.#onSurfaceVariantChromaLight,
-            ),
+    #ladderFamily(mode: ThemeMode): Record<SurfaceRung, string> {
+        const { anchorLightness, baseChroma, rungs } = surfaceLadder[mode]
+        return Object.fromEntries(
+            Object.entries(rungs).map(([rung, { chromaFactor, stepDelta }]) => [
+                rung,
+                this.#resolve({
+                    chroma: baseChroma * chromaFactor,
+                    lightness: anchorLightness + stepDelta * stepL,
+                }),
+            ]),
+        ) as Record<SurfaceRung, string>
+    }
 
-            outlineDarkHex: this.calculateSurface(MakeSurface.#outlineDarkL, MakeSurface.#outlineChromaDark),
-            outlineLightHex: this.calculateSurface(MakeSurface.#outlineLightL, MakeSurface.#outlineChromaLight),
-            outlineVariantDarkHex: this.calculateSurface(
-                MakeSurface.#outlineVariantDarkL,
-                MakeSurface.#outlineVariantChromaDark,
-            ),
-            outlineVariantLightHex: this.calculateSurface(
-                MakeSurface.#outlineVariantLightL,
-                MakeSurface.#outlineVariantChromaLight,
-            ),
-        } as const
+    #resolve({ chroma, lightness }: Tone): string {
+        return new okHslColour([this.#base.h, this.#base.s * chroma, lightness]).hex
+    }
+
+    #semanticFamily(mode: ThemeMode): Record<SemanticRole, string> {
+        return Object.fromEntries(
+            Object.entries(semanticTones).map(([role, byMode]) => [role, this.#resolve(byMode[mode])]),
+        ) as Record<SemanticRole, string>
     }
 }

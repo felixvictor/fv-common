@@ -86,6 +86,14 @@ declare class MakeSurface {
     readonly lightSurfaceLightHex: string;
     readonly lightSurfaceMainHex: string;
     readonly lightSurfaceVariantHex: string;
+    readonly onSurfaceDarkHex: string;
+    readonly onSurfaceLightHex: string;
+    readonly onSurfaceVariantDarkHex: string;
+    readonly onSurfaceVariantLightHex: string;
+    readonly outlineDarkHex: string;
+    readonly outlineLightHex: string;
+    readonly outlineVariantDarkHex: string;
+    readonly outlineVariantLightHex: string;
   };
 }
 //#endregion

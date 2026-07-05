@@ -7,13 +7,27 @@ export class MakeSurface {
     static readonly #darkChromaLight = MakeSurface.#darkChromaMain * 1.1
     static readonly #darkChromaVariant = MakeSurface.#darkChromaMain * 1.8
     static readonly #darkMainL = 0.06
-
     static readonly #lightChromaMain = 0.42
     static readonly #lightChromaBright = MakeSurface.#lightChromaMain * 0.6
     static readonly #lightChromaLight = MakeSurface.#lightChromaMain * 1.2
     static readonly #lightChromaVariant = MakeSurface.#lightChromaMain * 1.5
     static readonly #lightMainL = 0.95
-
+    static readonly #onSurfaceChromaDark = 0.06
+    static readonly #onSurfaceChromaLight = 0.1
+    static readonly #onSurfaceDarkL = 0.92
+    static readonly #onSurfaceLightL = 0.12
+    static readonly #onSurfaceVariantChromaDark = 0.1
+    static readonly #onSurfaceVariantChromaLight = 0.16
+    static readonly #onSurfaceVariantDarkL = 0.78
+    static readonly #onSurfaceVariantLightL = 0.32
+    static readonly #outlineChromaDark = 0.14
+    static readonly #outlineChromaLight = 0.2
+    static readonly #outlineDarkL = 0.62
+    static readonly #outlineLightL = 0.48
+    static readonly #outlineVariantChromaDark = 0.1
+    static readonly #outlineVariantChromaLight = 0.14
+    static readonly #outlineVariantDarkL = 0.32
+    static readonly #outlineVariantLightL = 0.82
     static readonly #paddingL = 0.005
     static readonly #stepL = minSurfaceLightnessDelta + MakeSurface.#paddingL
 
@@ -34,7 +48,6 @@ export class MakeSurface {
         const lightBright = lightMain + MakeSurface.#stepL
         const lightLight = lightMain - MakeSurface.#stepL
         const lightVariant = lightLight - MakeSurface.#stepL
-
         const darkMain = MakeSurface.#darkMainL
         const darkLight = darkMain + MakeSurface.#stepL
         const darkBright = darkLight + MakeSurface.#stepL
@@ -45,11 +58,32 @@ export class MakeSurface {
             darkSurfaceLightHex: this.calculateSurface(darkLight, MakeSurface.#darkChromaLight),
             darkSurfaceMainHex: this.calculateSurface(darkMain, MakeSurface.#darkChromaMain),
             darkSurfaceVariantHex: this.calculateSurface(darkVariant, MakeSurface.#darkChromaVariant),
-
             lightSurfaceBrightHex: this.calculateSurface(lightBright, MakeSurface.#lightChromaBright),
             lightSurfaceLightHex: this.calculateSurface(lightLight, MakeSurface.#lightChromaLight),
             lightSurfaceMainHex: this.calculateSurface(lightMain, MakeSurface.#lightChromaMain),
             lightSurfaceVariantHex: this.calculateSurface(lightVariant, MakeSurface.#lightChromaVariant),
+
+            onSurfaceDarkHex: this.calculateSurface(MakeSurface.#onSurfaceDarkL, MakeSurface.#onSurfaceChromaDark),
+            onSurfaceLightHex: this.calculateSurface(MakeSurface.#onSurfaceLightL, MakeSurface.#onSurfaceChromaLight),
+            onSurfaceVariantDarkHex: this.calculateSurface(
+                MakeSurface.#onSurfaceVariantDarkL,
+                MakeSurface.#onSurfaceVariantChromaDark,
+            ),
+            onSurfaceVariantLightHex: this.calculateSurface(
+                MakeSurface.#onSurfaceVariantLightL,
+                MakeSurface.#onSurfaceVariantChromaLight,
+            ),
+
+            outlineDarkHex: this.calculateSurface(MakeSurface.#outlineDarkL, MakeSurface.#outlineChromaDark),
+            outlineLightHex: this.calculateSurface(MakeSurface.#outlineLightL, MakeSurface.#outlineChromaLight),
+            outlineVariantDarkHex: this.calculateSurface(
+                MakeSurface.#outlineVariantDarkL,
+                MakeSurface.#outlineVariantChromaDark,
+            ),
+            outlineVariantLightHex: this.calculateSurface(
+                MakeSurface.#outlineVariantLightL,
+                MakeSurface.#outlineVariantChromaLight,
+            ),
         } as const
     }
 }

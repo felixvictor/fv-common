@@ -55,11 +55,10 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         ["on-success", "success", "otherContentText"],
         ["on-info", "info", "otherContentText"],
         ["on-warning", "warning", "otherContentText"],
-        ["on-betty-green", "betty-green", "otherContentText"],
-        ["on-betty-red", "betty-red", "otherContentText"],
         ["on-surface", "surface", "bodyText"],
         ["on-background", "background", "bodyText"],
     ]
+
     for (const [fg, bg, role] of textPairs) {
         const fgHex = theme[fg] ?? ""
         const bgHex = theme[bg] ?? ""

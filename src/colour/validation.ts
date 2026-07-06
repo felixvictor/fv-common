@@ -37,11 +37,17 @@ export const validateSeed = (name: string, hex: string, options: { neutral?: boo
     }
 }
 
-export const validateHueDelta = (nameA: string, hexA: string, nameB: string, hexB: string) => {
+export const validateHueDelta = (
+    nameA: string,
+    hexA: string,
+    nameB: string,
+    hexB: string,
+    minDelta: number = minSeedHueDelta,
+) => {
     const delta = hueDelta(hexA, hexB)
-    if (delta < minSeedHueDelta) {
+    if (delta < minDelta) {
         console.warn(
-            `${nameA} and ${nameB} are only ${round(delta, 1)}° apart in hue – their tonal ranges may be indistinguishable`,
+            `${nameA} and ${nameB} are only ${round(delta, 1)}° apart in hue (minimum: ${minDelta}°) – their tonal ranges may be indistinguishable`,
         )
     }
 }

@@ -10,7 +10,7 @@ import { beautifySuffix } from "./helpers.js"
 export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, isSvg = false): string =>
     new Intl.NumberFormat(getLocale(), options)
         .formatToParts(value)
-        .map((part) => {
+        .map((part, index, parts) => {
             switch (part.type) {
                 case "compact": {
                     return beautifySuffix(part.value, isSvg)
@@ -37,6 +37,14 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "literal": {
+                    const next = parts[index + 1]
+                    // Intl.NumberFormat may already insert a space before the percent sign
+                    // (e.g. de-DE), and we add our own via percentSign, resulting in a
+                    // double space. Drop this literal if it's just whitespace preceding
+                    // the percent sign.
+                    if (next?.type === "percentSign" && part.value.trim() === "") {
+                        return ""
+                    }
                     return part.value
                 }
 

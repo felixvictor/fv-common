@@ -1,23 +1,49 @@
+import { toFiniteNumber } from "@/common"
+
+const minPort = 0 as const
+const maxPort = 65_535 as const
+
+const isValidPort = (value: number): boolean => Number.isInteger(value) && value >= minPort && value <= maxPort
+
 export const createUrl = (
-    options: { host: string; path?: string; port?: number | string; protocol: string },
+    options: {
+        host: string
+        password?: string
+        path?: string
+        port?: number | string
+        protocol: string
+        user?: string
+    },
     name?: string,
 ): URL => {
-    const { host, path, port, protocol } = options
+    const { host, password, path, port, protocol, user } = options
 
-    let urlString = `${protocol}://${host}`
-
-    if (port) {
-        urlString += `:${port}`
+    const baseUrlString = `${protocol}://${host}`
+    if (!URL.canParse(baseUrlString)) {
+        throw new Error(`Invalid ${name ?? ""} address: ${baseUrlString}`)
     }
 
-    if (path) {
-        const normalizedPath = path.startsWith("/") ? path : `/${path}`
-        urlString += normalizedPath
+    const url = new URL(baseUrlString)
+
+    if (port !== undefined && port !== "") {
+        const numericPort = toFiniteNumber(port)
+        if (numericPort === undefined || !isValidPort(numericPort)) {
+            throw new Error(`Invalid ${name ?? ""} port: ${String(port)}`)
+        }
+        url.port = String(numericPort)
     }
 
-    if (!URL.canParse(urlString)) {
-        throw new Error(`Invalid ${name ?? ""} address: ${urlString}`)
+    if (path !== undefined && path !== "") {
+        url.pathname = path
     }
 
-    return new URL(urlString)
+    if (user !== undefined) {
+        url.username = user
+    }
+
+    if (password !== undefined) {
+        url.password = password
+    }
+
+    return url
 }

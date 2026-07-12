@@ -1,5 +1,8 @@
 import Color, { Coords } from "colorjs.io";
 import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/de.js";
+import "dayjs/locale/en.js";
+import "dayjs/locale/en-gb.js";
 //#region src/chunkify.d.ts
 declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
@@ -398,9 +401,11 @@ declare const cSpaceZeroWidthNoBreak: string;
 //#region src/url.d.ts
 declare const createUrl: (options: {
   host: string;
+  password?: string;
   path?: string;
   port?: number | string;
   protocol: string;
+  user?: string;
 }, name?: string) => URL;
 //#endregion
 export { type ApcaTextRole, ColourScaleGenerator, type CurvePoint, MakeSurface, Md3ScaleGenerator, type Md3Tone, type Md3ToneArray, type SortArgument, addSpan, apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chromaMaxOffset, chromaMinOffset, chromaMinOffsetForFloor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, datetimeFormat, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, fallback, formatDate, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInt, formatLocalDate, formatLocalTime, formatPP, formatPercent, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getApcaContrast, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getOrdinal, getRange, getRelativeTime, getThemeTone, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isFutureDate, isMeetingApcaContrast, isNullish, isNumeric, isObject, isPastDate, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, maxTone, md3AccentOnToneDark, md3AccentOnToneLight, md3AccentToneDark, md3AccentToneLight, md3ContainerToneDark, md3ContainerToneLight, md3OnContainerToneDark, md3OnContainerToneLight, md3ScrimHex, md3ShadowHex, md3Tones, minSeedHueDelta, minSurfaceLightnessDelta, minTone, nearestPow2, neutralChromaMax, nextPow2, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, seedChromaMin, seedLightnessMax, seedLightnessMin, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, ti, toFiniteNumber, truncate, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };

@@ -1,7 +1,6 @@
 import { ExecSyncOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-
 //#region src/node/command.d.ts
 interface AsyncCommandResult {
   error?: Error;

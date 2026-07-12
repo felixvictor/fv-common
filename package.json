@@ -1,17 +1,17 @@
 {
     "name": "fv-common",
     "version": "1.53.1",
-    "type": "module",
     "description": "Common helper functions",
-    "repository": "https://fj.byrtz.de/ibey/fv-common.git",
     "license": "SEE LICENSE IN licence.md",
-    "engines": {
-        "node": ">= 24",
-        "pnpm": ">= 11"
-    },
+    "repository": "https://fj.byrtz.de/ibey/fv-common.git",
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "sideEffects": false,
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
     "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
@@ -26,12 +26,9 @@
             "import": "./dist/na.js"
         }
     },
-    "files": [
-        "dist"
-    ],
     "scripts": {
         "barrel": "tsx scripts/generate-barrel.mts",
-        "build": "run-s barrel typecheck build:gen build:commit",
+        "build": "run-s lint barrel build:gen build:commit",
         "build:commit": "git add dist/ src/ && git diff --staged --quiet || git commit -m 'build: dist'",
         "build:gen": "tsdown",
         "build:push": "git push",
@@ -39,16 +36,14 @@
         "git:chore": "git add package.json pnpm-lock.yaml pnpm-workspace.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "run-s lint:js pretty-print",
-        "lint:js": "eslint --cache --fix .",
+        "lint:js": "oxlint --fix",
         "main:release": "run-s build release build:push",
-        "node-modules-inspector": "pnpx node-modules-inspector",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "pnpm clean --lockfile && pnpm install",
         "pnpm:update": "pnpm self-update && pnpm update --interactive",
-        "pretty-print": "prettier --config .prettierrc.json --log-level error --write .",
+        "pretty-print": "oxfmt",
         "push": "git push",
-        "release": "release-it --ci",
-        "typecheck": "tsc --build"
+        "release": "release-it --ci"
     },
     "dependencies": {
         "atomically": "^2.1.1",
@@ -60,27 +55,23 @@
         "@commitlint/cli": "^21.2.1",
         "@commitlint/config-conventional": "^21.2.0",
         "@commitlint/types": "^21.2.0",
-        "@eslint/eslintrc": "^3.3.6",
-        "@eslint/js": "^10.0.1",
         "@release-it/conventional-changelog": "^11.0.1",
         "@types/node": "^26.1.1",
-        "eslint": "^10.7.0",
-        "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-perfectionist": "^5.10.0",
-        "eslint-plugin-unicorn": "^71.1.0",
-        "globals": "^17.7.0",
         "husky": "^9.1.7",
         "npm-run-all2": "^9.0.2",
-        "prettier": "^3.9.5",
-        "prettier-plugin-pkg": "^0.22.1",
+        "oxfmt": "^0.58.0",
+        "oxlint": "^1.73.0",
+        "oxlint-tsgolint": "^0.24.0",
         "release-it": "^20.2.1",
         "ts-morph": "^28.0.0",
         "tsdown": "^0.22.4",
         "tsx": "^4.23.0",
-        "typescript": "^6.0.3",
-        "typescript-eslint": "^8.63.0"
+        "typescript": "^6.0.3"
     },
-    "sideEffects": false,
+    "engines": {
+        "node": ">= 24",
+        "pnpm": ">= 11"
+    },
     "release-it": {
         "git": {
             "commitMessage": "chore: release v${version}",

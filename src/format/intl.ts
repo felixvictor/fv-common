@@ -3,6 +3,8 @@ import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "@/unicode"
 
 import { beautifySuffix } from "./helpers.js"
 
+console.log("INITIALISIERUNGS-CHECK:", { cMinus, cSpaceNarrowNoBreaking })
+
 /**
  * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
  * Applies thin spaces, proper minus signs, and styled compact notation.
@@ -57,7 +59,8 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "minusSign": {
-                    return `${cMinus}${cSpaceNarrowNoBreaking}`
+                    return "\u2212\u202F"
+                    //return `${cMinus}${cSpaceNarrowNoBreaking}`
                 }
 
                 case "percentSign": {

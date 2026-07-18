@@ -51,7 +51,6 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "minusSign": {
-                    console.log("MINUS CASE HIT!", { value: part.value, cMinus, cSpaceNarrowNoBreaking })
                     return `${cMinus}${cSpaceNarrowNoBreaking}`
                 }
 

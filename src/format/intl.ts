@@ -35,14 +35,6 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "integer": {
-                    if (/^[+\--\u2212]/.test(part.value)) {
-                        const sign = part.value[0]
-                        // Removed the sign
-                        const absoluteValue = part.value.slice(1)
-
-                        return `${sign === "+" ? cPlus : cMinus}${cSpaceNarrowNoBreaking}${absoluteValue}`
-                    }
-
                     return part.value
                 }
 
@@ -59,8 +51,8 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "minusSign": {
-                    return "\u2212\u202F"
-                    //return `${cMinus}${cSpaceNarrowNoBreaking}`
+                    console.log("MINUS CASE HIT!", { value: part.value, cMinus, cSpaceNarrowNoBreaking })
+                    return `${cMinus}${cSpaceNarrowNoBreaking}`
                 }
 
                 case "percentSign": {

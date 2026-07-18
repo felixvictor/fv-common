@@ -33,14 +33,15 @@ export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions,
                 }
 
                 case "integer": {
+                    if (part.value.startsWith("-") || part.value.startsWith(cMinus)) {
+                        const absoluteValue = part.value.slice(1)
+                        return `${cMinus}${cSpaceNarrowNoBreaking}${absoluteValue}`
+                    }
+
                     return part.value
                 }
 
                 case "literal": {
-                    if (part.value === "-") {
-                        return `${cMinus}${cSpaceNarrowNoBreaking}`
-                    }
-
                     const next = parts[index + 1]
                     // Intl.NumberFormat may already insert a space before the percent sign
                     // (e.g. de-DE), and we add our own via percentSign, resulting in a

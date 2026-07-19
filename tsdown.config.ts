@@ -27,4 +27,10 @@ export default defineConfig([
         tsconfig: "tsconfig.browser.json",
         ...config,
     },
+    {
+        entry: "src/trading.ts",
+        platform: "neutral",
+        tsconfig: "tsconfig.browser.json",
+        ...config,
+    },
 ])

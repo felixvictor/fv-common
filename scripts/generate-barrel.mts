@@ -8,6 +8,7 @@ import { simpleStringSort } from "../src/sort.js"
 const sourceDirectory = fileURLToPath(new URL("../src", import.meta.url))
 const fsDirectory = path.resolve(sourceDirectory, "node")
 const naDirectory = path.resolve(sourceDirectory, "na")
+const tradingDirectory = path.resolve(sourceDirectory, "trading")
 
 const isDryRun = process.argv.includes("--dry-run")
 const targetArgument = process.argv.find((argument) => argument.startsWith("--target="))?.split("=", 2)[1]
@@ -126,7 +127,12 @@ try {
     if (!targetArgument || targetArgument === "index.ts") {
         await generateBarrel(
             mainBarrel,
-            (filePath) => !(filePath.startsWith(fsDirectory) || filePath.startsWith(naDirectory)),
+            (filePath) =>
+                !(
+                    filePath.startsWith(fsDirectory) ||
+                    filePath.startsWith(naDirectory) ||
+                    filePath.startsWith(tradingDirectory)
+                ),
         )
     }
 
@@ -139,7 +145,7 @@ try {
     }
 
     if (!targetArgument || targetArgument === "trading.ts") {
-        await generateBarrel(tradingBarrel, (filePath) => filePath.startsWith(naDirectory))
+        await generateBarrel(tradingBarrel, (filePath) => filePath.startsWith(tradingDirectory))
     }
 } catch (error: unknown) {
     throw new Error(`Barrel generation failure: ${error as string}`, { cause: error })

@@ -8,6 +8,9 @@ const { weekend } = localeUS.getWeekInfo()
 const preMarketStart = Temporal.PlainTime.from({ hour: 4, minute: 0 })
 const preMarketEnd = Temporal.PlainTime.from({ hour: 9, minute: 30 })
 
+const marketStart = Temporal.PlainTime.from({ hour: 9, minute: 30 })
+const marketEnd = Temporal.PlainTime.from({ hour: 16, minute: 0 })
+
 const extendedHoursStart = Temporal.PlainTime.from({ hour: 4, minute: 0 })
 const extendedHoursEnd = Temporal.PlainTime.from({ hour: 20, minute: 0 })
 
@@ -35,20 +38,20 @@ const getNyCalendar = (instant: Temporal.Instant) => {
 
 const getNyDate = (instant: Temporal.Instant): Temporal.PlainDate => getNyCalendar(instant).nyDate
 
-const isNyseClosed = (plainDate: Temporal.PlainDate): boolean => {
+const isNyseClosedAtDate = (plainDate: Temporal.PlainDate): boolean => {
     const jsDate = new Date(plainDate.year, plainDate.month - 1, plainDate.day)
     return isHoliday(jsDate)
 }
 
-const isNyseOpen = (nyDate: Temporal.PlainDate): boolean =>
-    !(weekend.includes(nyDate.dayOfWeek) || isNyseClosed(nyDate))
+const isNyseOpenAtDate = (nyDate: Temporal.PlainDate): boolean =>
+    !(weekend.includes(nyDate.dayOfWeek) || isNyseClosedAtDate(nyDate))
 
 /**
  * Whether the given moment falls on an actual US trading day (not a
  * weekend, not an NYSE holiday) - New York local calendar date.
  */
 export const isNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.instant()): boolean =>
-    isNyseOpen(getNyDate(instant))
+    isNyseOpenAtDate(getNyDate(instant))
 
 /**
  * Returns the current US trading day as `YYYY-MM-DD` (New York local time),
@@ -61,7 +64,7 @@ export const getNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.insta
     let nyDate = getNyDate(instant)
 
     // Weekend filings or NYSE holidays are attributed to the next actual trading day.
-    while (!isNyseOpen(nyDate)) {
+    while (!isNyseOpenAtDate(nyDate)) {
         nyDate = nyDate.add({ days: 1 })
     }
 
@@ -71,10 +74,18 @@ export const getNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.insta
 const isNyTimeBetween = (instant: Temporal.Instant, startTime: Temporal.PlainTime, endTime: Temporal.PlainTime) => {
     const { nyDate, nyTime } = getNyCalendar(instant)
 
-    if (!isNyseOpen(nyDate)) return false
+    if (!isNyseOpenAtDate(nyDate)) return false
 
     return isTimeBetween(nyTime, startTime, endTime)
 }
+
+/**
+ * Determines whether the given moment falls within the NYSE's market
+ * session (09:30-16:00 New York time) on an actual trading day. Always
+ * false on weekends and NYSE holidays, regardless of time of day.
+ */
+export const isNyseOpen = (instant: Temporal.Instant = Temporal.Now.instant()): boolean =>
+    isNyTimeBetween(instant, marketStart, marketEnd)
 
 /**
  * Determines whether the given moment falls within the NYSE's pre-market
@@ -113,7 +124,7 @@ export const addNyseTradingDays = (tradingDay: string, tradingDaysToAdd: number)
 
     while (remainingDays > 0) {
         result = result.add({ days: 1 })
-        if (isNyseOpen(result)) {
+        if (isNyseOpenAtDate(result)) {
             remainingDays -= 1
         }
     }

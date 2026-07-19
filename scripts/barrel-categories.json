@@ -1,0 +1,11 @@
+[
+    {
+        "name": "node",
+        "dir": "node",
+        "platform": "node",
+        "tsconfig": "./tsconfig.node.json",
+        "outputExtension": ".mjs"
+    },
+    { "name": "na", "dir": "na" },
+    { "name": "trading", "dir": "trading" }
+]

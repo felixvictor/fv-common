@@ -3,8 +3,6 @@ import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "@/unicode"
 
 import { beautifySuffix } from "./helpers.js"
 
-console.log("INITIALISIERUNGS-CHECK:", { cMinus, cSpaceNarrowNoBreaking })
-
 /**
  * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
  * Applies thin spaces, proper minus signs, and styled compact notation.

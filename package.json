@@ -24,6 +24,10 @@
         "./na": {
             "types": "./dist/na.d.ts",
             "import": "./dist/na.js"
+        },
+        "./trading": {
+            "types": "./dist/trading.d.ts",
+            "import": "./dist/trading.js"
         }
     },
     "scripts": {
@@ -49,6 +53,7 @@
         "atomically": "^2.1.1",
         "colorjs.io": "^0.6.1",
         "dayjs": "^1.11.21",
+        "nyse-holidays": "^1.2.0",
         "svg-path-commander": "^2.2.1"
     },
     "devDependencies": {
@@ -59,14 +64,14 @@
         "@types/node": "^26.1.1",
         "husky": "^9.1.7",
         "npm-run-all2": "^9.0.2",
-        "oxfmt": "^0.58.0",
+        "oxfmt": "^0.59.0",
         "oxlint": "^1.74.0",
-        "oxlint-tsgolint": "^0.24.0",
+        "oxlint-tsgolint": "^0.25.0",
         "release-it": "^20.2.1",
         "ts-morph": "^28.0.0",
         "tsdown": "^0.22.9",
         "tsx": "^4.23.1",
-        "typescript": "^6.0.3"
+        "typescript": "^7.0.2"
     },
     "engines": {
         "node": ">= 24",

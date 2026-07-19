@@ -91,6 +91,7 @@ const generateBarrel = async (targetFilePath: string, isFileFilter: (filePath: s
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "index.ts"))
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "node.ts"))
         .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "na.ts"))
+        .filter((f) => f.getFilePath() !== path.resolve(sourceDirectory, "trading.ts"))
         .filter((f) => !f.getBaseName().startsWith("index."))
         .filter((f) => isFileFilter(f.getFilePath()))
         .toSorted((a, b) => a.getFilePath().localeCompare(b.getFilePath()))
@@ -119,6 +120,7 @@ try {
     const mainBarrel = path.resolve(sourceDirectory, "index.ts")
     const naBarrel = path.resolve(sourceDirectory, "na.ts")
     const nodeBarrel = path.resolve(sourceDirectory, "node.ts")
+    const tradingBarrel = path.resolve(sourceDirectory, "trading.ts")
 
     // 1. Generate Main Barrel (Everything except src/fs)
     if (!targetArgument || targetArgument === "index.ts") {
@@ -128,14 +130,16 @@ try {
         )
     }
 
-    // 2. Generate Node Barrel (only src/fs)
     if (!targetArgument || targetArgument === "node.ts") {
         await generateBarrel(nodeBarrel, (filePath) => filePath.startsWith(fsDirectory))
     }
 
-    // 2. Generate NA Barrel (only src/na)
     if (!targetArgument || targetArgument === "na.ts") {
         await generateBarrel(naBarrel, (filePath) => filePath.startsWith(naDirectory))
+    }
+
+    if (!targetArgument || targetArgument === "trading.ts") {
+        await generateBarrel(tradingBarrel, (filePath) => filePath.startsWith(naDirectory))
     }
 } catch (error: unknown) {
     throw new Error(`Barrel generation failure: ${error as string}`, { cause: error })

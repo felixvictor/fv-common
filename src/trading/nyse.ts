@@ -2,8 +2,11 @@ import { isHoliday } from "nyse-holidays"
 import { isTimeBetween } from "@/temporal/common"
 
 const tzNewYork = "America/New_York"
+/*
 const localeUS = new Intl.Locale("en-US")
 const { weekend } = localeUS.getWeekInfo()
+*/
+const weekend = new Set([6, 7])
 
 const preMarketStart = Temporal.PlainTime.from({ hour: 4, minute: 0 })
 const preMarketEnd = Temporal.PlainTime.from({ hour: 9, minute: 30 })
@@ -44,7 +47,7 @@ const isNyseClosedAtDate = (plainDate: Temporal.PlainDate): boolean => {
 }
 
 const isNyseOpenAtDate = (nyDate: Temporal.PlainDate): boolean =>
-    !(weekend.includes(nyDate.dayOfWeek) || isNyseClosedAtDate(nyDate))
+    !(weekend.has(nyDate.dayOfWeek) || isNyseClosedAtDate(nyDate))
 
 /**
  * Whether the given moment falls on an actual US trading day (not a

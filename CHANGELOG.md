@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.59.0](fj.byrtz.de/ibey/fv-common/compare/1.58.1...1.59.0) (2026-07-20)
+
 ## [1.58.1](fj.byrtz.de/ibey/fv-common/compare/1.58.0...1.58.1) (2026-07-20)
 
 ## [1.58.0](fj.byrtz.de/ibey/fv-common/compare/1.57.0...1.58.0) (2026-07-19)

@@ -1,4 +1,5 @@
 import { isHoliday } from "nyse-holidays"
+
 import { isTimeBetween } from "@/temporal/common"
 
 const tzNewYork = "America/New_York"
@@ -114,6 +115,13 @@ export const isNyseExtendedTradingHours = (instant: Temporal.Instant = Temporal.
  */
 export const isEdgarOperating = (instant: Temporal.Instant = Temporal.Now.instant()): boolean =>
     isNyTimeBetween(instant, edgarOperatingStart, edgarOperatingEnd)
+
+export const nyseStatus = () => ({
+    isEdgarOperating: isEdgarOperating(),
+    isNyseExtendedTradingHours: isNyseExtendedTradingHours(),
+    isNyseOpen: isNyseOpen(),
+    isNysePreMarket: isNysePreMarket(),
+})
 
 /**
  * Returns the NY trading day that is `tradingDaysToAdd` actual trading

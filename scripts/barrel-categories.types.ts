@@ -1,7 +1,7 @@
 export interface BarrelCategory {
-    name: string
     dir: string
+    name: string
+    outputExtension?: string
     platform?: "browser" | "neutral" | "node"
     tsconfig?: string
-    outputExtension?: string
 }

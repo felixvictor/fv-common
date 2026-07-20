@@ -3,9 +3,10 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { Project, SourceFile, SyntaxKind } from "ts-morph"
 
+import type { BarrelCategory } from "./barrel-categories.types.js"
+
 import { simpleStringSort } from "../src/sort.js"
 import categoriesJson from "./barrel-categories.json" with { type: "json" }
-import type { BarrelCategory } from "./barrel-categories.types.js"
 
 const barrelCategories = categoriesJson as BarrelCategory[]
 

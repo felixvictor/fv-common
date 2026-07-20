@@ -1,5 +1,7 @@
 import { defineConfig } from "tsdown"
+
 import type { BarrelCategory } from "./scripts/barrel-categories.types.js"
+
 import categoriesJson from "./scripts/barrel-categories.json" with { type: "json" }
 
 const barrelCategories = categoriesJson as BarrelCategory[]

@@ -179,9 +179,9 @@ declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99,
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
 declare const ti: (tone: Md3Tone) => number;
-declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const scaleNumberMax: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 95 | 99 | 100;
 declare const minTone: 0;
-declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+declare const maxTone: 0 | 90 | 30 | 10 | 20 | 40 | 50 | 60 | 70 | 80 | 95 | 99 | 100;
 declare const fallback: (array: Md3ToneArray, index: number) => string;
 declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
 declare const md3AccentToneLight: Md3Tone;
@@ -379,7 +379,7 @@ declare const optimisePath: (path: string) => string;
 //#region src/temporal/common.d.ts
 declare const isTimeBetween: (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime) => boolean;
 declare const formatMs: (ms: number, locale?: string) => string;
-declare const formatPlainTime: (time: Temporal.PlainTime, locale?: string) => string;
+declare const formatPlainTime: (time: Temporal.PlainTime) => string;
 //#endregion
 //#region src/unicode.d.ts
 declare const cCaretRight: string;

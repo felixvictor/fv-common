@@ -379,7 +379,7 @@ declare const optimisePath: (path: string) => string;
 //#region src/temporal/common.d.ts
 declare const isTimeBetween: (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime) => boolean;
 declare const formatMs: (ms: number, locale?: string) => string;
-declare const formatPlainTime: (time: Temporal.PlainTime) => string;
+declare const formatPlainTime: (time: Temporal.PlainTime, locale?: string) => string;
 //#endregion
 //#region src/unicode.d.ts
 declare const cCaretRight: string;

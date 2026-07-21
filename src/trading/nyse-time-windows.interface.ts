@@ -4,6 +4,7 @@ export interface PlainTimeWindow {
 }
 
 export interface TimeWindow {
+    info: string
     order: number
     text: string
     window: PlainTimeWindow

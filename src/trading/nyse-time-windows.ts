@@ -1,12 +1,12 @@
 import type { PlainTimeWindow, TimeWindow } from "@/trading/nyse-time-windows.interface"
 
-import { isTimeBetween } from "@/temporal/common"
+import { formatPlainTime, isTimeBetween } from "@/temporal/common"
 import { getNyCalendar, isNyseOpenAtDate } from "@/trading/nyse-date"
 
 type NyseTimeWindowChecks = Record<NyseTimeWindowKey, (instant?: Temporal.Instant) => boolean>
 type NyseTimeWindowKey = keyof typeof nyseTimeWindows
 
-export const nyseTimeWindows = {
+const windows = {
     isEdgarOperating: {
         order: 4,
         text: "SEC Edgar filing",
@@ -39,7 +39,17 @@ export const nyseTimeWindows = {
             start: Temporal.PlainTime.from({ hour: 4, minute: 0 }),
         },
     },
-} as const satisfies Record<string, TimeWindow>
+} as const
+
+export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
+    Object.entries(windows).map(([key, val]) => [
+        key,
+        {
+            ...val,
+            info: `${formatPlainTime(val.window.start)} to ${formatPlainTime(val.window.end)}`,
+        },
+    ]),
+)
 
 const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow) => {
     const { nyDate, nyTime } = getNyCalendar(instant)
@@ -49,17 +59,14 @@ const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow)
     return isTimeBetween(nyTime, timeWindow.start, timeWindow.end)
 }
 
-const nyseTimeWindowChecks = Object.fromEntries(
+const nyseTimeWindowChecks: NyseTimeWindowChecks = Object.fromEntries(
     Object.entries(nyseTimeWindows).map(([key, timeWindow]) => [
         key,
         (instant: Temporal.Instant = Temporal.Now.instant()) => isNyTimeBetween(instant, timeWindow.window),
     ]),
-) as NyseTimeWindowChecks
+)
 
 export const { isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNysePreMarket } = nyseTimeWindowChecks
 
 export const nyseStatus = (): Record<NyseTimeWindowKey, boolean> =>
-    Object.fromEntries(Object.entries(nyseTimeWindowChecks).map(([key, check]) => [key, check()])) as Record<
-        NyseTimeWindowKey,
-        boolean
-    >
+    Object.fromEntries(Object.entries(nyseTimeWindowChecks).map(([key, check]) => [key, check()]))

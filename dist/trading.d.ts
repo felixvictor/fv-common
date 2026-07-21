@@ -26,5 +26,5 @@ declare const nyseTimeWindows: Record<string, TimeWindow>;
 declare const isEdgarOperating: ((instant?: Temporal.Instant) => boolean) | undefined, isNyseExtendedTradingHours: ((instant?: Temporal.Instant) => boolean) | undefined, isNyseMarketHours: ((instant?: Temporal.Instant) => boolean) | undefined, isNysePreMarket: ((instant?: Temporal.Instant) => boolean) | undefined;
 declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 //#endregion
-export { type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseStatus, nyseTimeWindows };
+export { type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseStatus, nyseTimeWindows };
 //# sourceMappingURL=trading.d.ts.map

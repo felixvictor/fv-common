@@ -5,4 +5,5 @@
 export { addNyseTradingDays, getNyCalendar, getNyseTradingDay, isNyseOpenAtDate, isNyseTradingDay } from "./trading/nyse-date.js";
 export type { PlainTimeWindow, TimeWindow } from "./trading/nyse-time-windows.interface.js";
 export { isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNysePreMarket, nyseStatus, nyseTimeWindows } from "./trading/nyse-time-windows.js";
+export type { NyseTimeWindowKey } from "./trading/nyse-time-windows.js";
 

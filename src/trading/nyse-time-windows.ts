@@ -49,7 +49,7 @@ export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
             info: `${formatPlainTime(val.window.start)} to ${formatPlainTime(val.window.end)}`,
         },
     ]),
-) as { [K in keyof typeof windows]: TimeWindow }
+)
 
 const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow) => {
     const { nyDate, nyTime } = getNyCalendar(instant)

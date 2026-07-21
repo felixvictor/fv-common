@@ -8,7 +8,7 @@ export type NyseTimeWindowKey = keyof typeof windows
 const windows = {
     isEdgarOperating: {
         order: 4,
-        text: "SEC Edgar filing",
+        text: "SEC edgar filing",
         window: {
             end: Temporal.PlainTime.from({ hour: 22, minute: 30 }),
             start: Temporal.PlainTime.from({ hour: 6, minute: 0 }),

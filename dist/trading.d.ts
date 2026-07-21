@@ -14,6 +14,7 @@ interface PlainTimeWindow {
   start: Temporal.PlainTime;
 }
 interface TimeWindow {
+  info: string;
   order: number;
   text: string;
   window: PlainTimeWindow;
@@ -21,41 +22,8 @@ interface TimeWindow {
 //#endregion
 //#region src/trading/nyse-time-windows.d.ts
 type NyseTimeWindowKey = keyof typeof nyseTimeWindows;
-declare const nyseTimeWindows: {
-  readonly isEdgarOperating: {
-    readonly order: 4;
-    readonly text: "SEC Edgar filing";
-    readonly window: {
-      readonly end: Temporal.PlainTime;
-      readonly start: Temporal.PlainTime;
-    };
-  };
-  readonly isNyseExtendedTradingHours: {
-    readonly order: 3;
-    readonly text: "Extended trading hours";
-    readonly window: {
-      readonly end: Temporal.PlainTime;
-      readonly start: Temporal.PlainTime;
-    };
-  };
-  readonly isNyseMarketHours: {
-    readonly order: 1;
-    readonly text: "Regular market hours";
-    readonly window: {
-      readonly end: Temporal.PlainTime;
-      readonly start: Temporal.PlainTime;
-    };
-  };
-  readonly isNysePreMarket: {
-    readonly order: 2;
-    readonly text: "Pre-market";
-    readonly window: {
-      readonly end: Temporal.PlainTime;
-      readonly start: Temporal.PlainTime;
-    };
-  };
-};
-declare const isEdgarOperating: (instant?: Temporal.Instant) => boolean, isNyseExtendedTradingHours: (instant?: Temporal.Instant) => boolean, isNyseMarketHours: (instant?: Temporal.Instant) => boolean, isNysePreMarket: (instant?: Temporal.Instant) => boolean;
+declare const nyseTimeWindows: Record<string, TimeWindow>;
+declare const isEdgarOperating: ((instant?: Temporal.Instant) => boolean) | undefined, isNyseExtendedTradingHours: ((instant?: Temporal.Instant) => boolean) | undefined, isNyseMarketHours: ((instant?: Temporal.Instant) => boolean) | undefined, isNysePreMarket: ((instant?: Temporal.Instant) => boolean) | undefined;
 declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 //#endregion
 export { type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseStatus, nyseTimeWindows };

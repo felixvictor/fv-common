@@ -40,7 +40,7 @@ export { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js";
 export type { SortArgument } from "./sort.js";
 export { drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine } from "./svg/draw.js";
 export { optimisePath } from "./svg/optimise.js";
-export { formatMs, isTimeBetween } from "./temporal/common.js";
+export { formatMs, formatPlainTime, isTimeBetween } from "./temporal/common.js";
 export { cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak } from "./unicode.js";
 export { createUrl } from "./url.js";
 

@@ -17,7 +17,7 @@ export const formatMs = (ms: number, locale?: string): string => {
     return timeFormatter.format(duration)
 }
 
-const timeOptions: Intl.DateTimeFormatOptions = { timeStyle: "short" }
+const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", minute: "numeric" }
 export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     return time.toLocaleString(effectiveLocale, timeOptions)

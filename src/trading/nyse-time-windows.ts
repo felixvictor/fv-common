@@ -4,7 +4,6 @@ import { formatPlainTime, isTimeBetween } from "@/temporal/common"
 import { getNyCalendar, isNyseOpenAtDate } from "@/trading/nyse-date"
 
 export type NyseTimeWindowKey = keyof typeof nyseTimeWindows
-type NyseTimeWindowChecks = Record<NyseTimeWindowKey, (instant?: Temporal.Instant) => boolean>
 
 const windows = {
     isEdgarOperating: {
@@ -59,12 +58,12 @@ const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow)
     return isTimeBetween(nyTime, timeWindow.start, timeWindow.end)
 }
 
-const nyseTimeWindowChecks: NyseTimeWindowChecks = Object.fromEntries(
+const nyseTimeWindowChecks = Object.fromEntries(
     Object.entries(nyseTimeWindows).map(([key, timeWindow]) => [
         key,
         (instant: Temporal.Instant = Temporal.Now.instant()) => isNyTimeBetween(instant, timeWindow.window),
     ]),
-)
+) as Record<NyseTimeWindowKey, (instant?: Temporal.Instant) => boolean>
 
 export const { isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNysePreMarket } = nyseTimeWindowChecks
 

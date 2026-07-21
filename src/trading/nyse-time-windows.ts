@@ -3,8 +3,8 @@ import type { PlainTimeWindow, TimeWindow } from "@/trading/nyse-time-windows.in
 import { formatPlainTime, isTimeBetween } from "@/temporal/common"
 import { getNyCalendar, isNyseOpenAtDate } from "@/trading/nyse-date"
 
+export type NyseTimeWindowKey = keyof typeof nyseTimeWindows
 type NyseTimeWindowChecks = Record<NyseTimeWindowKey, (instant?: Temporal.Instant) => boolean>
-type NyseTimeWindowKey = keyof typeof nyseTimeWindows
 
 const windows = {
     isEdgarOperating: {
@@ -49,7 +49,7 @@ export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
             info: `${formatPlainTime(val.window.start)} to ${formatPlainTime(val.window.end)}`,
         },
     ]),
-)
+) as { [K in keyof typeof windows]: TimeWindow }
 
 const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow) => {
     const { nyDate, nyTime } = getNyCalendar(instant)

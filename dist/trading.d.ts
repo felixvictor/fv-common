@@ -25,7 +25,7 @@ type NyseTimeWindowKey = keyof typeof windows;
 declare const windows: {
   readonly isEdgarOperating: {
     readonly order: 4;
-    readonly text: "SEC Edgar filing";
+    readonly text: "SEC edgar filing";
     readonly window: {
       readonly end: Temporal.PlainTime;
       readonly start: Temporal.PlainTime;

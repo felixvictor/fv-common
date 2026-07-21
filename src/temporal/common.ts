@@ -20,5 +20,10 @@ export const formatMs = (ms: number, locale?: string): string => {
 const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", hourCycle: "h23", minute: "numeric" }
 export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
-    return time.toLocaleString(effectiveLocale, timeOptions)
+    const formatter = new Intl.DateTimeFormat(effectiveLocale, timeOptions)
+
+    return formatter
+        .formatToParts(time)
+        .map((part) => (part.type === "hour" ? String(Number(part.value)) : part.value))
+        .join("")
 }

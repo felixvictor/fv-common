@@ -18,6 +18,7 @@ export const formatMs = (ms: number, locale?: string): string => {
 }
 
 const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", hourCycle: "h23", minute: "numeric" }
-export const formatPlainTime = (time: Temporal.PlainTime): string => {
-    return time.toString(timeOptions)
+export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return time.toLocaleString(effectiveLocale, timeOptions)
 }

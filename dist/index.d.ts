@@ -409,7 +409,7 @@ declare const createUrl: (options: {
   password?: string;
   path?: string;
   port?: number | string;
-  protocol: string;
+  protocol?: string;
   user?: string;
 }, name?: string) => URL;
 //#endregion

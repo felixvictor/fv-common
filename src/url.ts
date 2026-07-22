@@ -11,14 +11,15 @@ export const createUrl = (
         password?: string
         path?: string
         port?: number | string
-        protocol: string
+        protocol?: string
         user?: string
     },
     name?: string,
 ): URL => {
     const { host, password, path, port, protocol, user } = options
 
-    const baseUrlString = `${protocol}://${host}`
+    const _protocol = protocol ?? "https"
+    const baseUrlString = `${_protocol}://${host}`
     if (!URL.canParse(baseUrlString)) {
         throw new Error(`Invalid ${name ?? ""} address: ${baseUrlString}`)
     }

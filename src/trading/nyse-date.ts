@@ -1,5 +1,6 @@
 import { nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates } from "@/trading/nyse-early-close-dates"
 import { nyseHolidayDataKnownThroughYear, nyseHolidayDates } from "@/trading/nyse-holiday-dates"
+import { secHolidayDataKnownThroughYear, secHolidayDates } from "@/trading/sec-holiday-dates"
 
 const tzNewYork = "America/New_York"
 const weekendNewYork = new Set([6, 7])
@@ -16,9 +17,13 @@ export const getNyCalendar = (instant: Temporal.Instant) => {
 const getNyDate = (instant: Temporal.Instant): Temporal.PlainDate => getNyCalendar(instant).nyDate
 
 const isNyseClosedAtDate = (plainDate: Temporal.PlainDate): boolean => nyseHolidayDates.has(plainDate.toString())
+const isSecClosedAtDate = (plainDate: Temporal.PlainDate): boolean => secHolidayDates.has(plainDate.toString())
 
 export const isNyseOpenAtDate = (nyDate: Temporal.PlainDate): boolean =>
     !(weekendNewYork.has(nyDate.dayOfWeek) || isNyseClosedAtDate(nyDate))
+
+export const isSecOpenAtDate = (nyDate: Temporal.PlainDate): boolean =>
+    !(weekendNewYork.has(nyDate.dayOfWeek) || isSecClosedAtDate(nyDate))
 
 /** Whether `instant` falls on an actual US trading day - New York local calendar date. */
 export const isNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.instant()): boolean =>
@@ -63,10 +68,14 @@ export const isNyseEarlyCloseDay = (nyDate: Temporal.PlainDate): boolean => nyse
 export const isNyseEarlyCloseDataStale = (nyDate: Temporal.PlainDate): boolean =>
     nyDate.year > nyseEarlyCloseDataKnownThroughYear
 
-/** True once `nyDate`'s year has no holiday data. Callers with a Logger should warn on this. */
+/** True once `nyDate`'s year has no NYSE holiday data. Callers with a Logger should warn on this. */
 export const isNyseHolidayDataStale = (nyDate: Temporal.PlainDate): boolean =>
     nyDate.year > nyseHolidayDataKnownThroughYear
 
-/** True if either calendar has no data for `nyDate`'s year. */
+/** True once `nyDate`'s year has no SEC holiday data. Callers with a Logger should warn on this. */
+export const isSecHolidayDataStale = (nyDate: Temporal.PlainDate): boolean =>
+    nyDate.year > secHolidayDataKnownThroughYear
+
+/** True if any hand-maintained calendar has no data for `nyDate`'s year. */
 export const isNyseCalendarDataStale = (nyDate: Temporal.PlainDate): boolean =>
-    isNyseHolidayDataStale(nyDate) || isNyseEarlyCloseDataStale(nyDate)
+    isNyseHolidayDataStale(nyDate) || isNyseEarlyCloseDataStale(nyDate) || isSecHolidayDataStale(nyDate)

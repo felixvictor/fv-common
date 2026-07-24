@@ -1,7 +1,7 @@
 import type { PlainTimeWindow, TimeWindow } from "@/trading/nyse-time-windows.interface"
 
 import { formatPlainTime, isTimeBetween } from "@/temporal/common"
-import { getNyCalendar, isNyseEarlyCloseDay, isNyseOpenAtDate } from "@/trading/nyse-date"
+import { getNyCalendar, isNyseEarlyCloseDay, isNyseOpenAtDate, isSecOpenAtDate } from "@/trading/nyse-date"
 import { nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseTime } from "@/trading/nyse-early-close-dates"
 
 export type NyseTimeWindowKey = keyof typeof windows
@@ -48,6 +48,14 @@ const windows = {
     },
 } as const
 
+// isEdgarOperating follows the SEC calendar; the other three follow NYSE's.
+const windowDayGates: Record<NyseTimeWindowKey, (nyDate: Temporal.PlainDate) => boolean> = {
+    isEdgarOperating: isSecOpenAtDate,
+    isNyseExtendedTradingHours: isNyseOpenAtDate,
+    isNyseMarketHours: isNyseOpenAtDate,
+    isNysePreMarket: isNyseOpenAtDate,
+}
+
 const resolveEnd = (end: PlainTimeWindow["end"], nyDate: Temporal.PlainDate): Temporal.PlainTime => {
     if (end instanceof Temporal.PlainTime) {
         return end
@@ -55,9 +63,8 @@ const resolveEnd = (end: PlainTimeWindow["end"], nyDate: Temporal.PlainDate): Te
     return isNyseEarlyCloseDay(nyDate) ? end.earlyClose : end.default
 }
 
-const describeWindow = (window: PlainTimeWindow, nyDate: Temporal.PlainDate): string => {
-    return `${formatPlainTime(window.start)} to ${formatPlainTime(resolveEnd(window.end, nyDate))}`
-}
+const describeWindow = (window: PlainTimeWindow, nyDate: Temporal.PlainDate): string =>
+    `${formatPlainTime(window.start)} to ${formatPlainTime(resolveEnd(window.end, nyDate))}`
 
 export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
     Object.entries(windows).map(([key, val]) => [
@@ -70,17 +77,19 @@ export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
     ]),
 )
 
-const isNyTimeBetween = (instant: Temporal.Instant, timeWindow: PlainTimeWindow) => {
+const isNyTimeBetween = (instant: Temporal.Instant, key: NyseTimeWindowKey, timeWindow: PlainTimeWindow) => {
     const { nyDate, nyTime } = getNyCalendar(instant)
 
-    if (!isNyseOpenAtDate(nyDate)) return false
+    if (!windowDayGates[key](nyDate)) return false
+
     return isTimeBetween(nyTime, timeWindow.start, resolveEnd(timeWindow.end, nyDate))
 }
 
 const nyseTimeWindowChecks = Object.fromEntries(
     Object.entries(nyseTimeWindows).map(([key, timeWindow]) => [
         key,
-        (instant: Temporal.Instant = Temporal.Now.instant()) => isNyTimeBetween(instant, timeWindow.window),
+        (instant: Temporal.Instant = Temporal.Now.instant()) =>
+            isNyTimeBetween(instant, key as NyseTimeWindowKey, timeWindow.window),
     ]),
 ) as Record<NyseTimeWindowKey, (instant?: Temporal.Instant) => boolean>
 

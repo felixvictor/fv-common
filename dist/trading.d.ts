@@ -7,14 +7,32 @@ declare const isNyseOpenAtDate: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseTradingDay: (instant?: Temporal.Instant) => boolean;
 declare const getNyseTradingDay: (instant?: Temporal.Instant) => string;
 declare const addNyseTradingDays: (tradingDay: string, tradingDaysToAdd: number) => string;
+declare const isNyseEarlyCloseDay: (nyDate: Temporal.PlainDate) => boolean;
+declare const isNyseEarlyCloseDataStale: (nyDate: Temporal.PlainDate) => boolean;
+declare const isNyseHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
+declare const isNyseCalendarDataStale: (nyDate: Temporal.PlainDate) => boolean;
+//#endregion
+//#region src/trading/nyse-early-close-dates.d.ts
+declare const nyseEarlyCloseDates: ReadonlySet<string>;
+declare const nyseEarlyCloseDataKnownThroughYear = 2028;
+declare const nyseEarlyCloseTime: Temporal.PlainTime;
+declare const nyseEarlyCloseAfterHoursEndTime: Temporal.PlainTime;
+//#endregion
+//#region src/trading/nyse-holiday-dates.d.ts
+declare const nyseHolidayDates: ReadonlySet<string>;
+declare const nyseHolidayDataKnownThroughYear = 2028;
 //#endregion
 //#region src/trading/nyse-time-windows.interface.d.ts
+interface EarlyCloseAdjustedTime {
+  default: Temporal.PlainTime;
+  earlyClose: Temporal.PlainTime;
+}
 interface PlainTimeWindow {
-  end: Temporal.PlainTime;
+  end: EarlyCloseAdjustedTime | Temporal.PlainTime;
   start: Temporal.PlainTime;
 }
 interface TimeWindow {
-  info: string;
+  info: (instant?: Temporal.Instant) => string;
   order: number;
   text: string;
   window: PlainTimeWindow;
@@ -35,7 +53,10 @@ declare const windows: {
     readonly order: 3;
     readonly text: "Extended trading hours";
     readonly window: {
-      readonly end: Temporal.PlainTime;
+      readonly end: {
+        readonly default: Temporal.PlainTime;
+        readonly earlyClose: Temporal.PlainTime;
+      };
       readonly start: Temporal.PlainTime;
     };
   };
@@ -43,7 +64,10 @@ declare const windows: {
     readonly order: 1;
     readonly text: "Regular market hours";
     readonly window: {
-      readonly end: Temporal.PlainTime;
+      readonly end: {
+        readonly default: Temporal.PlainTime;
+        readonly earlyClose: Temporal.PlainTime;
+      };
       readonly start: Temporal.PlainTime;
     };
   };
@@ -60,5 +84,5 @@ declare const nyseTimeWindows: Record<string, TimeWindow>;
 declare const isEdgarOperating: (instant?: Temporal.Instant) => boolean, isNyseExtendedTradingHours: (instant?: Temporal.Instant) => boolean, isNyseMarketHours: (instant?: Temporal.Instant) => boolean, isNysePreMarket: (instant?: Temporal.Instant) => boolean;
 declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 //#endregion
-export { type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseExtendedTradingHours, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseStatus, nyseTimeWindows };
+export { type EarlyCloseAdjustedTime, type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseCalendarDataStale, isNyseEarlyCloseDataStale, isNyseEarlyCloseDay, isNyseExtendedTradingHours, isNyseHolidayDataStale, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates, nyseEarlyCloseTime, nyseHolidayDataKnownThroughYear, nyseHolidayDates, nyseStatus, nyseTimeWindows };
 //# sourceMappingURL=trading.d.ts.map

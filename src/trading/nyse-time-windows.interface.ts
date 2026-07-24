@@ -9,7 +9,7 @@ export interface PlainTimeWindow {
 }
 
 export interface TimeWindow {
-    info: (instant?: Temporal.Instant) => string
+    info: (nyDate: Temporal.PlainDate) => string
     order: number
     text: string
     window: PlainTimeWindow

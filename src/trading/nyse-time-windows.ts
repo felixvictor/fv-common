@@ -55,8 +55,7 @@ const resolveEnd = (end: PlainTimeWindow["end"], nyDate: Temporal.PlainDate): Te
     return isNyseEarlyCloseDay(nyDate) ? end.earlyClose : end.default
 }
 
-const describeWindow = (window: PlainTimeWindow, instant: Temporal.Instant): string => {
-    const { nyDate } = getNyCalendar(instant)
+const describeWindow = (window: PlainTimeWindow, nyDate: Temporal.PlainDate): string => {
     return `${formatPlainTime(window.start)} to ${formatPlainTime(resolveEnd(window.end, nyDate))}`
 }
 
@@ -65,7 +64,8 @@ export const nyseTimeWindows: Record<string, TimeWindow> = Object.fromEntries(
         key,
         {
             ...val,
-            info: (instant: Temporal.Instant = Temporal.Now.instant()) => describeWindow(val.window, instant),
+            info: (nyDate: Temporal.PlainDate = getNyCalendar(Temporal.Now.instant()).nyDate) =>
+                describeWindow(val.window, nyDate),
         },
     ]),
 )

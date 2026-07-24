@@ -4,12 +4,14 @@ declare const getNyCalendar: (instant: Temporal.Instant) => {
   nyTime: Temporal.PlainTime;
 };
 declare const isNyseOpenAtDate: (nyDate: Temporal.PlainDate) => boolean;
+declare const isSecOpenAtDate: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseTradingDay: (instant?: Temporal.Instant) => boolean;
 declare const getNyseTradingDay: (instant?: Temporal.Instant) => string;
 declare const addNyseTradingDays: (tradingDay: string, tradingDaysToAdd: number) => string;
 declare const isNyseEarlyCloseDay: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseEarlyCloseDataStale: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
+declare const isSecHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseCalendarDataStale: (nyDate: Temporal.PlainDate) => boolean;
 //#endregion
 //#region src/trading/nyse-early-close-dates.d.ts
@@ -84,5 +86,9 @@ declare const nyseTimeWindows: Record<string, TimeWindow>;
 declare const isEdgarOperating: (instant?: Temporal.Instant) => boolean, isNyseExtendedTradingHours: (instant?: Temporal.Instant) => boolean, isNyseMarketHours: (instant?: Temporal.Instant) => boolean, isNysePreMarket: (instant?: Temporal.Instant) => boolean;
 declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 //#endregion
-export { type EarlyCloseAdjustedTime, type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseCalendarDataStale, isNyseEarlyCloseDataStale, isNyseEarlyCloseDay, isNyseExtendedTradingHours, isNyseHolidayDataStale, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates, nyseEarlyCloseTime, nyseHolidayDataKnownThroughYear, nyseHolidayDates, nyseStatus, nyseTimeWindows };
+//#region src/trading/sec-holiday-dates.d.ts
+declare const secHolidayDates: ReadonlySet<string>;
+declare const secHolidayDataKnownThroughYear = 2028;
+//#endregion
+export { type EarlyCloseAdjustedTime, type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseCalendarDataStale, isNyseEarlyCloseDataStale, isNyseEarlyCloseDay, isNyseExtendedTradingHours, isNyseHolidayDataStale, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, isSecHolidayDataStale, isSecOpenAtDate, nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates, nyseEarlyCloseTime, nyseHolidayDataKnownThroughYear, nyseHolidayDates, nyseStatus, nyseTimeWindows, secHolidayDataKnownThroughYear, secHolidayDates };
 //# sourceMappingURL=trading.d.ts.map

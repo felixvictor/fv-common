@@ -1,10 +1,15 @@
+export interface EarlyCloseAdjustedTime {
+    default: Temporal.PlainTime
+    earlyClose: Temporal.PlainTime
+}
+
 export interface PlainTimeWindow {
-    end: Temporal.PlainTime
+    end: EarlyCloseAdjustedTime | Temporal.PlainTime
     start: Temporal.PlainTime
 }
 
 export interface TimeWindow {
-    info: string
+    info: (instant?: Temporal.Instant) => string
     order: number
     text: string
     window: PlainTimeWindow

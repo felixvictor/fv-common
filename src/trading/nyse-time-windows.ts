@@ -6,8 +6,8 @@ import { nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseTime } from "@/trading/n
 
 export type NyseTimeWindowKey = keyof typeof windows
 
-const nyseRegularSessionOpenTime = Temporal.PlainTime.from({ hour: 9, minute: 30 })
-const nyseRegularSessionDefaultCloseTime = Temporal.PlainTime.from({ hour: 16, minute: 0 })
+export const nyseRegularSessionOpenTime = Temporal.PlainTime.from({ hour: 9, minute: 30 })
+export const nyseRegularSessionDefaultCloseTime = Temporal.PlainTime.from({ hour: 16, minute: 0 })
 const nyseTradingDayStartTime = Temporal.PlainTime.from({ hour: 4, minute: 0 })
 const nyseExtendedSessionDefaultCloseTime = Temporal.PlainTime.from({ hour: 20, minute: 0 })
 const edgarOperatingStartTime = Temporal.PlainTime.from({ hour: 6, minute: 0 })

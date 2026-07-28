@@ -79,3 +79,7 @@ export const isSecHolidayDataStale = (nyDate: Temporal.PlainDate): boolean =>
 /** True if any hand-maintained calendar has no data for `nyDate`'s year. */
 export const isNyseCalendarDataStale = (nyDate: Temporal.PlainDate): boolean =>
     isNyseHolidayDataStale(nyDate) || isNyseEarlyCloseDataStale(nyDate) || isSecHolidayDataStale(nyDate)
+
+export const toNyInstant = (nyDate: string, nyTime: Temporal.PlainTime): Temporal.Instant => {
+    return Temporal.PlainDate.from(nyDate).toZonedDateTime({ plainTime: nyTime, timeZone: tzNewYork }).toInstant()
+}

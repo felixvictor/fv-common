@@ -13,6 +13,7 @@ declare const isNyseEarlyCloseDataStale: (nyDate: Temporal.PlainDate) => boolean
 declare const isNyseHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
 declare const isSecHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
 declare const isNyseCalendarDataStale: (nyDate: Temporal.PlainDate) => boolean;
+declare const toNyInstant: (nyDate: string, nyTime: Temporal.PlainTime) => Temporal.Instant;
 //#endregion
 //#region src/trading/nyse-early-close-dates.d.ts
 declare const nyseEarlyCloseDates: ReadonlySet<string>;
@@ -42,6 +43,8 @@ interface TimeWindow {
 //#endregion
 //#region src/trading/nyse-time-windows.d.ts
 type NyseTimeWindowKey = keyof typeof windows;
+declare const nyseRegularSessionOpenTime: Temporal.PlainTime;
+declare const nyseRegularSessionDefaultCloseTime: Temporal.PlainTime;
 declare const windows: {
   readonly isEdgarOperating: {
     readonly order: 4;
@@ -90,5 +93,5 @@ declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 declare const secHolidayDates: ReadonlySet<string>;
 declare const secHolidayDataKnownThroughYear = 2028;
 //#endregion
-export { type EarlyCloseAdjustedTime, type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseCalendarDataStale, isNyseEarlyCloseDataStale, isNyseEarlyCloseDay, isNyseExtendedTradingHours, isNyseHolidayDataStale, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, isSecHolidayDataStale, isSecOpenAtDate, nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates, nyseEarlyCloseTime, nyseHolidayDataKnownThroughYear, nyseHolidayDates, nyseStatus, nyseTimeWindows, secHolidayDataKnownThroughYear, secHolidayDates };
+export { type EarlyCloseAdjustedTime, type NyseTimeWindowKey, type PlainTimeWindow, type TimeWindow, addNyseTradingDays, getNyCalendar, getNyseTradingDay, isEdgarOperating, isNyseCalendarDataStale, isNyseEarlyCloseDataStale, isNyseEarlyCloseDay, isNyseExtendedTradingHours, isNyseHolidayDataStale, isNyseMarketHours, isNyseOpenAtDate, isNysePreMarket, isNyseTradingDay, isSecHolidayDataStale, isSecOpenAtDate, nyseEarlyCloseAfterHoursEndTime, nyseEarlyCloseDataKnownThroughYear, nyseEarlyCloseDates, nyseEarlyCloseTime, nyseHolidayDataKnownThroughYear, nyseHolidayDates, nyseRegularSessionDefaultCloseTime, nyseRegularSessionOpenTime, nyseStatus, nyseTimeWindows, secHolidayDataKnownThroughYear, secHolidayDates, toNyInstant };
 //# sourceMappingURL=trading.d.ts.map

@@ -10,6 +10,7 @@ export const getNyCalendar = (instant: Temporal.Instant) => {
 
     return {
         nyDate: nyDateTime.toPlainDate(),
+        nyDateTime: nyDateTime.toPlainDateTime(),
         nyTime: nyDateTime.toPlainTime(),
     }
 }

@@ -1,6 +1,7 @@
 //#region src/trading/nyse-date.d.ts
 declare const getNyCalendar: (instant: Temporal.Instant) => {
   nyDate: Temporal.PlainDate;
+  nyDateTime: Temporal.PlainDateTime;
   nyTime: Temporal.PlainTime;
 };
 declare const isNyseOpenAtDate: (nyDate: Temporal.PlainDate) => boolean;

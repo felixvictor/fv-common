@@ -61,6 +61,22 @@ export const readDirectorySync = (directoryPath: string): string[] => {
 }
 
 /**
+ * Reads directory contents recursively, returning all files and subdirectories as Dirent
+ * entries (with type info such as isFile()/isDirectory(), unlike the plain path strings
+ * from readDirectorySync).
+ *
+ * @param directoryPath - Path to the directory to read.
+ * @returns Array of Dirent entries for all files and directories within.
+ *
+ * @example
+ * const entries = readDirectoryEntriesSync("src")
+ * const files = entries.filter((entry) => entry.isFile())
+ */
+export const readDirectoryEntriesSync = (directoryPath: string): fs.Dirent[] => {
+    return fs.readdirSync(directoryPath, { recursive: true, withFileTypes: true })
+}
+
+/**
  * Reads directory contents recursively, returning all files and subdirectories.
  * Async version of readDirectorySync.
  *

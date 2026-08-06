@@ -91,6 +91,22 @@ export const readDirectoryAsync = async (directoryPath: string): Promise<string[
 }
 
 /**
+ * Reads directory contents recursively, returning all files and subdirectories as Dirent
+ * entries.
+ * Async version of readDirectoryEntriesSync.
+ *
+ * @param directoryPath - Path to the directory to read.
+ * @returns Promise resolving to array of Dirent entries for all files and directories within.
+ *
+ * @example
+ * const entries = await readDirectoryEntriesAsync("src")
+ * const files = entries.filter((entry) => entry.isFile())
+ */
+export const readDirectoryEntriesAsync = async (directoryPath: string): Promise<fs.Dirent[]> => {
+    return await fsPromises.readdir(directoryPath, { recursive: true, withFileTypes: true })
+}
+
+/**
  * Reads immediate directory contents only (non-recursive).
  * Does not traverse subdirectories.
  *

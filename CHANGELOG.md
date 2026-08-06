@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.0](fj.byrtz.de/ibey/fv-common/compare/1.66.0...1.67.0) (2026-08-06)
+
+### Features
+
+* readDirectoryEntriesAsync ([371e010](fj.byrtz.de/ibey/fv-common/commits/371e010551b4971191c1bc84305a61671d6a1b45))
+* readDirectoryEntriesAsync ([f1e1fbb](fj.byrtz.de/ibey/fv-common/commits/f1e1fbb6a0f3b0c38e4c3ada60e7aaddd3826552))
+
 ## [1.66.0](fj.byrtz.de/ibey/fv-common/compare/1.65.0...1.66.0) (2026-08-05)
 
 ### Features

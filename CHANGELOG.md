@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.68.1](fj.byrtz.de/ibey/fv-common/compare/1.68.0...1.68.1) (2026-08-07)
+
+### Bug Fixes
+
+* sort handling of non values ([6e80c80](fj.byrtz.de/ibey/fv-common/commits/6e80c802b80ee340961a2db45a0d0acdd3801c5f))
+
 ## [1.68.0](fj.byrtz.de/ibey/fv-common/compare/1.67.0...1.68.0) (2026-08-07)
 
 ### Features

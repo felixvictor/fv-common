@@ -203,13 +203,13 @@ describe("Library Sort Functions", () => {
             expect(result).toBe(0)
         })
 
-        it("should verify order for complex types instead of just checking toBeDefined", () => {
+        it("should preserve original order for incomparable types (arrays), not scramble it", () => {
             const data = [{ tags: ["b", "a"] }, { tags: ["a", "b"] }]
-
             data.sort(sortBy(["tags"]))
-
-            expect(data[0]!.tags).toEqual(["a", "b"])
-            expect(data[1]!.tags).toEqual(["b", "a"])
+            // Arrays coerce to neither a finite number nor a string, so the comparator returns 0 for
+            // any pair — a stable sort then leaves the original order untouched.
+            expect(data[0]!.tags).toEqual(["b", "a"])
+            expect(data[1]!.tags).toEqual(["a", "b"])
         })
     })
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.68.2](fj.byrtz.de/ibey/fv-common/compare/1.68.1...1.68.2) (2026-08-07)
+
+### Bug Fixes
+
+* sort test ([d4b530a](fj.byrtz.de/ibey/fv-common/commits/d4b530a1d2a82e76901122e026c95fa07d3b36ff))
+
 ## [1.68.1](fj.byrtz.de/ibey/fv-common/compare/1.68.0...1.68.1) (2026-08-07)
 
 ### Bug Fixes

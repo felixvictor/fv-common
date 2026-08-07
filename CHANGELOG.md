@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.68.0](fj.byrtz.de/ibey/fv-common/compare/1.67.0...1.68.0) (2026-08-07)
+
+### Features
+
+* lerp ([7efcb50](fj.byrtz.de/ibey/fv-common/commits/7efcb50c50949239d6bfc4dcf1a55c030987d435))
+
 ## [1.67.0](fj.byrtz.de/ibey/fv-common/compare/1.66.0...1.67.0) (2026-08-06)
 
 ### Features

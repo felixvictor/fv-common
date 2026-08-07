@@ -24,6 +24,11 @@ export const isEmpty = (value: unknown): boolean => {
 export const isNullish = (value: unknown): value is null | undefined => value == undefined
 
 /**
+ * Check if a value is nullish or NaN.
+ */
+export const isNullishOrNaN = (value: unknown): boolean => isNullish(value) || Number.isNaN(value)
+
+/**
  * Determines whether a given value of any type is a finite, real number.
  */
 export const isNumeric = (value: unknown): value is number => toFiniteNumber(value) !== undefined

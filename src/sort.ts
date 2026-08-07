@@ -1,74 +1,79 @@
-import { isNullish, toFiniteNumber } from "./common.js"
+import { isNullishOrNaN, toFiniteNumber } from "./common.js"
 import { getLocale } from "./locale.js"
 
 const locale = getLocale()
+// 'base' sensitivity ignores case and accents, which is often desirable for data sorting.
+const collator = new Intl.Collator(locale, { numeric: true, sensitivity: "base" })
 
 /**
  * Sort argument type.
  * keyof T for ascending, `-${string & keyof T}` for descending.
  */
 export type SortArgument<T> = `-${keyof T & string}` | keyof T
+interface ParsedSortArgument<T> {
+    isDescending: boolean
+    key: keyof T
+}
 
 /**
- * Parses a SortArgument string to extract the property key and sort direction.
+ * Parses a SortArgument to extract its property key and sort direction.
  */
-const parseSortArgument = <T extends object>(property: SortArgument<T>): { isDesc: boolean; key: keyof T } => {
-    const propertyString = String(property)
-    const isDesc = propertyString.startsWith("-")
-    const key = (isDesc ? propertyString.slice(1) : propertyString) as keyof T
-    return { isDesc, key }
+const parseSortArgument = <T extends object>(sortArgument: SortArgument<T>): ParsedSortArgument<T> => {
+    const sortArgumentString = String(sortArgument)
+    const isDescending = sortArgumentString.startsWith("-")
+    const key = (isDescending ? sortArgumentString.slice(1) : sortArgumentString) as keyof T
+    return { isDescending, key }
 }
 
 /**
  * Locale-aware string comparison with numeric sorting.
- * Note: 'base' sensitivity ignores case and accents, which is often desirable for data sorting.
  */
-const compareStrings = (a: string, b: string): number =>
-    a.localeCompare(b, locale, { numeric: true, sensitivity: "base" })
+const getStringSortOrder = (a: string, b: string): number => collator.compare(a, b)
 
 /**
- * Compare two values with nullish handling.
- * Returns 0 if both are nullish, 1 if only a is nullish, -1 if only b is nullish, undefined otherwise.
+ * Handles the sorting weight for nullish or NaN values.
+ * Returns the sort order if any value is invalid, otherwise undefined.
  */
-const compareNullish = (a: unknown, b: unknown): number | undefined => {
-    const isNullishA = isNullish(a)
-    const isNullishB = isNullish(b)
+const getNonValueSortOrder = (a: unknown, b: unknown): number | undefined => {
+    const hasNoValueA = isNullishOrNaN(a)
+    const hasNoValueB = isNullishOrNaN(b)
 
-    if (isNullishA && isNullishB) return 0
-    if (isNullishA) return 1
-    if (isNullishB) return -1
+    if (hasNoValueA && hasNoValueB) return 0
+    if (hasNoValueA) return 1
+    if (hasNoValueB) return -1
     return undefined
 }
 
 /**
- * Compares two values of any type, with explicit null/undefined and type-coercion handling.
+ * Compares two values of any type, with explicit null/undefined/NaN and type-coercion handling.
  *
  * Comparison is performed in the following order of precedence:
  * 1. Referential equality — returns 0 immediately.
- * 2. Nullish values — null and undefined are considered equal to each other
+ * 2. Non-values — null, undefined and NaN are considered equal to each other
  *    and are sorted to the end of the list.
  * 3. Numeric comparison — if both values can be coerced to a finite number,
  *    they are compared numerically.
  * 4. String comparison — falls back to locale-aware string comparison.
  * 5. Incomparable types — values that cannot be compared meaningfully are treated as equal.
  */
-const compareValues = (a: unknown, b: unknown): number => {
+const getSortOrder = (a: unknown, b: unknown, isDescending: boolean): number => {
     if (a === b) return 0
 
-    const nullishResult = compareNullish(a, b)
-    if (nullishResult !== undefined) return nullishResult
+    const nonValueSortOrder = getNonValueSortOrder(a, b)
+    if (nonValueSortOrder !== undefined) return nonValueSortOrder
 
+    let valueSortOrder = 0
     const numberA = toFiniteNumber(a)
     const numberB = toFiniteNumber(b)
+
     if (numberA !== undefined && numberB !== undefined) {
-        return numberA - numberB
+        valueSortOrder = numberA - numberB
+    } else if (typeof a === "string" && typeof b === "string") {
+        valueSortOrder = getStringSortOrder(a, b)
     }
 
-    if (typeof a === "string" && typeof b === "string") {
-        return compareStrings(a, b)
-    }
-
-    return 0
+    // Invert only on valid values
+    return isDescending ? -valueSortOrder : valueSortOrder
 }
 
 /**
@@ -82,44 +87,44 @@ const compareValues = (a: unknown, b: unknown): number => {
  * people.sort(sortBy(['name', '-age']))
  * // Sorts by name ascending, then by age descending.
  */
-export const sortBy =
-    <T extends object>(propertyNames: SortArgument<T>[]) =>
-    (a: T, b: T): number => {
-        for (const property of propertyNames) {
-            const { isDesc, key } = parseSortArgument(property)
-            const result = compareValues(a[key], b[key])
+export const sortBy = <T extends object>(sortArguments: SortArgument<T>[]) => {
+    const parsedSortArguments = sortArguments.map((sortArgument) => parseSortArgument(sortArgument))
 
-            if (result !== 0) {
-                return isDesc ? -result : result
+    return (a: T, b: T): number => {
+        for (const { isDescending, key } of parsedSortArguments) {
+            const sortOrder = getSortOrder(a[key], b[key], isDescending)
+            if (sortOrder !== 0) {
+                return sortOrder
             }
         }
         return 0
     }
+}
 
 /**
- * Comparator for numeric values, with null and undefined sorted to the end.
+ * Comparator for numeric values, with null, undefined and NaN sorted to the end.
  */
 export function simpleNumberSort(a: number, b: number): number
 export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number
 export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number {
-    const nullishResult = compareNullish(a, b)
+    const nullishResult = getNonValueSortOrder(a, b)
     if (nullishResult !== undefined) return nullishResult
 
-    // After compareNullish returns undefined, both a and b are guaranteed to be numbers
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return a! - b!
+    // After getNonValueSortOrder returns undefined, both a and b are guaranteed to be numbers
+    // oxlint-disable typescript/non-nullable-type-assertion-style
+    return (a as number) - (b as number)
 }
 
 /**
- * Comparator for string values, with null and undefined sorted to the end.
+ * Comparator for string values, with null, undefined and NaN sorted to the end.
  */
 export function simpleStringSort(a: string, b: string): number
 export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number
 export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number {
-    const nullishResult = compareNullish(a, b)
+    const nullishResult = getNonValueSortOrder(a, b)
     if (nullishResult !== undefined) return nullishResult
 
-    // After compareNullish returns undefined, both a and b are guaranteed to be strings
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return compareStrings(a!, b!)
+    // After getNonValueSortOrder returns undefined, both a and b are guaranteed to be strings
+    // oxlint-disable typescript/non-nullable-type-assertion-style
+    return getStringSortOrder(a as string, b as string)
 }

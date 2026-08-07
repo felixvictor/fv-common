@@ -46,8 +46,7 @@ export const isNumeric = (value: unknown): value is number => toFiniteNumber(val
  */
 export const toFiniteNumber = (value: unknown): number | undefined => {
     if (
-        value === null ||
-        value === undefined ||
+        value == undefined ||
         typeof value === "boolean" ||
         typeof value === "bigint" ||
         typeof value === "symbol" ||

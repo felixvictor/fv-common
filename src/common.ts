@@ -86,3 +86,24 @@ export const clamp = (value: number | string, min: number | string, max: number 
  * Use this in performance-critical loops where inputs are already pre-validated.
  */
 export const clampUnsafe = (x: number, min: number, max: number): number => (x < min ? min : Math.min(x, max))
+
+/**
+ * Linearly interpolates between two values by a factor t (ranging from 0 to 1).
+ * * Returns NaN if any input cannot be converted to a number.
+ */
+export const lerp = (value1: number | string, value2: number | string, t: number | string): number => {
+    const v1 = Number(value1)
+    const v2 = Number(value2)
+    const tNumber = Number(t)
+
+    // eslint-disable-next-line unicorn/prefer-number-properties
+    if (isNaN(v1) || isNaN(v2) || isNaN(tNumber)) return NaN
+
+    return v1 + (v2 - v1) * tNumber
+}
+
+/**
+ * A high-performance version of lerp that assumes valid numeric inputs.
+ * * Use this in performance-critical loops where inputs are already pre-validated.
+ */
+export const lerpUnsafe = (v1: number, v2: number, t: number): number => v1 + (v2 - v1) * t

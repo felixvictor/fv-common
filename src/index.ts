@@ -14,7 +14,7 @@ export { fallback, getThemeTone, maxTone, md3AccentOnToneDark, md3AccentOnToneLi
 export type { Md3Tone, Md3ToneArray } from "./colour/md3-tones.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { minSeedHueDelta, minSurfaceLightnessDelta, neutralChromaMax, seedChromaMin, seedLightnessMax, seedLightnessMin, validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";
-export { clamp, clampUnsafe, isEmpty, isNullish, isNumeric, isObject, lerp, lerpUnsafe, toFiniteNumber } from "./common.js";
+export { clamp, clampUnsafe, isEmpty, isNullish, isNullishOrNaN, isNumeric, isObject, lerp, lerpUnsafe, toFiniteNumber } from "./common.js";
 export { datetimeFormat } from "./date/constants.js";
 export { convertBerlinTimeToUTC, convertDate, convertDEDateString, convertUTCStringToDate, getLocalHour, getRange } from "./date/convert.js";
 export { formatDate, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getRelativeTime, setDateLocale } from "./date/format.js";

@@ -5,13 +5,14 @@ import { secHolidayDataKnownThroughYear, secHolidayDates } from "@/trading/sec-h
 const tzNewYork = "America/New_York"
 const weekendNewYork = new Set([6, 7])
 
-export const getNyCalendar = (instant: Temporal.Instant) => {
-    const nyDateTime = instant.toZonedDateTimeISO(tzNewYork)
+export const getNyCalendar = (instant: Temporal.Instant = Temporal.Now.instant()) => {
+    const nyZonedDateTime = instant.toZonedDateTimeISO(tzNewYork)
 
     return {
-        nyDate: nyDateTime.toPlainDate(),
-        nyDateTime: nyDateTime.toPlainDateTime(),
-        nyTime: nyDateTime.toPlainTime(),
+        nyZonedDateTime,
+        nyDate: nyZonedDateTime.toPlainDate(),
+        nyDateTime: nyZonedDateTime.toPlainDateTime(),
+        nyTime: nyZonedDateTime.toPlainTime(),
     }
 }
 

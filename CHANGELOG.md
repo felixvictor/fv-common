@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.69.0](fj.byrtz.de/ibey/fv-common/compare/1.68.2...1.69.0) (2026-08-08)
+
+### Features
+
+* nyZonedDateTime ([32a3260](fj.byrtz.de/ibey/fv-common/commits/32a32608f0343f0bfb80e8eba41866b85c186fbb))
+
 ## [1.68.2](fj.byrtz.de/ibey/fv-common/compare/1.68.1...1.68.2) (2026-08-07)
 
 ### Bug Fixes

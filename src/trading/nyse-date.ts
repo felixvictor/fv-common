@@ -9,10 +9,10 @@ export const getNyCalendar = (instant: Temporal.Instant = Temporal.Now.instant()
     const nyZonedDateTime = instant.toZonedDateTimeISO(tzNewYork)
 
     return {
-        nyZonedDateTime,
         nyDate: nyZonedDateTime.toPlainDate(),
         nyDateTime: nyZonedDateTime.toPlainDateTime(),
         nyTime: nyZonedDateTime.toPlainTime(),
+        nyZonedDateTime,
     }
 }
 

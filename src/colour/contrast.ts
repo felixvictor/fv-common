@@ -1,7 +1,6 @@
-import Color from "colorjs.io"
-
 import { blackHex, whiteHex } from "@/colour/constant"
 import { round } from "@/format/number"
+import Color from "colorjs.io"
 
 export type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText"
 

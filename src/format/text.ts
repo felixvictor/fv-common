@@ -4,8 +4,12 @@ import { getCardinalRules } from "./cardinal.js"
 
 /**
  * Capitalizes the first letter of a string using locale-aware rules.
- * @example capitalizeFirstLetter("hello") → "Hello"
- * @example capitalizeFirstLetter("istanbul") → "İstanbul" (in Turkish locale)
+ *
+ * @example
+ *     capitalizeFirstLetter("hello") → "Hello"
+ *
+ * @example
+ *     capitalizeFirstLetter("istanbul") → "İstanbul" (in Turkish locale)
  */
 export const capitalizeFirstLetter = (text: string, locale?: string): string => {
     if (!text) return text
@@ -14,10 +18,13 @@ export const capitalizeFirstLetter = (text: string, locale?: string): string => 
 }
 
 /**
- * Returns the appropriate singular or plural form based on count.
- * Uses Intl.PluralRules for locale-aware pluralisation.
- * @example pluralise(1, "item", "items") → "item"
- * @example pluralise(5, "item", "items") → "items"
+ * Returns the appropriate singular or plural form based on count. Uses Intl.PluralRules for locale-aware pluralisation.
+ *
+ * @example
+ *     pluralise(1, "item", "items") → "item"
+ *
+ * @example
+ *     pluralise(5, "item", "items") → "items"
  */
 export const pluralise = (count: number, wordSingle: string, wordPlural?: string): string => {
     const cardinalRules = getCardinalRules(getLocale())

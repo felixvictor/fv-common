@@ -31,8 +31,8 @@ export const isNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.instan
     isNyseOpenAtDate(getNyDate(instant))
 
 /**
- * The current US trading day as `YYYY-MM-DD` (New York local time).
- * Weekends and NYSE holidays roll forward to the next actual trading day.
+ * The current US trading day as `YYYY-MM-DD` (New York local time). Weekends and NYSE holidays roll forward to the next
+ * actual trading day.
  */
 export const getNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.instant()): string => {
     let nyDate = getNyDate(instant)
@@ -45,8 +45,8 @@ export const getNyseTradingDay = (instant: Temporal.Instant = Temporal.Now.insta
 }
 
 /**
- * The NY trading day `tradingDaysToAdd` actual trading days after `tradingDay`.
- * Weekends and NYSE holidays don't count toward the offset.
+ * The NY trading day `tradingDaysToAdd` actual trading days after `tradingDay`. Weekends and NYSE holidays don't count
+ * toward the offset.
  */
 export const addNyseTradingDays = (tradingDay: string, tradingDaysToAdd: number): string => {
     let result = Temporal.PlainDate.from(tradingDay)

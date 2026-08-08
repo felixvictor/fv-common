@@ -1,14 +1,10 @@
-/**
- * Checks if a value is a valid object (not null, not an array).
- * This acts as a Type Guard for TypeScript.
- */
+/** Checks if a value is a valid object (not null, not an array). This acts as a Type Guard for TypeScript. */
 export const isObject = (value: unknown): value is Record<PropertyKey, unknown> =>
     value !== null && typeof value === "object" && !Array.isArray(value)
 
 /**
- * Checks if an object has no own enumerable properties.
- * Returns false if the input is not an object.
- * Note: inherited enumerable properties are not considered.
+ * Checks if an object has no own enumerable properties. Returns false if the input is not an object. Note: inherited
+ * enumerable properties are not considered.
  */
 export const isEmpty = (value: unknown): boolean => {
     if (!isObject(value)) return false
@@ -18,31 +14,23 @@ export const isEmpty = (value: unknown): boolean => {
     return true
 }
 
-/**
- * Check if a value is nullish (null or undefined).
- */
+/** Check if a value is nullish (null or undefined). */
 export const isNullish = (value: unknown): value is null | undefined => value == undefined
 
-/**
- * Check if a value is nullish or NaN.
- */
+/** Check if a value is nullish or NaN. */
 export const isNullishOrNaN = (value: unknown): boolean => isNullish(value) || Number.isNaN(value)
 
-/**
- * Determines whether a given value of any type is a finite, real number.
- */
+/** Determines whether a given value of any type is a finite, real number. */
 export const isNumeric = (value: unknown): value is number => toFiniteNumber(value) !== undefined
 
 /**
  * Attempts to coerce a value of any type to a finite number.
  *
- * Explicitly rejects values that are not meaningfully numeric:
- * booleans, bigints, symbols, functions, arrays, and objects are all
- * treated as non-numeric regardless of their coercion behaviour.
- * Whitespace-only strings and values that produce `Infinity` are likewise rejected.
+ * Explicitly rejects values that are not meaningfully numeric: booleans, bigints, symbols, functions, arrays, and
+ * objects are all treated as non-numeric regardless of their coercion behaviour. Whitespace-only strings and values
+ * that produce `Infinity` are likewise rejected.
  *
- * Returns the numeric representation, or `undefined` if the value cannot be
- * safely treated as a finite number.
+ * Returns the numeric representation, or `undefined` if the value cannot be safely treated as a finite number.
  */
 export const toFiniteNumber = (value: unknown): number | undefined => {
     if (
@@ -63,9 +51,8 @@ export const toFiniteNumber = (value: unknown): number | undefined => {
 }
 
 /**
- * Clamps a numeric value between a minimum and maximum boundary.
- * If min > max, the boundaries are automatically swapped.
- * Returns NaN if any input cannot be converted to a number.
+ * Clamps a numeric value between a minimum and maximum boundary. If min > max, the boundaries are automatically
+ * swapped. Returns NaN if any input cannot be converted to a number.
  */
 export const clamp = (value: number | string, min: number | string, max: number | string): number => {
     const valueNumber = Number(value)
@@ -85,15 +72,15 @@ export const clamp = (value: number | string, min: number | string, max: number 
 }
 
 /**
- * A high-performance version of clamp that assumes valid numeric inputs
- * and that min is already less than or equal to max.
- * Use this in performance-critical loops where inputs are already pre-validated.
+ * A high-performance version of clamp that assumes valid numeric inputs and that min is already less than or equal to
+ * max. Use this in performance-critical loops where inputs are already pre-validated.
  */
 export const clampUnsafe = (x: number, min: number, max: number): number => (x < min ? min : Math.min(x, max))
 
 /**
  * Linearly interpolates between two values by a factor t (ranging from 0 to 1).
- * * Returns NaN if any input cannot be converted to a number.
+ *
+ * - Returns NaN if any input cannot be converted to a number.
  */
 export const lerp = (value1: number | string, value2: number | string, t: number | string): number => {
     const v1 = Number(value1)
@@ -108,6 +95,7 @@ export const lerp = (value1: number | string, value2: number | string, t: number
 
 /**
  * A high-performance version of lerp that assumes valid numeric inputs.
- * * Use this in performance-critical loops where inputs are already pre-validated.
+ *
+ * - Use this in performance-critical loops where inputs are already pre-validated.
  */
 export const lerpUnsafe = (v1: number, v2: number, t: number): number => v1 + (v2 - v1) * t

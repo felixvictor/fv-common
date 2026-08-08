@@ -11,10 +11,7 @@ interface Tone {
 
 type ToneByMode = Record<ThemeMode, Tone>
 
-/**
- * Roles resolved from absolute lightness/chroma pairs – no relative
- * stepping, unlike the surface ladder below.
- */
+/** Roles resolved from absolute lightness/chroma pairs – no relative stepping, unlike the surface ladder below. */
 const semanticTones = {
     onSurface: {
         dark: { chroma: 0.06, lightness: 0.92 },
@@ -35,12 +32,10 @@ const semanticTones = {
 } as const satisfies Record<string, ToneByMode>
 
 /**
- * The four surface roles form a ladder around a per-theme anchor: each
- * rung sits `stepDelta` lightness-steps away from `main`, with its own
- * chroma multiplier on top of the theme's base chroma. Step direction
- * differs between themes (light theme darkens towards `variant`, dark
- * theme lightens towards it), so direction is encoded per rung rather
- * than assumed.
+ * The four surface roles form a ladder around a per-theme anchor: each rung sits `stepDelta` lightness-steps away from
+ * `main`, with its own chroma multiplier on top of the theme's base chroma. Step direction differs between themes
+ * (light theme darkens towards `variant`, dark theme lightens towards it), so direction is encoded per rung rather than
+ * assumed.
  */
 interface LadderRung {
     readonly chromaFactor: number

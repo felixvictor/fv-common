@@ -13,9 +13,10 @@ export const maxTone = md3Tones.at(-1)!
 
 export const fallback = (array: Md3ToneArray, index: number): string => array[index] ?? blackHex
 
-/** Direct, absolute lookup by MD3 tone – the recommended way to pull any
- *  colour out of a tonal range without relying on an ordinal "N steps from
- *  base" concept (which breaks whenever the base tone itself changes). */
+/**
+ * Direct, absolute lookup by MD3 tone – the recommended way to pull any colour out of a tonal range without relying on
+ * an ordinal "N steps from base" concept (which breaks whenever the base tone itself changes).
+ */
 export const getThemeTone = (range: Md3ToneArray, tone: Md3Tone): string => fallback(range, ti(tone))
 
 export const md3AccentToneLight: Md3Tone = 40
@@ -27,7 +28,6 @@ export const md3ContainerToneDark: Md3Tone = 30
 export const md3OnContainerToneLight: Md3Tone = 10
 export const md3OnContainerToneDark: Md3Tone = 90
 
-/** MD3 spec: scrim and shadow are always pure black in both themes,
- *  independent of the rest of the palette. */
+/** MD3 spec: scrim and shadow are always pure black in both themes, independent of the rest of the palette. */
 export const md3ScrimHex = "#000000"
 export const md3ShadowHex = "#000000"

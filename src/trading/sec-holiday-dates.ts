@@ -1,7 +1,4 @@
-/**
- * Full-day SEC/EDGAR closures. Covers years through
- * `secHolidayDataKnownThroughYear`.
- */
+/** Full-day SEC/EDGAR closures. Covers years through `secHolidayDataKnownThroughYear`. */
 export const secHolidayDates: ReadonlySet<string> = new Set([
     // 2026
     "2026-01-01", // New Year's Day

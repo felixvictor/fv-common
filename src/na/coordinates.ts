@@ -11,10 +11,7 @@ import {
 // Coordinate Transform Matrices
 // ============================================================================
 
-/**
- * Transform matrix for converting F11 coordinates to SVG coordinates.
- * This is a 2D affine transformation matrix.
- */
+/** Transform matrix for converting F11 coordinates to SVG coordinates. This is a 2D affine transformation matrix. */
 const transformMatrix = {
     A: -0.00499866779363828,
     B: -0.00000021464254980645,
@@ -22,9 +19,7 @@ const transformMatrix = {
     D: 4096.90282787469,
 } as const
 
-/**
- * Inverse transform matrix for converting SVG coordinates to F11 coordinates.
- */
+/** Inverse transform matrix for converting SVG coordinates to F11 coordinates. */
 const transformMatrixInv = {
     A: -200.053302087577,
     B: -0.00859027897636011,
@@ -80,31 +75,23 @@ export const convertInvCoordY = (x: number, y: number): number =>
 // Type Definitions
 // ============================================================================
 
-/**
- * Represents a 2D coordinate as an object with x and y properties.
- */
+/** Represents a 2D coordinate as an object with x and y properties. */
 export interface Coordinate {
     x: number
     y: number
 }
 
-/**
- * Represents a distance between two ports.
- */
+/** Represents a distance between two ports. */
 export interface Distance extends Array<number> {
     0: number // From port id
     1: number // To port id
     2: number // Distance (in pixels)
 }
 
-/**
- * Represents a bounding box as two points [min, max].
- */
+/** Represents a bounding box as two points [min, max]. */
 export type Extent = [Point, Point]
 
-/**
- * Represents a 2D point as a tuple [x, y].
- */
+/** Represents a 2D point as a tuple [x, y]. */
 export interface Point extends Array<number> {
     0: number // X coordinate
     1: number // Y coordinate
@@ -119,24 +106,24 @@ export type PointTuple = [number, number]
 /**
  * Converts radians to degrees.
  *
+ * @example
+ *     radiansToDegrees(Math.PI) // 180
+ *     radiansToDegrees(Math.PI / 2) // 90
+ *
  * @param radians - Angle in radians.
  * @returns Angle in degrees.
- *
- * @example
- * radiansToDegrees(Math.PI) // 180
- * radiansToDegrees(Math.PI / 2) // 90
  */
 export const radiansToDegrees = (radians: number): number => (radians * degreesHalfCircle) / Math.PI
 
 /**
  * Converts degrees to radians, adjusted by -90° for compass orientation.
  *
+ * @example
+ *     degreesToRadians(90) // 0 (90° - 90° = 0°)
+ *     degreesToRadians(180) // π/2 (180° - 90° = 90°)
+ *
  * @param degrees - Angle in degrees.
  * @returns Angle in radians.
- *
- * @example
- * degreesToRadians(90) // 0 (90° - 90° = 0°)
- * degreesToRadians(180) // π/2 (180° - 90° = 90°)
  */
 export const degreesToRadians = (degrees: number): number =>
     (Math.PI / degreesHalfCircle) * (degrees - degreesQuarterCircle)
@@ -146,16 +133,15 @@ export const degreesToRadians = (degrees: number): number =>
 // ============================================================================
 
 /**
- * Calculates the angle in degrees between two points.
- * The angle is measured clockwise from north (up).
+ * Calculates the angle in degrees between two points. The angle is measured clockwise from north (up).
+ *
+ * @example
+ *     rotationAngleInDegrees([0, 0], [0, -1]) // 0° (pointing up/north)
+ *     rotationAngleInDegrees([0, 0], [1, 0]) // 90° (pointing right/east)
  *
  * @param centerPt - Center point (origin).
  * @param targetPt - Target point.
  * @returns Angle in degrees [0, 360).
- *
- * @example
- * rotationAngleInDegrees([0, 0], [0, -1]) // 0° (pointing up/north)
- * rotationAngleInDegrees([0, 0], [1, 0])  // 90° (pointing right/east)
  */
 export const rotationAngleInDegrees = (centerPt: Point, targetPt: Point): number => {
     // Calculate angle from horizontal axis
@@ -192,17 +178,16 @@ export const getRadians = (centerPt: Point, targetPt: Point): number =>
     Math.atan2(targetPt[1] - centerPt[1], targetPt[0] - centerPt[0])
 
 /**
- * Calculates the angle in degrees from the origin to a point.
- * Result is normalized to [0, 360).
+ * Calculates the angle in degrees from the origin to a point. Result is normalized to [0, 360).
+ *
+ * @example
+ *     getAngle(0, 1) // 90°
+ *     getAngle(1, 0) // 0°
+ *     getAngle(0, -1) // 270°
  *
  * @param x - X coordinate.
  * @param y - Y coordinate.
  * @returns Angle in degrees [0, 360).
- *
- * @example
- * getAngle(0, 1)   // 90°
- * getAngle(1, 0)   // 0°
- * getAngle(0, -1)  // 270°
  */
 export const getAngle = (x: number, y: number): number => {
     let theta = Math.atan2(y, x)
@@ -219,14 +204,14 @@ export const getAngle = (x: number, y: number): number => {
 /**
  * Adds two angles and normalizes the result to [0, 360).
  *
+ * @example
+ *     addAngle(350, 20) // 10° (wraps around)
+ *     addAngle(90, 45) // 135°
+ *     addAngle(-45, 90) // 45°
+ *
  * @param a - First angle in degrees.
  * @param b - Second angle in degrees.
  * @returns Sum of angles normalized to [0, 360).
- *
- * @example
- * addAngle(350, 20)  // 10° (wraps around)
- * addAngle(90, 45)   // 135°
- * addAngle(-45, 90)  // 45°
  */
 export const addAngle = (a: number, b: number): number => {
     let theta = a + b
@@ -244,28 +229,28 @@ export const addAngle = (a: number, b: number): number => {
 /**
  * Calculates the Euclidean distance between two points.
  *
+ * @example
+ *     distancePoints({ x: 0, y: 0 }, { x: 3, y: 4 }) // 5
+ *
  * @param centerPt - First point.
  * @param targetPt - Second point.
  * @returns Distance between the two points.
- *
- * @example
- * distancePoints({ x: 0, y: 0 }, { x: 3, y: 4 }) // 5
  */
 export const distancePoints = (centerPt: Coordinate, targetPt: Coordinate): number =>
     Math.hypot(centerPt.x - targetPt.x, centerPt.y - targetPt.y)
 
 /**
- * Calculates the game distance in kilometers between two SVG coordinates.
- * Converts SVG coordinates to F11 game coordinates and calculates the distance.
+ * Calculates the game distance in kilometers between two SVG coordinates. Converts SVG coordinates to F11 game
+ * coordinates and calculates the distance.
+ *
+ * @example
+ *     const portA = { x: 100, y: 200 }
+ *     const portB = { x: 300, y: 400 }
+ *     const distance = getDistance(portA, portB)
  *
  * @param pt0 - First point in SVG coordinates.
  * @param pt1 - Second point in SVG coordinates.
  * @returns Distance in game units (kilometers).
- *
- * @example
- * const portA = { x: 100, y: 200 }
- * const portB = { x: 300, y: 400 }
- * const distance = getDistance(portA, portB)
  */
 export const getDistance = (pt0: Coordinate, pt1: Coordinate): number => {
     // Convert SVG coordinates to F11 game coordinates
@@ -282,9 +267,7 @@ export const getDistance = (pt0: Coordinate, pt1: Coordinate): number => {
     return distancePoints(fromF11, toF11) / (timeFactor * speedFactor)
 }
 
-/**
- * Adjust for openlayers (top left is not [0,0] but [0,mapSize])
- */
+/** Adjust for openlayers (top left is not [0,0] but [0,mapSize]) */
 export const coordinateAdjust = (x: number | PointTuple | PointTuple[], y?: number): PointTuple | PointTuple[] => {
     if (Array.isArray(x)) {
         return Array.isArray(x[0])

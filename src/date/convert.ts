@@ -15,12 +15,12 @@ export const convertDEDateString = (date: string): string => dayjs(date, "DD.MM.
 /**
  * Converts a date range array to begin/end Dayjs objects.
  *
+ * @example
+ *     const dates = [new Date("2024-01-01"), new Date("2024-01-31")]
+ *     const { begin, end } = getRange(dates)
+ *
  * @param dateRange - Array of Date objects.
  * @returns Object with begin and end Dayjs objects.
- *
- * @example
- * const dates = [new Date("2024-01-01"), new Date("2024-01-31")]
- * const { begin, end } = getRange(dates)
  */
 export const getRange = (dateRange: Date[]): { begin: Dayjs; end: Dayjs } => {
     const begin = dayjs(dateRange[0])

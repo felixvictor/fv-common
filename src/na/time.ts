@@ -1,11 +1,10 @@
-import dayjs from "dayjs"
+import { formatTimeRange } from "@/date/format"
 import "dayjs/locale/de.js"
 import "dayjs/locale/en.js"
 import "dayjs/locale/en-gb.js"
-import utc from "dayjs/plugin/utc.js"
-
-import { formatTimeRange } from "@/date/format"
 import { getLocale, onLocaleChange, setLocale as setLibraryLocale } from "@/locale"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
 
 import { hoursPerDay, maxPortBattleHour, serverMaintenanceHour } from "./constants.js"
 
@@ -31,13 +30,13 @@ setDateLocale("en-GB")
 /**
  * Calculates and formats the port battle time window.
  *
+ * @example
+ *     getPortBattleTime(0, false) // "10 – 8 (14 – 12 local)" (if local is UTC+4)
+ *     getPortBattleTime(2, true) // "12 – 21 (16 – 1 local)" (9-hour neutral port window)
+ *
  * @param startHoursFromSMH - Hours offset from server maintenance hour.
  * @param isNeutralPort - Whether this is a neutral port (9h window vs 2h).
  * @returns Formatted time range string with UTC and local times.
- *
- * @example
- * getPortBattleTime(0, false) // "10 – 8 (14 – 12 local)" (if local is UTC+4)
- * getPortBattleTime(2, true)  // "12 – 21 (16 – 1 local)" (9-hour neutral port window)
  */
 export const getPortBattleTime = (startHoursFromSMH: number, isNeutralPort = false): string => {
     const durationInHours = isNeutralPort ? 9 : 2

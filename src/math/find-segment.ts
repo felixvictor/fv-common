@@ -1,6 +1,4 @@
-/**
- * Represents a point on a cubic Hermite spline curve.
- */
+/** Represents a point on a cubic Hermite spline curve. */
 export interface CurvePoint {
     /** Incoming tangent (derivative at this point from the left) */
     tangentIn: number
@@ -42,11 +40,8 @@ const findSegment = (time: number, points: CurvePoint[]): [CurvePoint, CurvePoin
 /**
  * Performs cubic Hermite spline interpolation between two curve points.
  *
- * Uses the Hermite basis functions:
- * - h00(t) = 2t³ - 3t² + 1
- * - h10(t) = t³ - 2t² + t
- * - h01(t) = -2t³ + 3t²
- * - h11(t) = t³ - t²
+ * Uses the Hermite basis functions: - h00(t) = 2t³ - 3t² + 1 - h10(t) = t³ - 2t² + t - h01(t) = -2t³ + 3t² - h11(t) =
+ * t³ - t²
  *
  * @param p0 - Starting point of the segment.
  * @param p1 - Ending point of the segment.
@@ -69,17 +64,17 @@ const hermiteInterpolation = (p0: CurvePoint, p1: CurvePoint, t: number): number
 /**
  * Evaluates a cubic Hermite spline curve at a given time.
  *
+ * @example
+ *     const points: CurvePoint[] = [
+ *         { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
+ *         { time: 1, value: 1, tangentIn: 1, tangentOut: 0 },
+ *     ]
+ *     getCurveValue(0.5, points) // Returns interpolated value at t=0.5
+ *
  * @param time - The time value to evaluate at.
  * @param points - Array of curve points sorted by time in ascending order.
  * @returns The interpolated curve value, or undefined if time is out of bounds.
  * @throws {Error} If points array is empty or not sorted.
- *
- * @example
- * const points: CurvePoint[] = [
- *   { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
- *   { time: 1, value: 1, tangentIn: 1, tangentOut: 0 }
- * ]
- * getCurveValue(0.5, points) // Returns interpolated value at t=0.5
  */
 export const getCurveValue = (time: number, points: CurvePoint[]): number | undefined => {
     // Validation
@@ -118,21 +113,20 @@ export const getCurveValue = (time: number, points: CurvePoint[]): number | unde
 }
 
 /**
- * Evaluates a cubic Hermite spline curve at a given time with clamping.
- * If time is before the first point, returns the first value.
- * If time is after the last point, returns the last value.
+ * Evaluates a cubic Hermite spline curve at a given time with clamping. If time is before the first point, returns the
+ * first value. If time is after the last point, returns the last value.
+ *
+ * @example
+ *     const points: CurvePoint[] = [
+ *         { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
+ *         { time: 1, value: 1, tangentIn: 1, tangentOut: 0 },
+ *     ]
+ *     getCurveValueClamped(-0.5, points) // Returns 0 (clamped to first point)
+ *     getCurveValueClamped(1.5, points) // Returns 1 (clamped to last point)
  *
  * @param time - The time value to evaluate at.
  * @param points - Array of curve points sorted by time in ascending order.
  * @returns The interpolated or clamped curve value.
- *
- * @example
- * const points: CurvePoint[] = [
- *   { time: 0, value: 0, tangentIn: 0, tangentOut: 1 },
- *   { time: 1, value: 1, tangentIn: 1, tangentOut: 0 }
- * ]
- * getCurveValueClamped(-0.5, points) // Returns 0 (clamped to first point)
- * getCurveValueClamped(1.5, points)  // Returns 1 (clamped to last point)
  */
 export const getCurveValueClamped = (time: number, points: CurvePoint[]): number => {
     if (points.length === 0) {

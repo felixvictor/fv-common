@@ -12,9 +12,7 @@ const execFileAsync = promisify(execFile)
 // Types
 // ============================================================================
 
-/**
- * Result of async command execution.
- */
+/** Result of async command execution. */
 interface AsyncCommandResult {
     error?: Error
     stderr: string
@@ -22,9 +20,7 @@ interface AsyncCommandResult {
     success: boolean
 }
 
-/**
- * Result of command execution.
- */
+/** Result of command execution. */
 interface CommandResult {
     error?: Error
     output: string | undefined
@@ -35,9 +31,7 @@ interface CommandResult {
 // Helpers
 // ============================================================================
 
-/**
- * Logs error details for command execution failures.
- */
+/** Logs error details for command execution failures. */
 const logCommandError = (command: string, error: unknown): void => {
     if (isNodeError(error)) {
         if (error.code === "ENOENT") {
@@ -57,20 +51,20 @@ const logCommandError = (command: string, error: unknown): void => {
 // ============================================================================
 
 /**
- * Executes a command synchronously through a shell with error handling.
- * Supports shell features like pipes, redirects, and variable expansion.
+ * Executes a command synchronously through a shell with error handling. Supports shell features like pipes, redirects,
+ * and variable expansion.
+ *
+ * @example
+ *     const output = executeCommand("ls -la")
+ *     console.log(output)
+ *
+ * @example
+ *     // With shell features
+ *     const output = executeCommand("echo $HOME && pwd", { cwd: "/tmp" })
  *
  * @param command - The command string to execute (e.g., "ls -la | grep node").
  * @param options - Optional execSync options.
  * @returns Command output as string, or empty string on error.
- *
- * @example
- * const output = executeCommand("ls -la")
- * console.log(output)
- *
- * @example
- * // With shell features
- * const output = executeCommand("echo $HOME && pwd", { cwd: "/tmp" })
  */
 export const executeCommand = (command: string, options?: ExecSyncOptions): string => {
     try {
@@ -84,17 +78,17 @@ export const executeCommand = (command: string, options?: ExecSyncOptions): stri
 /**
  * Executes a command synchronously through a shell and returns a detailed result.
  *
+ * @example
+ *     const result = executeCommandWithResult("ls -la")
+ *     if (result.success) {
+ *         console.log(result.output)
+ *     } else {
+ *         console.error("Command failed:", result.error)
+ *     }
+ *
  * @param command - The command string to execute.
  * @param options - Optional execSync options.
  * @returns Object containing success status, output, and error if any.
- *
- * @example
- * const result = executeCommandWithResult("ls -la")
- * if (result.success) {
- *   console.log(result.output)
- * } else {
- *   console.error("Command failed:", result.error)
- * }
  */
 export const executeCommandWithResult = (command: string, options?: ExecSyncOptions): CommandResult => {
     try {
@@ -125,16 +119,15 @@ export const executeCommandWithResult = (command: string, options?: ExecSyncOpti
 }
 
 /**
- * Executes a command synchronously and returns trimmed output as string.
- * Returns empty string on error.
+ * Executes a command synchronously and returns trimmed output as string. Returns empty string on error.
+ *
+ * @example
+ *     const path = executeCommandString("pwd")
+ *     console.log("Current directory:", path)
  *
  * @param command - The command string to execute.
  * @param options - Optional execSync options.
  * @returns Trimmed command output as string, or empty string on error.
- *
- * @example
- * const path = executeCommandString("pwd")
- * console.log("Current directory:", path)
  */
 export const executeCommandString = (command: string, options?: ExecSyncOptions): string => {
     const output = executeCommand(command, options)
@@ -142,16 +135,15 @@ export const executeCommandString = (command: string, options?: ExecSyncOptions)
 }
 
 /**
- * Checks if a command exists and is executable.
- * Uses 'which' on Unix-like systems, 'where' on Windows.
+ * Checks if a command exists and is executable. Uses 'which' on Unix-like systems, 'where' on Windows.
+ *
+ * @example
+ *     if (commandExists("git")) {
+ *         console.log("Git is available")
+ *     }
  *
  * @param command - Command name to check (e.g., "git", "node").
  * @returns True if command exists, false otherwise.
- *
- * @example
- * if (commandExists("git")) {
- *   console.log("Git is available")
- * }
  */
 export const doesCommandExist = (command: string): boolean => {
     try {
@@ -168,20 +160,20 @@ export const doesCommandExist = (command: string): boolean => {
 // ============================================================================
 
 /**
- * Executes a command asynchronously through a shell with error handling.
- * Supports shell features like pipes, redirects, and variable expansion.
+ * Executes a command asynchronously through a shell with error handling. Supports shell features like pipes, redirects,
+ * and variable expansion.
+ *
+ * @example
+ *     const output = await executeCommandAsync("ls -la")
+ *     console.log(output)
+ *
+ * @example
+ *     // With options and shell features
+ *     const output = await executeCommandAsync("pwd && echo done", { cwd: "/tmp" })
  *
  * @param command - The command string to execute.
  * @param options - Optional exec options.
  * @returns Promise resolving to trimmed command stdout, or empty string on error.
- *
- * @example
- * const output = await executeCommandAsync("ls -la")
- * console.log(output)
- *
- * @example
- * // With options and shell features
- * const output = await executeCommandAsync("pwd && echo done", { cwd: "/tmp" })
  */
 export const executeCommandAsync = async (command: string, options?: ExecSyncOptions): Promise<string> => {
     try {
@@ -196,18 +188,18 @@ export const executeCommandAsync = async (command: string, options?: ExecSyncOpt
 /**
  * Executes a command asynchronously through a shell and returns a detailed result.
  *
+ * @example
+ *     const result = await executeCommandAsyncWithResult("ls -la")
+ *     if (result.success) {
+ *         console.log(result.stdout)
+ *     } else {
+ *         console.error("Command failed:", result.error)
+ *         console.error("stderr:", result.stderr)
+ *     }
+ *
  * @param command - The command string to execute.
  * @param options - Optional exec options.
  * @returns Promise resolving to object containing success status, stdout, stderr, and error if any.
- *
- * @example
- * const result = await executeCommandAsyncWithResult("ls -la")
- * if (result.success) {
- *   console.log(result.stdout)
- * } else {
- *   console.error("Command failed:", result.error)
- *   console.error("stderr:", result.stderr)
- * }
  */
 export const executeCommandAsyncWithResult = async (
     command: string,
@@ -258,16 +250,15 @@ export const executeCommandAsyncWithResult = async (
 }
 
 /**
- * Checks if a command exists asynchronously.
- * Uses 'which' on Unix-like systems, 'where' on Windows.
+ * Checks if a command exists asynchronously. Uses 'which' on Unix-like systems, 'where' on Windows.
+ *
+ * @example
+ *     if (await commandExistsAsync("git")) {
+ *         console.log("Git is available")
+ *     }
  *
  * @param command - Command name to check (e.g., "git", "node").
  * @returns Promise resolving to true if command exists, false otherwise.
- *
- * @example
- * if (await commandExistsAsync("git")) {
- *   console.log("Git is available")
- * }
  */
 export const commandExistsAsync = async (command: string): Promise<boolean> => {
     try {

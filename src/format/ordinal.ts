@@ -27,12 +27,19 @@ const suffixesSuper = new Map([
 
 /**
  * Format ordinal number with appropriate suffix.
+ *
+ * @example
+ *     getOrdinal(1) → "1ˢᵗ"
+ *
+ * @example
+ *     getOrdinal(2, false) → "2nd"
+ *
+ * @example
+ *     getOrdinal(3) → "3ʳᵈ"
+ *
  * @param n - Integer
  * @param isSuperscript - True if superscript suffixes needed
  * @param locale - Optional locale override
- * @example getOrdinal(1) → "1ˢᵗ"
- * @example getOrdinal(2, false) → "2nd"
- * @example getOrdinal(3) → "3ʳᵈ"
  */
 export const getOrdinal = (n: number, isSuperscript = true, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()

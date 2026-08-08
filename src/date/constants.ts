@@ -1,4 +1,2 @@
-/**
- * Standard datetime format used throughout the application.
- */
+/** Standard datetime format used throughout the application. */
 export const datetimeFormat = "YYYY-MM-DD HH:mm"

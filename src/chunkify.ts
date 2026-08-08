@@ -1,20 +1,20 @@
 /**
  * Splits an array into n pieces.
  *
+ * @example
+ *     // Balanced split (default)
+ *     chunkify([1, 2, 3, 4, 5, 6, 7], 3) // [[1,2,3], [4,5], [6,7]]
+ *
+ * @example
+ *     // Unbalanced split
+ *     chunkify([1, 2, 3, 4, 5, 6, 7], 3, false) // [[1,2], [3,4], [5,6,7]]
+ *
  * @param array - The source array to be split.
  * @param n - The number of pieces to create (must be >= 1).
- * @param isBalanced - If true, chunk sizes differ by at most 1 element.
- *                    If false, creates n-1 equal chunks with remainder in the last chunk.
+ * @param isBalanced - If true, chunk sizes differ by at most 1 element. If false, creates n-1 equal chunks with
+ *   remainder in the last chunk.
  * @returns An array of n (or fewer) arrays containing the split pieces.
  * @throws {Error} If n is less than 1.
- *
- * @example
- * // Balanced split (default)
- * chunkify([1,2,3,4,5,6,7], 3) // [[1,2,3], [4,5], [6,7]]
- *
- * @example
- * // Unbalanced split
- * chunkify([1,2,3,4,5,6,7], 3, false) // [[1,2], [3,4], [5,6,7]]
  */
 export const chunkify = <T>(array: T[], n: number, isBalanced = true): T[][] => {
     // Input validation

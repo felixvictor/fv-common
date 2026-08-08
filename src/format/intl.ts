@@ -4,8 +4,8 @@ import { cMinus, cPlus, cSpaceNarrowNoBreaking, cSpaceThin } from "@/unicode"
 import { beautifySuffix } from "./helpers.js"
 
 /**
- * Internal number formatter using Intl.NumberFormat with custom typographic enhancements.
- * Applies thin spaces, proper minus signs, and styled compact notation.
+ * Internal number formatter using Intl.NumberFormat with custom typographic enhancements. Applies thin spaces, proper
+ * minus signs, and styled compact notation.
  */
 export const formatWithIntl = (value: number, options: Intl.NumberFormatOptions, isSvg = false): string =>
     new Intl.NumberFormat(getLocale(), options)

@@ -3,16 +3,16 @@ import { cSpaceFigure, cSpaceNarrowNoBreaking, cSpacePunctuation } from "@/unico
 import { formatUnit } from "./helpers.js"
 import { formatWithIntl } from "./intl.js"
 
-/**
- * Base number formatter with decimal precision.
- */
+/** Base number formatter with decimal precision. */
 const formatNumber = (value: number, decimals = 2, options: Intl.NumberFormatOptions = {}, isSvg = false): string => {
     return formatWithIntl(value, { maximumFractionDigits: decimals, ...options, style: "decimal" }, isSvg)
 }
 
 /**
  * Formats a floating-point number with specified decimal places.
- * @example formatFloat(1234.5678, 2) → "1 234.57"
+ *
+ * @example
+ *     formatFloat(1234.5678, 2) → "1 234.57"
  */
 export const formatFloat = (
     value: number,
@@ -23,8 +23,12 @@ export const formatFloat = (
 
 /**
  * Formats a float with explicit sign (+/-).
- * @example formatSignFloat(42.5, 2) → "+42.50"
- * @example formatSignFloat(-42.5, 2) → "−42.50"
+ *
+ * @example
+ *     formatSignFloat(42.5, 2) → "+42.50"
+ *
+ * @example
+ *     formatSignFloat(-42.5, 2) → "−42.50"
  */
 export const formatSignFloat = (value: number, decimals = 2): string => {
     return formatFloat(value, decimals, { signDisplay: "always" })
@@ -32,7 +36,9 @@ export const formatSignFloat = (value: number, decimals = 2): string => {
 
 /**
  * Formats a number with SI compact notation (K, M suffixes).
- * @example formatSiFloat(1234567) → "1.2 m" (where m is styled)
+ *
+ * @example
+ *     formatSiFloat(1234567) → "1.2 m" (where m is styled)
  */
 export const formatSiFloat = (value: number, isSvg = false): string => {
     return formatFloat(
@@ -47,10 +53,14 @@ export const formatSiFloat = (value: number, isSvg = false): string => {
 }
 
 /**
- * Formats a float with fixed decimal places, using figure spaces for missing digits.
- * Ensures alignment in tabular data by replacing trailing zeros with figure spaces.
- * @example formatFloatFixed(42, 2) → "42  " (with figure spaces)
- * @example formatFloatFixed(42.1, 2) → "42.1 " (with one figure space)
+ * Formats a float with fixed decimal places, using figure spaces for missing digits. Ensures alignment in tabular data
+ * by replacing trailing zeros with figure spaces.
+ *
+ * @example
+ *     formatFloatFixed(42, 2) → "42  " (with figure spaces)
+ *
+ * @example
+ *     formatFloatFixed(42.1, 2) → "42.1 " (with one figure space)
  */
 export const formatFloatFixed = (value: number, decimals = 2): string => {
     return formatFloat(value, decimals, { minimumFractionDigits: decimals })
@@ -68,7 +78,9 @@ export const formatWeight = (x: number): string => formatFloatWithUnit(x, "t")
 
 /**
  * Rounds a number to specified decimal places.
- * @example round(3.14159, 2) → 3.14
+ *
+ * @example
+ *     round(3.14159, 2) → 3.14
  */
 export const round = (n: number, d = 0): number => {
     const multiplier = 10 ** d
@@ -77,13 +89,17 @@ export const round = (n: number, d = 0): number => {
 
 /**
  * Rounds a number to 3 decimal places (thousands precision).
- * @example roundToThousands(3.14159) → 3.142
+ *
+ * @example
+ *     roundToThousands(3.14159) → 3.142
  */
 export const roundToThousands = (value: number): number => round(value, 3)
 
 /**
  * Formats an integer (no decimal places).
- * @example formatInt(1234567) → "1 234 567"
+ *
+ * @example
+ *     formatInt(1234567) → "1 234 567"
  */
 export const formatInt = (value: number, options: Intl.NumberFormatOptions = {}): string => {
     return formatNumber(value, 0, options)
@@ -91,14 +107,14 @@ export const formatInt = (value: number, options: Intl.NumberFormatOptions = {})
 
 /**
  * Formats an integer with explicit sign (+/-).
- * @example formatSignInt(42) → "+42"
+ *
+ * @example
+ *     formatSignInt(42) → "+42"
  */
 export const formatSignInt = (value: number): string => {
     return formatInt(value, { signDisplay: "always" })
 }
 
-/**
- * Format integer
- */
+/** Format integer */
 export const formatSiInt = (x: number, max = 2, options = {} as Intl.NumberFormatOptions): string =>
     formatNumber(x, 0, { ...options, maximumSignificantDigits: max })

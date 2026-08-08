@@ -15,8 +15,8 @@ import { okHslColour } from "./okhsl-colour.js"
 /**
  * {@link https://matthewstrom.com/writing/generating-color-palettes/}
  *
- * Utility class for perceptually-designed HSL color scale generation.
- * Based on Matthew Ström's color palette generation algorithm.
+ * Utility class for perceptually-designed HSL color scale generation. Based on Matthew Ström's color palette generation
+ * algorithm.
  */
 export class ColourScaleGenerator {
     readonly #backgroundY: number

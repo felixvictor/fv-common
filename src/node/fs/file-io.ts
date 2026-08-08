@@ -9,17 +9,16 @@ import { defaultEncoding } from "./constants.js"
 // ============================================================================
 
 /**
- * Reads text file synchronously using atomic read operation.
- * Returns undefined if file doesn't exist or read fails.
+ * Reads text file synchronously using atomic read operation. Returns undefined if file doesn't exist or read fails.
+ *
+ * @example
+ *     const content = readTextFileSync("config.txt")
+ *     if (content) {
+ *         console.log(content)
+ *     }
  *
  * @param fileName - Path to the file to read.
  * @returns File contents as string, or undefined on error.
- *
- * @example
- * const content = readTextFileSync('config.txt')
- * if (content) {
- *   console.log(content)
- * }
  */
 export const readTextFileSync = (fileName: string): string | undefined => {
     try {
@@ -35,17 +34,16 @@ export const readTextFileSync = (fileName: string): string | undefined => {
 }
 
 /**
- * Reads text file asynchronously.
- * Returns undefined if file doesn't exist or read fails.
+ * Reads text file asynchronously. Returns undefined if file doesn't exist or read fails.
+ *
+ * @example
+ *     const content = await readTextFileAsync("config.txt")
+ *     if (content) {
+ *         console.log(content)
+ *     }
  *
  * @param fileName - Path to the file to read.
  * @returns Promise resolving to file contents as string, or undefined on error.
- *
- * @example
- * const content = await readTextFileAsync('config.txt')
- * if (content) {
- *   console.log(content)
- * }
  */
 export const readTextFileAsync = async (fileName: string): Promise<string | undefined> => {
     try {
@@ -61,15 +59,14 @@ export const readTextFileAsync = async (fileName: string): Promise<string | unde
 }
 
 /**
- * Saves text to file synchronously using atomic write.
- * Atomic write ensures file is not corrupted if process crashes during write.
- * Logs error but doesn't throw on failure.
+ * Saves text to file synchronously using atomic write. Atomic write ensures file is not corrupted if process crashes
+ * during write. Logs error but doesn't throw on failure.
+ *
+ * @example
+ *     saveTextFileSync("output.txt", "Hello, world!")
  *
  * @param fileName - Path to the file to save.
  * @param data - Text content to write.
- *
- * @example
- * saveTextFileSync('output.txt', 'Hello, world!')
  */
 export const saveTextFileSync = (fileName: string, data: string): void => {
     try {
@@ -80,15 +77,14 @@ export const saveTextFileSync = (fileName: string, data: string): void => {
 }
 
 /**
- * Saves text to file asynchronously using atomic write.
- * Atomic write ensures file is not corrupted if process crashes during write.
- * Logs error but doesn't throw on failure.
+ * Saves text to file asynchronously using atomic write. Atomic write ensures file is not corrupted if process crashes
+ * during write. Logs error but doesn't throw on failure.
+ *
+ * @example
+ *     await saveTextFileAsync("output.txt", "Hello, world!")
  *
  * @param fileName - Path to the file to save.
  * @param data - Text content to write.
- *
- * @example
- * await saveTextFileAsync('output.txt', 'Hello, world!')
  */
 export const saveTextFileAsync = async (fileName: string, data: string): Promise<void> => {
     try {
@@ -103,17 +99,16 @@ export const saveTextFileAsync = async (fileName: string, data: string): Promise
 // ============================================================================
 
 /**
- * Reads and parses JSON file synchronously.
- * Returns undefined if file doesn't exist or JSON is invalid.
+ * Reads and parses JSON file synchronously. Returns undefined if file doesn't exist or JSON is invalid.
+ *
+ * @example
+ *     const config = readJsonSync("config.json")
+ *     if (config) {
+ *         console.log(config)
+ *     }
  *
  * @param fileName - Path to the JSON file to read.
  * @returns Parsed JSON data, or undefined on error.
- *
- * @example
- * const config = readJsonSync('config.json')
- * if (config) {
- *   console.log(config)
- * }
  */
 export const readJsonSync = (fileName: string): unknown => {
     try {
@@ -126,17 +121,16 @@ export const readJsonSync = (fileName: string): unknown => {
 }
 
 /**
- * Reads and parses JSON file asynchronously.
- * Returns undefined if file doesn't exist or JSON is invalid.
+ * Reads and parses JSON file asynchronously. Returns undefined if file doesn't exist or JSON is invalid.
+ *
+ * @example
+ *     const config = await readJsonAsync("config.json")
+ *     if (config) {
+ *         console.log(config)
+ *     }
  *
  * @param fileName - Path to the JSON file to read.
  * @returns Promise resolving to parsed JSON data, or undefined on error.
- *
- * @example
- * const config = await readJsonAsync('config.json')
- * if (config) {
- *   console.log(config)
- * }
  */
 export const readJsonAsync = async (fileName: string): Promise<unknown> => {
     try {
@@ -149,28 +143,26 @@ export const readJsonAsync = async (fileName: string): Promise<unknown> => {
 }
 
 /**
- * Saves an object as JSON file synchronously.
- * Uses JSON.stringify with default formatting (no pretty-print).
+ * Saves an object as JSON file synchronously. Uses JSON.stringify with default formatting (no pretty-print).
+ *
+ * @example
+ *     saveJsonSync("config.json", { key: "value" })
  *
  * @param fileName - Path to the file to save.
  * @param data - Object to serialize as JSON.
- *
- * @example
- * saveJsonSync('config.json', { key: 'value' })
  */
 export const saveJsonSync = (fileName: string, data: object): void => {
     saveTextFileSync(fileName, JSON.stringify(data))
 }
 
 /**
- * Saves an object as JSON file asynchronously.
- * Uses JSON.stringify with default formatting (no pretty-print).
+ * Saves an object as JSON file asynchronously. Uses JSON.stringify with default formatting (no pretty-print).
+ *
+ * @example
+ *     await saveJsonAsync("config.json", { key: "value" })
  *
  * @param fileName - Path to the file to save.
  * @param data - Object to serialize as JSON.
- *
- * @example
- * await saveJsonAsync('config.json', { key: 'value' })
  */
 export const saveJsonAsync = async (fileName: string, data: object): Promise<void> => {
     await saveTextFileAsync(fileName, JSON.stringify(data))
@@ -181,17 +173,16 @@ export const saveJsonAsync = async (fileName: string, data: object): Promise<voi
 // ============================================================================
 
 /**
- * Reads binary file synchronously.
- * Returns undefined if file doesn't exist or read fails.
+ * Reads binary file synchronously. Returns undefined if file doesn't exist or read fails.
+ *
+ * @example
+ *     const buffer = readBinaryFileSync("image.png")
+ *     if (buffer) {
+ *         console.log(`File size: ${buffer.length} bytes`)
+ *     }
  *
  * @param fileName - Path to the file to read.
  * @returns File contents as Buffer, or undefined on error.
- *
- * @example
- * const buffer = readBinaryFileSync('image.png')
- * if (buffer) {
- *   console.log(`File size: ${buffer.length} bytes`)
- * }
  */
 export const readBinaryFileSync = (fileName: string): Buffer | undefined => {
     try {
@@ -207,17 +198,16 @@ export const readBinaryFileSync = (fileName: string): Buffer | undefined => {
 }
 
 /**
- * Reads binary file asynchronously.
- * Returns undefined if file doesn't exist or read fails.
+ * Reads binary file asynchronously. Returns undefined if file doesn't exist or read fails.
+ *
+ * @example
+ *     const buffer = await readBinaryFileAsync("image.png")
+ *     if (buffer) {
+ *         console.log(`File size: ${buffer.length} bytes`)
+ *     }
  *
  * @param fileName - Path to the file to read.
  * @returns Promise resolving to file contents as Buffer, or undefined on error.
- *
- * @example
- * const buffer = await readBinaryFileAsync('image.png')
- * if (buffer) {
- *   console.log(`File size: ${buffer.length} bytes`)
- * }
  */
 export const readBinaryFileAsync = async (fileName: string): Promise<Buffer | undefined> => {
     try {
@@ -233,14 +223,14 @@ export const readBinaryFileAsync = async (fileName: string): Promise<Buffer | un
 }
 
 /**
- * Saves binary data to file synchronously using atomic write.
- * Accepts Buffer for binary data or string for text-based binary formats.
+ * Saves binary data to file synchronously using atomic write. Accepts Buffer for binary data or string for text-based
+ * binary formats.
+ *
+ * @example
+ *     saveBinaryFileSync("output.bin", buffer)
  *
  * @param fileName - Path to the file to save.
  * @param data - Binary data as Buffer or string.
- *
- * @example
- * saveBinaryFileSync('output.bin', buffer)
  */
 export const saveBinaryFileSync = (fileName: string, data: Buffer | string): void => {
     try {
@@ -251,14 +241,14 @@ export const saveBinaryFileSync = (fileName: string, data: Buffer | string): voi
 }
 
 /**
- * Saves binary data to file asynchronously using atomic write.
- * Accepts Buffer for binary data or string for text-based binary formats.
+ * Saves binary data to file asynchronously using atomic write. Accepts Buffer for binary data or string for text-based
+ * binary formats.
+ *
+ * @example
+ *     await saveBinaryFileAsync("output.bin", buffer)
  *
  * @param fileName - Path to the file to save.
  * @param data - Binary data as Buffer or string.
- *
- * @example
- * await saveBinaryFileAsync('output.bin', buffer)
  */
 export const saveBinaryFileAsync = async (fileName: string, data: Buffer | string): Promise<void> => {
     try {
@@ -273,62 +263,58 @@ export const saveBinaryFileAsync = async (fileName: string, data: Buffer | strin
 // ============================================================================
 
 /**
- * Reads image file synchronously.
- * Type-safe wrapper around readBinaryFileSync that returns Buffer.
+ * Reads image file synchronously. Type-safe wrapper around readBinaryFileSync that returns Buffer.
+ *
+ * @example
+ *     const image = readImageSync("photo.jpg")
+ *     if (image) {
+ *         console.log(`Image size: ${image.length} bytes`)
+ *     }
  *
  * @param fileName - Path to the image file to read.
  * @returns Image data as Buffer, or undefined on error.
- *
- * @example
- * const image = readImageSync('photo.jpg')
- * if (image) {
- *   console.log(`Image size: ${image.length} bytes`)
- * }
  */
 export const readImageSync = (fileName: string): Buffer | undefined => {
     return readBinaryFileSync(fileName)
 }
 
 /**
- * Reads image file asynchronously.
- * Type-safe wrapper around readBinaryFileAsync that returns Buffer.
+ * Reads image file asynchronously. Type-safe wrapper around readBinaryFileAsync that returns Buffer.
+ *
+ * @example
+ *     const image = await readImageAsync("photo.jpg")
+ *     if (image) {
+ *         console.log(`Image size: ${image.length} bytes`)
+ *     }
  *
  * @param fileName - Path to the image file to read.
  * @returns Promise resolving to image data as Buffer, or undefined on error.
- *
- * @example
- * const image = await readImageAsync('photo.jpg')
- * if (image) {
- *   console.log(`Image size: ${image.length} bytes`)
- * }
  */
 export const readImageAsync = async (fileName: string): Promise<Buffer | undefined> => {
     return readBinaryFileAsync(fileName)
 }
 
 /**
- * Saves image data to file synchronously.
- * Type-safe wrapper around saveBinaryFileSync that only accepts Buffer.
+ * Saves image data to file synchronously. Type-safe wrapper around saveBinaryFileSync that only accepts Buffer.
+ *
+ * @example
+ *     saveImageSync("output.png", imageBuffer)
  *
  * @param fileName - Path to the file to save.
  * @param data - Image data as Buffer.
- *
- * @example
- * saveImageSync('output.png', imageBuffer)
  */
 export const saveImageSync = (fileName: string, data: Buffer): void => {
     saveBinaryFileSync(fileName, data)
 }
 
 /**
- * Saves image data to file asynchronously.
- * Type-safe wrapper around saveBinaryFileAsync that only accepts Buffer.
+ * Saves image data to file asynchronously. Type-safe wrapper around saveBinaryFileAsync that only accepts Buffer.
+ *
+ * @example
+ *     await saveImageAsync("output.png", imageBuffer)
  *
  * @param fileName - Path to the file to save.
  * @param data - Image data as Buffer.
- *
- * @example
- * await saveImageAsync('output.png', imageBuffer)
  */
 export const saveImageAsync = async (fileName: string, data: Buffer): Promise<void> => {
     await saveBinaryFileAsync(fileName, data)

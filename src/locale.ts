@@ -16,6 +16,7 @@ export const getLocale = (): string => currentLocale
 
 /**
  * Register a callback to be called whenever the locale changes.
+ *
  * @param callback - Function to call on locale change
  */
 export const onLocaleChange = (callback: () => void): void => {

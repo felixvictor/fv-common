@@ -1,7 +1,6 @@
-import Color from "colorjs.io"
-
 import { okHslColour } from "@/colour/okhsl-colour"
 import { clamp } from "@/common"
+import Color from "colorjs.io"
 
 export const backgroundLightnessThreshold = 0.18 as const
 export const chromaCurveFactor = 4 as const
@@ -59,8 +58,8 @@ export const hueDelta = (hex1: string, hex2: string) => {
 }
 
 /**
- * Computes a chroma min offset such that the resulting minimum chroma
- * never falls below the given floor, regardless of seed saturation.
+ * Computes a chroma min offset such that the resulting minimum chroma never falls below the given floor, regardless of
+ * seed saturation.
  */
 export const chromaMinOffsetForFloor = (hex: string, chromaFloor: number): number =>
     Math.max(0, new okHslColour(hex).s - chromaFloor)

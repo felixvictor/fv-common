@@ -1,15 +1,15 @@
 /**
  * Calculates the largest power of 2 that is less than or equal to the given number.
  *
+ * @example
+ *     nearestPow2(100) // 64 (2^6)
+ *     nearestPow2(64) // 64 (2^6)
+ *     nearestPow2(65) // 64 (2^6)
+ *     nearestPow2(7) // 4 (2^2)
+ *
  * @param value - The input number (must be positive).
  * @returns The largest power of 2 ≤ value.
  * @throws {Error} If value is not a positive number.
- *
- * @example
- * nearestPow2(100) // 64 (2^6)
- * nearestPow2(64)  // 64 (2^6)
- * nearestPow2(65)  // 64 (2^6)
- * nearestPow2(7)   // 4 (2^2)
  */
 export const nearestPow2 = (value: number): number => {
     if (value <= 0 || !Number.isFinite(value)) {
@@ -24,14 +24,14 @@ export const nearestPow2 = (value: number): number => {
 /**
  * Calculates the smallest power of 2 that is greater than or equal to the given number.
  *
+ * @example
+ *     nextPow2(100) // 128 (2^7)
+ *     nextPow2(64) // 64 (2^6)
+ *     nextPow2(65) // 128 (2^7)
+ *
  * @param value - The input number (must be positive).
  * @returns The smallest power of 2 ≥ value.
  * @throws {Error} If value is not a positive number.
- *
- * @example
- * nextPow2(100) // 128 (2^7)
- * nextPow2(64)  // 64 (2^6)
- * nextPow2(65)  // 128 (2^7)
  */
 export const nextPow2 = (value: number): number => {
     if (value <= 0 || !Number.isFinite(value)) {

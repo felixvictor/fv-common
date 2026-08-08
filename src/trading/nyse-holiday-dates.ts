@@ -1,7 +1,6 @@
 /**
- * Full-day NYSE closures, from https://www.nyse.com/trade/hours-calendars.
- * Dates are already resolved to their observed date. Covers years
- * through `nyseHolidayDataKnownThroughYear`.
+ * Full-day NYSE closures, from https://www.nyse.com/trade/hours-calendars. Dates are already resolved to their observed
+ * date. Covers years through `nyseHolidayDataKnownThroughYear`.
  */
 export const nyseHolidayDates: ReadonlySet<string> = new Set([
     // 2026

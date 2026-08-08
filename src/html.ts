@@ -1,13 +1,12 @@
 /**
- * Gets the bounding rectangle with all dimensions floored.
- * This is the base function that other utilities build upon.
+ * Gets the bounding rectangle with all dimensions floored. This is the base function that other utilities build upon.
+ *
+ * @example
+ *     const rect = getElementRect(document.getElementById("myDiv"))
+ *     console.log(rect.top, rect.left, rect.width, rect.height)
  *
  * @param element - The HTML or SVG element to measure.
  * @returns A DOMRect-like object with all values floored to integers.
- *
- * @example
- * const rect = getElementRect(document.getElementById('myDiv'))
- * console.log(rect.top, rect.left, rect.width, rect.height)
  */
 export const getElementRect = (
     element: HTMLElement | SVGElement,
@@ -37,11 +36,11 @@ export const getElementRect = (
 /**
  * Gets the height of an element in pixels (floored to nearest integer).
  *
+ * @example
+ *     const height = getElementHeight(document.getElementById("myDiv"))
+ *
  * @param element - The HTML or SVG element to measure.
  * @returns The floored height in pixels, including padding and borders.
- *
- * @example
- * const height = getElementHeight(document.getElementById('myDiv'))
  */
 export const getElementHeight = (element: HTMLElement | SVGElement): number => {
     return getElementRect(element).height
@@ -50,11 +49,11 @@ export const getElementHeight = (element: HTMLElement | SVGElement): number => {
 /**
  * Gets the width of an element in pixels (floored to nearest integer).
  *
+ * @example
+ *     const width = getElementWidth(document.getElementById("myDiv"))
+ *
  * @param element - The HTML or SVG element to measure.
  * @returns The floored width in pixels, including padding and borders.
- *
- * @example
- * const width = getElementWidth(document.getElementById('myDiv'))
  */
 export const getElementWidth = (element: HTMLElement | SVGElement): number => {
     return getElementRect(element).width
@@ -63,11 +62,11 @@ export const getElementWidth = (element: HTMLElement | SVGElement): number => {
 /**
  * Gets both width and height of an element in pixels (floored to nearest integers).
  *
+ * @example
+ *     const { width, height } = getElementDimensions(document.getElementById("myDiv"))
+ *
  * @param element - The HTML or SVG element to measure.
  * @returns An object containing floored width and height in pixels.
- *
- * @example
- * const { width, height } = getElementDimensions(document.getElementById('myDiv'))
  */
 export const getElementDimensions = (element: HTMLElement | SVGElement): { height: number; width: number } => {
     const { height, width } = getElementRect(element)
@@ -77,12 +76,12 @@ export const getElementDimensions = (element: HTMLElement | SVGElement): { heigh
 /**
  * Gets precise (non-floored) dimensions of an element.
  *
+ * @example
+ *     const { width, height } = getElementDimensionsPrecise(document.getElementById("myDiv"))
+ *     // Returns fractional pixels: { width: 150.5, height: 200.75 }
+ *
  * @param element - The HTML or SVG element to measure.
  * @returns An object containing precise width and height in pixels.
- *
- * @example
- * const { width, height } = getElementDimensionsPrecise(document.getElementById('myDiv'))
- * // Returns fractional pixels: { width: 150.5, height: 200.75 }
  */
 export const getElementDimensionsPrecise = (element: HTMLElement | SVGElement): { height: number; width: number } => {
     const { height, width } = element.getBoundingClientRect()

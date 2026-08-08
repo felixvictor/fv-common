@@ -1,6 +1,6 @@
 /**
- * NYSE 13:00 ET early-close days, from https://www.nyse.com/trade/hours-calendars.
- * Covers years through `nyseEarlyCloseDataKnownThroughYear`.
+ * NYSE 13:00 ET early-close days, from https://www.nyse.com/trade/hours-calendars. Covers years through
+ * `nyseEarlyCloseDataKnownThroughYear`.
  */
 export const nyseEarlyCloseDates: ReadonlySet<string> = new Set([
     "2026-11-27", // Day after Thanksgiving

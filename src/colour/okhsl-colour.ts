@@ -1,7 +1,6 @@
-import Color, { type Coords } from "colorjs.io"
-
 import { lightnessMax, lightnessMin } from "@/colour/colour-math"
 import { clamp } from "@/common"
+import Color, { type Coords } from "colorjs.io"
 
 export class okHslColour {
     static readonly colorSpace = "okhsl"

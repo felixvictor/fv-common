@@ -3,7 +3,7 @@
     "version": "1.68.2",
     "description": "Common helper functions",
     "license": "SEE LICENSE IN licence.md",
-    "repository": "https://fj.byrtz.de/ibey/fv-common.git",
+    "repository": "https://github.com/felixvictor/fv-common.git",
     "files": [
         "dist"
     ],
@@ -31,6 +31,8 @@
         }
     },
     "scripts": {
+        ".oxc:1:lint": "oxlint --fix",
+        ".oxc:2:fmt": "oxfmt",
         "barrel": "tsx scripts/generate-barrel.ts",
         "build": "run-s lint barrel build:gen build:commit",
         "build:commit": "git add dist/ src/ && git diff --staged --quiet || git commit -m 'build: dist'",
@@ -39,13 +41,13 @@
         "dev": "tsc --watch",
         "git:chore": "git add package.json pnpm-lock.yaml pnpm-workspace.yaml && git commit -m 'chore(deps): bump'",
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
-        "lint": "run-s lint:js pretty-print",
-        "lint:js": "oxlint --fix",
+        "lint": "pnpm run --sequential /^\\.oxc:.*/",
         "main:release": "run-s build release build:push",
         "pnpm:dedupe": "pnpm dedupe",
         "pnpm:renew": "pnpm clean --lockfile && pnpm install",
         "pnpm:update": "pnpm self-update && pnpm update --interactive",
-        "pretty-print": "oxfmt",
+        "pretty-print": "pnpm run .oxc:fmt",
+        "print-perfectionist-config": "node -e \"import('eslint-plugin-perfectionist').then(m => console.log(JSON.stringify(Object.fromEntries(Object.keys(m.default.configs['recommended-natural'].rules).sort().map(r => [r, ['error', { type: 'natural' }]])), null, 4)))\"",
         "push": "git push",
         "release": "release-it --ci",
         "test": "vitest run"

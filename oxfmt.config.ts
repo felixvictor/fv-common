@@ -10,6 +10,7 @@ const barrelFiles = barrelCategories.map((category) => `src/${category.name}.ts`
 
 export default defineConfig({
     ignorePatterns: ["CHANGELOG.md", "dist/**", "pnpm-lock.yaml", "src/index.ts", ...barrelFiles],
+    jsdoc: true,
     printWidth: 120,
     semi: false,
     sortPackageJson: {

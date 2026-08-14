@@ -3,7 +3,9 @@ import type { ExecSyncOptions } from "node:child_process"
 import { execFile, execFileSync, execSync } from "node:child_process"
 import { promisify } from "node:util"
 
-import { isNodeError, putError } from "./error.js"
+import type { Result } from "../result.js"
+
+import { err, ok } from "../result.js"
 import { defaultEncoding } from "./fs/constants.js"
 
 const execFileAsync = promisify(execFile)
@@ -12,38 +14,24 @@ const execFileAsync = promisify(execFile)
 // Types
 // ============================================================================
 
-/** Result of async command execution. */
-interface AsyncCommandResult {
-    error?: Error
-    stderr: string
-    stdout: string
-    success: boolean
-}
-
-/** Result of command execution. */
-interface CommandResult {
-    error?: Error
-    output: string | undefined
-    success: boolean
+/** Failure of a shell command, returned as the `error` of a `Result`. `stderr` is present when the process produced it. */
+export interface CommandError {
+    readonly cause: unknown
+    readonly command: string
+    readonly stderr?: string
 }
 
 // ============================================================================
 // Helpers
 // ============================================================================
 
-/** Logs error details for command execution failures. */
-const logCommandError = (command: string, error: unknown): void => {
-    if (isNodeError(error)) {
-        if (error.code === "ENOENT") {
-            console.error("Command not found:", command)
-        } else {
-            console.error("Command execution failed:", command)
-            console.error("Error code:", error.code)
-        }
-        console.error("Error details:", error.message)
-    } else {
-        putError(String(error))
-    }
+/** Builds a `CommandError` from a caught error, extracting `stderr` if the error object carries it. */
+const toCommandError = (command: string, error: unknown): CommandError => {
+    const hasStderr =
+        error !== null && typeof error === "object" && "stderr" in error && typeof error.stderr === "string"
+    return hasStderr
+        ? { cause: error, command, stderr: (error as { stderr: string }).stderr }
+        : { cause: error, command }
 }
 
 // ============================================================================
@@ -51,94 +39,54 @@ const logCommandError = (command: string, error: unknown): void => {
 // ============================================================================
 
 /**
- * Executes a command synchronously through a shell with error handling. Supports shell features like pipes, redirects,
- * and variable expansion.
+ * Executes a command synchronously through a shell. Supports shell features like pipes, redirects, and variable
+ * expansion.
  *
  * @example
- *     const output = executeCommand("ls -la")
- *     console.log(output)
+ *     const result = executeCommand("ls -la")
+ *     if (result.ok) {
+ *         console.log(result.value)
+ *     }
  *
  * @example
  *     // With shell features
- *     const output = executeCommand("echo $HOME && pwd", { cwd: "/tmp" })
+ *     const result = executeCommand("echo $HOME && pwd", { cwd: "/tmp" })
  *
  * @param command - The command string to execute (e.g., "ls -la | grep node").
  * @param options - Optional execSync options.
- * @returns Command output as string, or empty string on error.
+ * @returns `Result` with the command output, or a `CommandError`.
  */
-export const executeCommand = (command: string, options?: ExecSyncOptions): string => {
+export const executeCommand = (command: string, options?: ExecSyncOptions): Result<string, CommandError> => {
     try {
-        return execSync(command, { ...options, encoding: defaultEncoding })
+        return ok(execSync(command, { ...options, encoding: defaultEncoding }))
     } catch (error: unknown) {
-        logCommandError(command, error)
-        return ""
+        return err(toCommandError(command, error))
     }
 }
 
 /**
- * Executes a command synchronously through a shell and returns a detailed result.
+ * Executes a command synchronously through a shell and returns trimmed output.
  *
  * @example
- *     const result = executeCommandWithResult("ls -la")
- *     if (result.success) {
- *         console.log(result.output)
- *     } else {
- *         console.error("Command failed:", result.error)
+ *     const result = executeCommandString("pwd")
+ *     if (result.ok) {
+ *         console.log("Current directory:", result.value)
  *     }
  *
  * @param command - The command string to execute.
  * @param options - Optional execSync options.
- * @returns Object containing success status, output, and error if any.
+ * @returns `Result` with the trimmed command output, or a `CommandError`.
  */
-export const executeCommandWithResult = (command: string, options?: ExecSyncOptions): CommandResult => {
-    try {
-        const output = execSync(command, { ...options, encoding: defaultEncoding })
-        return {
-            output,
-            success: true,
-        }
-    } catch (error: unknown) {
-        const errorObject = error instanceof Error ? error : new Error(String(error))
-
-        // Log error details
-        if (isNodeError(error)) {
-            if (error.code === "ENOENT") {
-                console.error("Command not found:", command)
-            } else {
-                console.error("Command execution failed:", command)
-                console.error("Error code:", error.code)
-            }
-        }
-
-        return {
-            error: errorObject,
-            output: undefined,
-            success: false,
-        }
-    }
-}
-
-/**
- * Executes a command synchronously and returns trimmed output as string. Returns empty string on error.
- *
- * @example
- *     const path = executeCommandString("pwd")
- *     console.log("Current directory:", path)
- *
- * @param command - The command string to execute.
- * @param options - Optional execSync options.
- * @returns Trimmed command output as string, or empty string on error.
- */
-export const executeCommandString = (command: string, options?: ExecSyncOptions): string => {
-    const output = executeCommand(command, options)
-    return output.trim()
+export const executeCommandString = (command: string, options?: ExecSyncOptions): Result<string, CommandError> => {
+    const result = executeCommand(command, options)
+    return result.ok ? ok(result.value.trim()) : result
 }
 
 /**
  * Checks if a command exists and is executable. Uses 'which' on Unix-like systems, 'where' on Windows.
  *
  * @example
- *     if (commandExists("git")) {
+ *     if (doesCommandExist("git")) {
  *         console.log("Git is available")
  *     }
  *
@@ -160,92 +108,32 @@ export const doesCommandExist = (command: string): boolean => {
 // ============================================================================
 
 /**
- * Executes a command asynchronously through a shell with error handling. Supports shell features like pipes, redirects,
- * and variable expansion.
+ * Executes a command asynchronously through a shell. Supports shell features like pipes, redirects, and variable
+ * expansion.
  *
  * @example
- *     const output = await executeCommandAsync("ls -la")
- *     console.log(output)
+ *     const result = await executeCommandAsync("ls -la")
+ *     if (result.ok) {
+ *         console.log(result.value)
+ *     }
  *
  * @example
  *     // With options and shell features
- *     const output = await executeCommandAsync("pwd && echo done", { cwd: "/tmp" })
+ *     const result = await executeCommandAsync("pwd && echo done", { cwd: "/tmp" })
  *
  * @param command - The command string to execute.
  * @param options - Optional exec options.
- * @returns Promise resolving to trimmed command stdout, or empty string on error.
+ * @returns Promise resolving to a `Result` with the trimmed command stdout, or a `CommandError`.
  */
-export const executeCommandAsync = async (command: string, options?: ExecSyncOptions): Promise<string> => {
-    try {
-        const { stdout } = await execFileAsync(command, { ...options, encoding: defaultEncoding, shell: true })
-        return stdout.trim()
-    } catch (error: unknown) {
-        logCommandError(command, error)
-        return ""
-    }
-}
-
-/**
- * Executes a command asynchronously through a shell and returns a detailed result.
- *
- * @example
- *     const result = await executeCommandAsyncWithResult("ls -la")
- *     if (result.success) {
- *         console.log(result.stdout)
- *     } else {
- *         console.error("Command failed:", result.error)
- *         console.error("stderr:", result.stderr)
- *     }
- *
- * @param command - The command string to execute.
- * @param options - Optional exec options.
- * @returns Promise resolving to object containing success status, stdout, stderr, and error if any.
- */
-export const executeCommandAsyncWithResult = async (
+export const executeCommandAsync = async (
     command: string,
     options?: ExecSyncOptions,
-): Promise<AsyncCommandResult> => {
+): Promise<Result<string, CommandError>> => {
     try {
-        const { stderr, stdout } = await execFileAsync(command, { ...options, encoding: defaultEncoding, shell: true })
-        return {
-            stderr: stderr.trim(),
-            stdout: stdout.trim(),
-            success: true,
-        }
+        const { stdout } = await execFileAsync(command, { ...options, encoding: defaultEncoding, shell: true })
+        return ok(stdout.trim())
     } catch (error: unknown) {
-        const errorObject = error instanceof Error ? error : new Error(String(error))
-
-        // Extract stdout/stderr from exec error if available
-        let stdout = ""
-        let stderr = ""
-        if (
-            error &&
-            typeof error === "object" &&
-            "stdout" in error &&
-            "stderr" in error &&
-            typeof error.stdout === "string" &&
-            typeof error.stderr === "string"
-        ) {
-            stdout = error.stdout
-            stderr = error.stderr
-        }
-
-        // Log error details
-        if (isNodeError(error)) {
-            if (error.code === "ENOENT") {
-                console.error("Command not found:", command)
-            } else {
-                console.error("Command execution failed:", command)
-                console.error("Error code:", error.code)
-            }
-        }
-
-        return {
-            error: errorObject,
-            stderr: stderr.trim(),
-            stdout: stdout.trim(),
-            success: false,
-        }
+        return err(toCommandError(command, error))
     }
 }
 

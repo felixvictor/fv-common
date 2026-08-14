@@ -1,54 +1,54 @@
+import type { Result } from "@/result.js"
+
+import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import { putError } from "../error.js"
+import type { FileSystemError } from "../error.js"
+
+import { toFileSystemError } from "../error.js"
 
 // ============================================================================
 // File/Directory Statistics
 // ============================================================================
 
 /**
- * Gets file or directory statistics synchronously. Returns undefined if an error occurs.
+ * Gets file or directory statistics synchronously.
  *
  * @example
- *     const stats = getStatSync("/path/to/file.txt")
- *     if (stats) {
- *         console.log(`Size: ${stats.size} bytes`)
- *         console.log(`Is file: ${stats.isFile()}`)
+ *     const result = getStatSync("/path/to/file.txt")
+ *     if (result.ok) {
+ *         console.log(`Size: ${result.value.size} bytes`)
  *     }
  *
  * @param path - Path to the file or directory.
- * @returns Stats object, or undefined on error.
+ * @returns `Result` with the `fs.Stats`, or a `FileSystemError` (`kind: "not-found"` if the path doesn't exist).
  */
-export const getStatSync = (path: string): fs.Stats | undefined => {
+export const getStatSync = (path: string): Result<fs.Stats, FileSystemError> => {
     try {
-        return fs.statSync(path, { throwIfNoEntry: false })
+        return ok(fs.statSync(path))
     } catch (error: unknown) {
-        putError(error)
-        return undefined
+        return err(toFileSystemError(error, path))
     }
 }
 
 /**
- * Gets file or directory statistics asynchronously. Returns undefined if an error occurs.
+ * Gets file or directory statistics asynchronously.
  *
  * @example
- *     const stats = await getStatAsync("/path/to/file.txt")
- *     if (stats) {
- *         console.log(`Size: ${stats.size} bytes`)
- *         console.log(`Is file: ${stats.isFile()}`)
+ *     const result = await getStatAsync("/path/to/file.txt")
+ *     if (result.ok) {
+ *         console.log(`Size: ${result.value.size} bytes`)
  *     }
  *
  * @param path - Path to the file or directory.
- * @returns Promise resolving to stats object, or undefined on error.
+ * @returns Promise resolving to a `Result` with the `fs.Stats`, or a `FileSystemError`.
  */
-export const getStatAsync = async (path: string): Promise<fs.Stats | undefined> => {
+export const getStatAsync = async (path: string): Promise<Result<fs.Stats, FileSystemError>> => {
     try {
-        const stats = await fsPromises.stat(path)
-        return stats
+        return ok(await fsPromises.stat(path))
     } catch (error: unknown) {
-        putError(error)
-        return undefined
+        return err(toFileSystemError(error, path))
     }
 }
 
@@ -64,7 +64,7 @@ export const getStatAsync = async (path: string): Promise<fs.Stats | undefined> 
  * @returns True if path exists, false otherwise.
  */
 export const doesPathExist = (path: string): boolean => {
-    return getStatSync(path) !== undefined
+    return isOk(getStatSync(path))
 }
 
 /**
@@ -79,5 +79,5 @@ export const doesPathExist = (path: string): boolean => {
  * @returns Promise resolving to true if path exists, false otherwise.
  */
 export const doesPathExistAsync = async (path: string): Promise<boolean> => {
-    return (await getStatAsync(path)) !== undefined
+    return isOk(await getStatAsync(path))
 }

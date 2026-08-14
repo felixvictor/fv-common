@@ -1,3 +1,5 @@
+import { isErr } from "@/result.js"
+
 import { getStatAsync, getStatSync } from "./stat.js"
 
 /**
@@ -16,11 +18,11 @@ export const isFileOlderThan = (filePathA: string, filePathB: string): boolean =
     const statsA = getStatSync(filePathA)
     const statsB = getStatSync(filePathB)
 
-    if (!statsA || !statsB) {
+    if (isErr(statsA) || isErr(statsB)) {
         return false
     }
 
-    return statsA.mtime < statsB.mtime
+    return statsA.value.mtime < statsB.value.mtime
 }
 
 /**
@@ -40,9 +42,9 @@ export const isFileOlderThanAsync = async (filePathA: string, filePathB: string)
     const statsA = await getStatAsync(filePathA)
     const statsB = await getStatAsync(filePathB)
 
-    if (!statsA || !statsB) {
+    if (isErr(statsA) || isErr(statsB)) {
         return false
     }
 
-    return statsA.mtime < statsB.mtime
+    return statsA.value.mtime < statsB.value.mtime
 }

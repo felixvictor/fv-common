@@ -1,47 +1,57 @@
+import type { Result } from "@/result.js"
+
+import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import { putError } from "../error.js"
+import type { FileSystemError } from "../error.js"
+
+import { toFileSystemError } from "../error.js"
 import { getStatSync } from "./stat.js"
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-const fileSystemOptions = {
-    force: true,
-    throwIfNoEntry: false,
-} as const
 
 // ============================================================================
 // File Removal
 // ============================================================================
 
 /**
- * Removes a file synchronously. Does nothing if file doesn't exist (no error thrown).
+ * Removes a file synchronously. Not finding the file counts as success (nothing to remove), not a `FileSystemError`.
  *
  * @example
- *     removeFileSync("temp.txt")
+ *     const result = removeFileSync("temp.txt")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param fileName - Path to the file to remove.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
  */
-export const removeFileSync = (fileName: string): void => {
-    fs.rmSync(fileName, { force: fileSystemOptions.force })
+export const removeFileSync = (fileName: string): Result<void, FileSystemError> => {
+    try {
+        fs.rmSync(fileName, { force: true })
+        return ok(undefined)
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, fileName))
+    }
 }
 
 /**
- * Removes a file asynchronously. Logs error but doesn't throw on failure.
+ * Removes a file asynchronously. Async version of removeFileSync. Not finding the file counts as success.
  *
  * @example
- *     await removeFileAsync("temp.txt")
+ *     const result = await removeFileAsync("temp.txt")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param fileName - Path to the file to remove.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
  */
-export const removeFileAsync = async (fileName: string): Promise<void> => {
+export const removeFileAsync = async (fileName: string): Promise<Result<void, FileSystemError>> => {
     try {
-        await fsPromises.rm(fileName, { force: fileSystemOptions.force })
+        await fsPromises.rm(fileName, { force: true })
+        return ok(undefined)
     } catch (error: unknown) {
-        putError(error)
+        return err(toFileSystemError(error, fileName))
     }
 }
 
@@ -53,7 +63,7 @@ export const removeFileAsync = async (fileName: string): Promise<void> => {
  * Checks if a path exists and is a regular file (not a directory or symlink).
  *
  * @example
- *     if (fileExists("config.json")) {
+ *     if (doesFileExist("config.json")) {
  *         console.log("Config file found")
  *     }
  *
@@ -61,15 +71,15 @@ export const removeFileAsync = async (fileName: string): Promise<void> => {
  * @returns True if path exists and is a file, false otherwise.
  */
 export const doesFileExist = (fileName: string): boolean => {
-    const stat = getStatSync(fileName)
-    return stat?.isFile() === true
+    const result = getStatSync(fileName)
+    return isOk(result) && result.value.isFile()
 }
 
 /**
  * Checks if a file exists and is empty (zero bytes).
  *
  * @example
- *     if (fileEmpty("log.txt")) {
+ *     if (isFileEmpty("log.txt")) {
  *         console.log("Log file is empty")
  *     }
  *
@@ -77,7 +87,7 @@ export const doesFileExist = (fileName: string): boolean => {
  * @returns True if file exists and has zero bytes, false if missing or has content.
  */
 export const isFileEmpty = (fileName: string): boolean => {
-    const stat = fs.statSync(fileName, { throwIfNoEntry: fileSystemOptions.throwIfNoEntry })
+    const stat = fs.statSync(fileName, { throwIfNoEntry: false })
     return stat?.size === 0
 }
 
@@ -85,7 +95,7 @@ export const isFileEmpty = (fileName: string): boolean => {
  * Checks if a path exists and is a regular file (not a directory or symlink). Async version of doesFileExist.
  *
  * @example
- *     if (await fileExistsAsync("config.json")) {
+ *     if (await doesFileExistAsync("config.json")) {
  *         console.log("Config file found")
  *     }
  *
@@ -114,6 +124,6 @@ export const doesFileExistAsync = async (fileName: string): Promise<boolean> => 
  * @returns File size in bytes, or undefined if file doesn't exist or error occurs.
  */
 export const getFileSize = (fileName: string): number | undefined => {
-    const stat = getStatSync(fileName)
-    return stat?.size
+    const result = getStatSync(fileName)
+    return isOk(result) ? result.value.size : undefined
 }

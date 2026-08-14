@@ -9,13 +9,13 @@
         "types": ["node"]
     },
     "include": [
-        "src/node.ts",
-        "src/node/**/*",
+        "*.config.*",
+        "scripts/**/*",
         "src/common.ts",
         "src/locale.ts",
-        "src/sort.ts",
-        "scripts/**/*",
-        "eslint-rules/**/*",
-        "*.config.*"
+        "src/node.ts",
+        "src/node/**/*",
+        "src/result.ts",
+        "src/sort.ts"
     ]
 }

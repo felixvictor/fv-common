@@ -1,42 +1,57 @@
+import type { Result } from "@/result.js"
+
+import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import { putError } from "../error.js"
-import { getStatSync } from "./stat.js"
+import type { FileSystemError } from "../error.js"
+
+import { toFileSystemError } from "../error.js"
+import { getStatAsync, getStatSync } from "./stat.js"
 
 // ============================================================================
 // Directory Creation
 // ============================================================================
 
 /**
- * Creates a directory synchronously, including parent directories if needed. Logs error but doesn't throw on failure.
+ * Creates a directory synchronously, including parent directories if needed.
  *
  * @example
- *     makeDirectorySync("data/logs/2024")
+ *     const result = makeDirectorySync("data/logs/2024")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param directory - Path to the directory to create.
+ * @returns `Result`, empty on success, or a `FileSystemError`.
  */
-export const makeDirectorySync = (directory: string): void => {
+export const makeDirectorySync = (directory: string): Result<void, FileSystemError> => {
     try {
         fs.mkdirSync(directory, { recursive: true })
+        return ok(undefined)
     } catch (error: unknown) {
-        putError(`Cannot create directory ${directory}\nError: ${String(error)}`)
+        return err(toFileSystemError(error, directory))
     }
 }
 
 /**
- * Creates a directory asynchronously, including parent directories if needed. Logs error but doesn't throw on failure.
+ * Creates a directory asynchronously, including parent directories if needed.
  *
  * @example
- *     await makeDirectoryAsync("data/logs/2024")
+ *     const result = await makeDirectoryAsync("data/logs/2024")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param directory - Path to the directory to create.
+ * @returns `Result`, empty on success, or a `FileSystemError`.
  */
-export const makeDirectoryAsync = async (directory: string): Promise<void> => {
+export const makeDirectoryAsync = async (directory: string): Promise<Result<void, FileSystemError>> => {
     try {
         await fsPromises.mkdir(directory, { recursive: true })
+        return ok(undefined)
     } catch (error: unknown) {
-        putError(`Cannot create directory ${directory}\nError: ${String(error)}`)
+        return err(toFileSystemError(error, directory))
     }
 }
 
@@ -48,14 +63,20 @@ export const makeDirectoryAsync = async (directory: string): Promise<void> => {
  * Reads directory contents recursively, returning all files and subdirectories.
  *
  * @example
- *     const allFiles = readDirectorySync("src")
- *     // Returns: ["index.ts", "utils/helper.ts", "utils/config.ts", ...]
+ *     const result = readDirectorySync("src")
+ *     if (result.ok) {
+ *         // result.value: ["index.ts", "utils/helper.ts", "utils/config.ts", ...]
+ *     }
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Array of relative paths to all files and directories within.
+ * @returns `Result` with an array of relative paths to all files and directories within, or a `FileSystemError`.
  */
-export const readDirectorySync = (directoryPath: string): string[] => {
-    return fs.readdirSync(directoryPath, { recursive: true }) as string[]
+export const readDirectorySync = (directoryPath: string): Result<string[], FileSystemError> => {
+    try {
+        return ok(fs.readdirSync(directoryPath, { recursive: true }) as string[])
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
@@ -63,27 +84,37 @@ export const readDirectorySync = (directoryPath: string): string[] => {
  * as isFile()/isDirectory(), unlike the plain path strings from readDirectorySync).
  *
  * @example
- *     const entries = readDirectoryEntriesSync("src")
- *     const files = entries.filter((entry) => entry.isFile())
+ *     const result = readDirectoryEntriesSync("src")
+ *     if (result.ok) {
+ *         const files = result.value.filter((entry) => entry.isFile())
+ *     }
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Array of Dirent entries for all files and directories within.
+ * @returns `Result` with an array of Dirent entries for all files and directories within, or a `FileSystemError`.
  */
-export const readDirectoryEntriesSync = (directoryPath: string): fs.Dirent[] => {
-    return fs.readdirSync(directoryPath, { recursive: true, withFileTypes: true })
+export const readDirectoryEntriesSync = (directoryPath: string): Result<fs.Dirent[], FileSystemError> => {
+    try {
+        return ok(fs.readdirSync(directoryPath, { recursive: true, withFileTypes: true }))
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
  * Reads directory contents recursively, returning all files and subdirectories. Async version of readDirectorySync.
  *
  * @example
- *     const allFiles = await readDirectoryAsync("src")
+ *     const result = await readDirectoryAsync("src")
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Promise resolving to array of relative paths.
+ * @returns Promise resolving to a `Result` with an array of relative paths, or a `FileSystemError`.
  */
-export const readDirectoryAsync = async (directoryPath: string): Promise<string[]> => {
-    return await fsPromises.readdir(directoryPath, { recursive: true })
+export const readDirectoryAsync = async (directoryPath: string): Promise<Result<string[], FileSystemError>> => {
+    try {
+        return ok(await fsPromises.readdir(directoryPath, { recursive: true }))
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
@@ -91,41 +122,61 @@ export const readDirectoryAsync = async (directoryPath: string): Promise<string[
  * readDirectoryEntriesSync.
  *
  * @example
- *     const entries = await readDirectoryEntriesAsync("src")
- *     const files = entries.filter((entry) => entry.isFile())
+ *     const result = await readDirectoryEntriesAsync("src")
+ *     if (result.ok) {
+ *         const files = result.value.filter((entry) => entry.isFile())
+ *     }
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Promise resolving to array of Dirent entries for all files and directories within.
+ * @returns Promise resolving to a `Result` with an array of Dirent entries, or a `FileSystemError`.
  */
-export const readDirectoryEntriesAsync = async (directoryPath: string): Promise<fs.Dirent[]> => {
-    return await fsPromises.readdir(directoryPath, { recursive: true, withFileTypes: true })
+export const readDirectoryEntriesAsync = async (
+    directoryPath: string,
+): Promise<Result<fs.Dirent[], FileSystemError>> => {
+    try {
+        return ok(await fsPromises.readdir(directoryPath, { recursive: true, withFileTypes: true }))
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
  * Reads immediate directory contents only (non-recursive). Does not traverse subdirectories.
  *
  * @example
- *     const files = readDirectoryNotRecursive("src")
- *     // Returns: ["index.ts", "utils", "components"] (no nested paths)
+ *     const result = readDirectoryNotRecursive("src")
+ *     if (result.ok) {
+ *         // result.value: ["index.ts", "utils", "components"] (no nested paths)
+ *     }
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Array of file and directory names in the immediate directory.
+ * @returns `Result` with an array of file and directory names in the immediate directory, or a `FileSystemError`.
  */
-export const readDirectoryNotRecursive = (directoryPath: string): string[] => {
-    return fs.readdirSync(directoryPath, { recursive: false }) as string[]
+export const readDirectoryNotRecursive = (directoryPath: string): Result<string[], FileSystemError> => {
+    try {
+        return ok(fs.readdirSync(directoryPath, { recursive: false }) as string[])
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
  * Reads immediate directory contents only (non-recursive). Async version of readDirectoryNotRecursive.
  *
  * @example
- *     const files = await readDirectoryNotRecursiveAsync("src")
+ *     const result = await readDirectoryNotRecursiveAsync("src")
  *
  * @param directoryPath - Path to the directory to read.
- * @returns Promise resolving to array of file and directory names.
+ * @returns Promise resolving to a `Result` with an array of file and directory names, or a `FileSystemError`.
  */
-export const readDirectoryNotRecursiveAsync = async (directoryPath: string): Promise<string[]> => {
-    return await fsPromises.readdir(directoryPath, { recursive: false })
+export const readDirectoryNotRecursiveAsync = async (
+    directoryPath: string,
+): Promise<Result<string[], FileSystemError>> => {
+    try {
+        return ok(await fsPromises.readdir(directoryPath, { recursive: false }))
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 // ============================================================================
@@ -133,28 +184,47 @@ export const readDirectoryNotRecursiveAsync = async (directoryPath: string): Pro
 // ============================================================================
 
 /**
- * Removes a directory and all its contents recursively. Does nothing if directory doesn't exist (no error thrown).
+ * Removes a directory and all its contents recursively. Not finding the directory counts as success (nothing to
+ * remove), not a `FileSystemError`.
  *
  * @example
- *     removeDirectorySync("temp/build")
+ *     const result = removeDirectorySync("temp/build")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param directoryPath - Path to the directory to remove.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
  */
-export const removeDirectorySync = (directoryPath: string): void => {
-    fs.rmSync(directoryPath, { force: true, recursive: true })
+export const removeDirectorySync = (directoryPath: string): Result<void, FileSystemError> => {
+    try {
+        fs.rmSync(directoryPath, { force: true, recursive: true })
+        return ok(undefined)
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 /**
- * Removes a directory and all its contents recursively. Does nothing if directory doesn't exist (no error thrown).
- * Async version of removeDirectorySync.
+ * Removes a directory and all its contents recursively. Async version of removeDirectorySync. Not finding the directory
+ * counts as success.
  *
  * @example
- *     await removeDirectoryAsync("temp/build")
+ *     const result = await removeDirectoryAsync("temp/build")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
  *
  * @param directoryPath - Path to the directory to remove.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
  */
-export const removeDirectoryAsync = async (directoryPath: string): Promise<void> => {
-    await fsPromises.rm(directoryPath, { force: true, recursive: true })
+export const removeDirectoryAsync = async (directoryPath: string): Promise<Result<void, FileSystemError>> => {
+    try {
+        await fsPromises.rm(directoryPath, { force: true, recursive: true })
+        return ok(undefined)
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
 }
 
 // ============================================================================
@@ -165,7 +235,7 @@ export const removeDirectoryAsync = async (directoryPath: string): Promise<void>
  * Checks if a path exists and is a directory (not a file).
  *
  * @example
- *     if (directoryExists("data/logs")) {
+ *     if (doesDirectoryExist("data/logs")) {
  *         console.log("Logs directory exists")
  *     }
  *
@@ -173,15 +243,15 @@ export const removeDirectoryAsync = async (directoryPath: string): Promise<void>
  * @returns True if path exists and is a directory, false otherwise.
  */
 export const doesDirectoryExist = (directoryPath: string): boolean => {
-    const stat = getStatSync(directoryPath)
-    return stat?.isDirectory() === true
+    const result = getStatSync(directoryPath)
+    return isOk(result) && result.value.isDirectory()
 }
 
 /**
  * Checks if a path exists and is a directory (not a file). Async version of doesDirectoryExist.
  *
  * @example
- *     if (await directoryExistsAsync("data/logs")) {
+ *     if (await doesDirectoryExistAsync("data/logs")) {
  *         console.log("Logs directory exists")
  *     }
  *
@@ -189,10 +259,6 @@ export const doesDirectoryExist = (directoryPath: string): boolean => {
  * @returns Promise resolving to true if path exists and is a directory, false otherwise.
  */
 export const doesDirectoryExistAsync = async (directoryPath: string): Promise<boolean> => {
-    try {
-        const stats = await fsPromises.stat(directoryPath)
-        return stats.isDirectory()
-    } catch {
-        return false
-    }
+    const result = await getStatAsync(directoryPath)
+    return isOk(result) && result.value.isDirectory()
 }

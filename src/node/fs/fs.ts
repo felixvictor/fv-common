@@ -1,36 +1,37 @@
+import type { Result } from "@/result.js"
+
+import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import { putError } from "../error.js"
+import type { FileSystemError } from "../error.js"
+
+import { toFileSystemError } from "../error.js"
 
 // ============================================================================
 // File System Statistics - Internal Helpers
 // ============================================================================
 
-/** Gets file system statistics for a directory synchronously. Returns undefined if an error occurs. */
-const getStatFsSync = (directory: string): fs.StatsFs | undefined => {
+/** Gets file system statistics for a directory synchronously. */
+const getStatFsSync = (directory: string): Result<fs.StatsFs, FileSystemError> => {
     try {
-        return fs.statfsSync(directory)
+        return ok(fs.statfsSync(directory))
     } catch (error: unknown) {
-        putError(error)
-        return undefined
+        return err(toFileSystemError(error, directory))
     }
 }
 
-/** Gets file system statistics for a directory asynchronously. Returns undefined if an error occurs. */
-const getStatFsAsync = async (directory: string): Promise<fs.StatsFs | undefined> => {
+/** Gets file system statistics for a directory asynchronously. */
+const getStatFsAsync = async (directory: string): Promise<Result<fs.StatsFs, FileSystemError>> => {
     try {
-        return await fsPromises.statfs(directory)
+        return ok(await fsPromises.statfs(directory))
     } catch (error: unknown) {
-        putError(error)
-        return undefined
+        return err(toFileSystemError(error, directory))
     }
 }
 
-/** Calculates disk space metrics from file system stats. Returns undefined if stat is undefined. */
-const calculateDiskMetrics = (stat: fs.StatsFs | undefined) => {
-    if (!stat) return
-
+/** Calculates disk space metrics from file system stats. */
+const calculateDiskMetrics = (stat: fs.StatsFs) => {
     const total = stat.bsize * stat.blocks
     const free = stat.bsize * stat.bavail
     const used = stat.bsize * (stat.blocks - stat.bfree)
@@ -56,7 +57,8 @@ const calculateDiskMetrics = (stat: fs.StatsFs | undefined) => {
  * @returns Free space in bytes, or undefined on error.
  */
 export const getFreeSpace = (directory: string): number | undefined => {
-    return calculateDiskMetrics(getStatFsSync(directory))?.free
+    const result = getStatFsSync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).free : undefined
 }
 
 /**
@@ -72,7 +74,8 @@ export const getFreeSpace = (directory: string): number | undefined => {
  * @returns Promise resolving to free space in bytes, or undefined on error.
  */
 export const getFreeSpaceAsync = async (directory: string): Promise<number | undefined> => {
-    return calculateDiskMetrics(await getStatFsAsync(directory))?.free
+    const result = await getStatFsAsync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).free : undefined
 }
 
 /**
@@ -88,7 +91,8 @@ export const getFreeSpaceAsync = async (directory: string): Promise<number | und
  * @returns Total space in bytes, or undefined on error.
  */
 export const getTotalSpace = (directory: string): number | undefined => {
-    return calculateDiskMetrics(getStatFsSync(directory))?.total
+    const result = getStatFsSync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).total : undefined
 }
 
 /**
@@ -104,7 +108,8 @@ export const getTotalSpace = (directory: string): number | undefined => {
  * @returns Promise resolving to total space in bytes, or undefined on error.
  */
 export const getTotalSpaceAsync = async (directory: string): Promise<number | undefined> => {
-    return calculateDiskMetrics(await getStatFsAsync(directory))?.total
+    const result = await getStatFsAsync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).total : undefined
 }
 
 /**
@@ -120,7 +125,8 @@ export const getTotalSpaceAsync = async (directory: string): Promise<number | un
  * @returns Used space in bytes, or undefined on error.
  */
 export const getUsedSpace = (directory: string): number | undefined => {
-    return calculateDiskMetrics(getStatFsSync(directory))?.used
+    const result = getStatFsSync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).used : undefined
 }
 
 /**
@@ -136,7 +142,8 @@ export const getUsedSpace = (directory: string): number | undefined => {
  * @returns Promise resolving to used space in bytes, or undefined on error.
  */
 export const getUsedSpaceAsync = async (directory: string): Promise<number | undefined> => {
-    return calculateDiskMetrics(await getStatFsAsync(directory))?.used
+    const result = await getStatFsAsync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value).used : undefined
 }
 
 /**
@@ -157,7 +164,8 @@ export const getUsedSpaceAsync = async (directory: string): Promise<number | und
 export const getDiskUsage = (
     directory: string,
 ): undefined | { free: number; percentUsed: number; total: number; used: number } => {
-    return calculateDiskMetrics(getStatFsSync(directory))
+    const result = getStatFsSync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value) : undefined
 }
 
 /**
@@ -179,5 +187,6 @@ export const getDiskUsage = (
 export const getDiskUsageAsync = async (
     directory: string,
 ): Promise<undefined | { free: number; percentUsed: number; total: number; used: number }> => {
-    return calculateDiskMetrics(await getStatFsAsync(directory))
+    const result = await getStatFsAsync(directory)
+    return isOk(result) ? calculateDiskMetrics(result.value) : undefined
 }

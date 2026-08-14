@@ -15,21 +15,16 @@ export const errorCodes = {
     tooManyOpenFiles: "EMFILE",
 } as const
 
-/**
- * Logs an error message to console.error. Extracts message from Error objects or converts to string.
- *
- * @example
- *     try {
- *         riskyOperation()
- *     } catch (error) {
- *         putError(error)
- *     }
- *
- * @param error - The error to log (Error object, string, or any value).
- */
-export const putError = (error: unknown): void => {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error("Request failed -->", message)
+/** Failure of a file-system operation (read, write, stat, mkdir, …), returned as the `error` of a `Result`. */
+export type FileSystemError =
+    | { readonly cause: unknown; readonly kind: "unknown"; readonly path: string }
+    | { readonly kind: "not-found"; readonly path: string }
+
+/** Failure to parse a file's content as JSON, returned as the `error` of a `Result`. */
+export interface JsonParseError {
+    readonly cause: unknown
+    readonly kind: "parse-error"
+    readonly path: string
 }
 
 /**
@@ -49,4 +44,17 @@ export const putError = (error: unknown): void => {
  */
 export const isNodeError = (error: unknown): error is NodeJS.ErrnoException => {
     return error instanceof Error && "code" in error
+}
+
+/**
+ * Builds a `FileSystemError` from a caught error, distinguishing "not found" (`ENOENT`) from anything else.
+ *
+ * @param error - The error caught from a file-system operation.
+ * @param path - The path the operation was performed on, attached to the resulting error.
+ * @returns A `FileSystemError` with `kind: "not-found"` for `ENOENT`, `kind: "unknown"` otherwise.
+ */
+export const toFileSystemError = (error: unknown, path: string): FileSystemError => {
+    return isNodeError(error) && error.code === errorCodes.fileNotFound
+        ? { kind: "not-found", path }
+        : { cause: error, kind: "unknown", path }
 }

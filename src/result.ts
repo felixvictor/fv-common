@@ -37,3 +37,11 @@ export function ok<T>(value: T): Ok<T> {
 export function unwrapOr<T, E>(result: Result<T, E>, fallback: T): T {
     return isOk(result) ? result.value : fallback
 }
+
+/** Returns the success value, or throws. `message` becomes the thrown `Error`'s message, `error` its `cause`. */
+export function unwrapOrThrow<T, E>(result: Result<T, E>, message: string): T {
+    if (isErr(result)) {
+        throw new Error(message, { cause: result.error })
+    }
+    return result.value
+}

@@ -1,3 +1,5 @@
+import { makeDirectoryAsync, makeDirectorySync } from "@/node.js"
+import { getDirectory } from "@/node/fs/path.js"
 import { readFileSync, writeFile, writeFileSync } from "atomically"
 import fsPromises from "node:fs/promises"
 
@@ -59,17 +61,15 @@ export const readTextFileAsync = async (fileName: string): Promise<string | unde
 }
 
 /**
- * Saves text to file synchronously using atomic write. Atomic write ensures file is not corrupted if process crashes
- * during write. Logs error but doesn't throw on failure.
- *
- * @example
- *     saveTextFileSync("output.txt", "Hello, world!")
+ * Saves text to file synchronously using atomic write, creating parent directories if needed. Logs error but doesn't
+ * throw on failure.
  *
  * @param fileName - Path to the file to save.
  * @param data - Text content to write.
  */
 export const saveTextFileSync = (fileName: string, data: string): void => {
     try {
+        makeDirectorySync(getDirectory(fileName))
         writeFileSync(fileName, data, { encoding: defaultEncoding })
     } catch (error: unknown) {
         putError(`Cannot save ${fileName} (atomically.writeFileSync)\nError: ${String(error)}`)
@@ -77,17 +77,15 @@ export const saveTextFileSync = (fileName: string, data: string): void => {
 }
 
 /**
- * Saves text to file asynchronously using atomic write. Atomic write ensures file is not corrupted if process crashes
- * during write. Logs error but doesn't throw on failure.
- *
- * @example
- *     await saveTextFileAsync("output.txt", "Hello, world!")
+ * Saves text to file asynchronously using atomic write, creating parent directories if needed. Logs error but doesn't
+ * throw on failure.
  *
  * @param fileName - Path to the file to save.
  * @param data - Text content to write.
  */
 export const saveTextFileAsync = async (fileName: string, data: string): Promise<void> => {
     try {
+        await makeDirectoryAsync(getDirectory(fileName))
         await writeFile(fileName, data, { encoding: defaultEncoding })
     } catch (error: unknown) {
         putError(`Cannot save ${fileName} (atomically.writeFile)\nError: ${String(error)}`)
@@ -223,8 +221,8 @@ export const readBinaryFileAsync = async (fileName: string): Promise<Buffer | un
 }
 
 /**
- * Saves binary data to file synchronously using atomic write. Accepts Buffer for binary data or string for text-based
- * binary formats.
+ * Saves binary data to file synchronously using atomic write, creating parent directories if needed. Accepts Buffer for
+ * binary data or string for text-based binary formats.
  *
  * @example
  *     saveBinaryFileSync("output.bin", buffer)
@@ -234,6 +232,7 @@ export const readBinaryFileAsync = async (fileName: string): Promise<Buffer | un
  */
 export const saveBinaryFileSync = (fileName: string, data: Buffer | string): void => {
     try {
+        makeDirectorySync(getDirectory(fileName))
         writeFileSync(fileName, data)
     } catch (error: unknown) {
         putError(`Cannot save ${fileName} (saveBinaryFileSync)\nError: ${String(error)}`)
@@ -241,8 +240,8 @@ export const saveBinaryFileSync = (fileName: string, data: Buffer | string): voi
 }
 
 /**
- * Saves binary data to file asynchronously using atomic write. Accepts Buffer for binary data or string for text-based
- * binary formats.
+ * Saves binary data to file asynchronously using atomic write, creating parent directories if needed. Accepts Buffer
+ * for binary data or string for text-based binary formats.
  *
  * @example
  *     await saveBinaryFileAsync("output.bin", buffer)
@@ -252,6 +251,7 @@ export const saveBinaryFileSync = (fileName: string, data: Buffer | string): voi
  */
 export const saveBinaryFileAsync = async (fileName: string, data: Buffer | string): Promise<void> => {
     try {
+        await makeDirectoryAsync(getDirectory(fileName))
         await writeFile(fileName, data)
     } catch (error: unknown) {
         putError(`Cannot save ${fileName} (saveBinaryFileAsync)\nError: ${String(error)}`)

@@ -36,6 +36,8 @@ export { isBetween } from "./math/common.js";
 export { getCurveValue, getCurveValueClamped } from "./math/find-segment.js";
 export type { CurvePoint } from "./math/find-segment.js";
 export { nearestPow2, nextPow2 } from "./math/power.js";
+export { andThen, err, isErr, isOk, ok, unwrapOr } from "./result.js";
+export type { Err, Ok, Result } from "./result.js";
 export { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js";
 export type { SortArgument } from "./sort.js";
 export { drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine } from "./svg/draw.js";

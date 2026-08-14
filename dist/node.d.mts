@@ -1,24 +1,27 @@
 import { ExecSyncOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+//#region src/result.d.ts
+interface Err<E> {
+  readonly error: E;
+  readonly ok: false;
+}
+interface Ok<T> {
+  readonly ok: true;
+  readonly value: T;
+}
+type Result<T, E> = Err<E> | Ok<T>;
+//#endregion
 //#region src/node/command.d.ts
-interface AsyncCommandResult {
-  error?: Error;
-  stderr: string;
-  stdout: string;
-  success: boolean;
+interface CommandError {
+  readonly cause: unknown;
+  readonly command: string;
+  readonly stderr?: string;
 }
-interface CommandResult {
-  error?: Error;
-  output: string | undefined;
-  success: boolean;
-}
-declare const executeCommand: (command: string, options?: ExecSyncOptions) => string;
-declare const executeCommandWithResult: (command: string, options?: ExecSyncOptions) => CommandResult;
-declare const executeCommandString: (command: string, options?: ExecSyncOptions) => string;
+declare const executeCommand: (command: string, options?: ExecSyncOptions) => Result<string, CommandError>;
+declare const executeCommandString: (command: string, options?: ExecSyncOptions) => Result<string, CommandError>;
 declare const doesCommandExist: (command: string) => boolean;
-declare const executeCommandAsync: (command: string, options?: ExecSyncOptions) => Promise<string>;
-declare const executeCommandAsyncWithResult: (command: string, options?: ExecSyncOptions) => Promise<AsyncCommandResult>;
+declare const executeCommandAsync: (command: string, options?: ExecSyncOptions) => Promise<Result<string, CommandError>>;
 declare const commandExistsAsync: (command: string) => Promise<boolean>;
 //#endregion
 //#region src/node/error.d.ts
@@ -37,8 +40,21 @@ declare const errorCodes: {
   readonly timeout: "ETIMEDOUT";
   readonly tooManyOpenFiles: "EMFILE";
 };
-declare const putError: (error: unknown) => void;
+type FileSystemError = {
+  readonly cause: unknown;
+  readonly kind: "unknown";
+  readonly path: string;
+} | {
+  readonly kind: "not-found";
+  readonly path: string;
+};
+interface JsonParseError {
+  readonly cause: unknown;
+  readonly kind: "parse-error";
+  readonly path: string;
+}
 declare const isNodeError: (error: unknown) => error is NodeJS.ErrnoException;
+declare const toFileSystemError: (error: unknown, path: string) => FileSystemError;
 //#endregion
 //#region src/node/fs/compare.d.ts
 declare const isFileOlderThan: (filePathA: string, filePathB: string) => boolean;
@@ -48,40 +64,40 @@ declare const isFileOlderThanAsync: (filePathA: string, filePathB: string) => Pr
 declare const defaultEncoding: "utf8";
 //#endregion
 //#region src/node/fs/directory.d.ts
-declare const makeDirectorySync: (directory: string) => void;
-declare const makeDirectoryAsync: (directory: string) => Promise<void>;
-declare const readDirectorySync: (directoryPath: string) => string[];
-declare const readDirectoryEntriesSync: (directoryPath: string) => fs.Dirent[];
-declare const readDirectoryAsync: (directoryPath: string) => Promise<string[]>;
-declare const readDirectoryEntriesAsync: (directoryPath: string) => Promise<fs.Dirent[]>;
-declare const readDirectoryNotRecursive: (directoryPath: string) => string[];
-declare const readDirectoryNotRecursiveAsync: (directoryPath: string) => Promise<string[]>;
-declare const removeDirectorySync: (directoryPath: string) => void;
-declare const removeDirectoryAsync: (directoryPath: string) => Promise<void>;
+declare const makeDirectorySync: (directory: string) => Result<void, FileSystemError>;
+declare const makeDirectoryAsync: (directory: string) => Promise<Result<void, FileSystemError>>;
+declare const readDirectorySync: (directoryPath: string) => Result<string[], FileSystemError>;
+declare const readDirectoryEntriesSync: (directoryPath: string) => Result<fs.Dirent[], FileSystemError>;
+declare const readDirectoryAsync: (directoryPath: string) => Promise<Result<string[], FileSystemError>>;
+declare const readDirectoryEntriesAsync: (directoryPath: string) => Promise<Result<fs.Dirent[], FileSystemError>>;
+declare const readDirectoryNotRecursive: (directoryPath: string) => Result<string[], FileSystemError>;
+declare const readDirectoryNotRecursiveAsync: (directoryPath: string) => Promise<Result<string[], FileSystemError>>;
+declare const removeDirectorySync: (directoryPath: string) => Result<void, FileSystemError>;
+declare const removeDirectoryAsync: (directoryPath: string) => Promise<Result<void, FileSystemError>>;
 declare const doesDirectoryExist: (directoryPath: string) => boolean;
 declare const doesDirectoryExistAsync: (directoryPath: string) => Promise<boolean>;
 //#endregion
 //#region src/node/fs/file-io.d.ts
-declare const readTextFileSync: (fileName: string) => string | undefined;
-declare const readTextFileAsync: (fileName: string) => Promise<string | undefined>;
-declare const saveTextFileSync: (fileName: string, data: string) => void;
-declare const saveTextFileAsync: (fileName: string, data: string) => Promise<void>;
-declare const readJsonSync: (fileName: string) => unknown;
-declare const readJsonAsync: (fileName: string) => Promise<unknown>;
-declare const saveJsonSync: (fileName: string, data: object) => void;
-declare const saveJsonAsync: (fileName: string, data: object) => Promise<void>;
-declare const readBinaryFileSync: (fileName: string) => Buffer | undefined;
-declare const readBinaryFileAsync: (fileName: string) => Promise<Buffer | undefined>;
-declare const saveBinaryFileSync: (fileName: string, data: Buffer | string) => void;
-declare const saveBinaryFileAsync: (fileName: string, data: Buffer | string) => Promise<void>;
-declare const readImageSync: (fileName: string) => Buffer | undefined;
-declare const readImageAsync: (fileName: string) => Promise<Buffer | undefined>;
-declare const saveImageSync: (fileName: string, data: Buffer) => void;
-declare const saveImageAsync: (fileName: string, data: Buffer) => Promise<void>;
+declare const readTextFileSync: (fileName: string) => Result<string, FileSystemError>;
+declare const readTextFileAsync: (fileName: string) => Promise<Result<string, FileSystemError>>;
+declare const saveTextFileSync: (fileName: string, data: string) => Result<void, FileSystemError>;
+declare const saveTextFileAsync: (fileName: string, data: string) => Promise<Result<void, FileSystemError>>;
+declare const readJsonSync: (fileName: string) => Result<unknown, FileSystemError | JsonParseError>;
+declare const readJsonAsync: (fileName: string) => Promise<Result<unknown, FileSystemError | JsonParseError>>;
+declare const saveJsonSync: (fileName: string, data: object) => Result<void, FileSystemError>;
+declare const saveJsonAsync: (fileName: string, data: object) => Promise<Result<void, FileSystemError>>;
+declare const readBinaryFileSync: (fileName: string) => Result<Buffer, FileSystemError>;
+declare const readBinaryFileAsync: (fileName: string) => Promise<Result<Buffer, FileSystemError>>;
+declare const saveBinaryFileSync: (fileName: string, data: Buffer | string) => Result<void, FileSystemError>;
+declare const saveBinaryFileAsync: (fileName: string, data: Buffer | string) => Promise<Result<void, FileSystemError>>;
+declare const readImageSync: (fileName: string) => Result<Buffer, FileSystemError>;
+declare const readImageAsync: (fileName: string) => Promise<Result<Buffer, FileSystemError>>;
+declare const saveImageSync: (fileName: string, data: Buffer) => Result<void, FileSystemError>;
+declare const saveImageAsync: (fileName: string, data: Buffer) => Promise<Result<void, FileSystemError>>;
 //#endregion
 //#region src/node/fs/file-ops.d.ts
-declare const removeFileSync: (fileName: string) => void;
-declare const removeFileAsync: (fileName: string) => Promise<void>;
+declare const removeFileSync: (fileName: string) => Result<void, FileSystemError>;
+declare const removeFileAsync: (fileName: string) => Promise<Result<void, FileSystemError>>;
 declare const doesFileExist: (fileName: string) => boolean;
 declare const isFileEmpty: (fileName: string) => boolean;
 declare const doesFileExistAsync: (fileName: string) => Promise<boolean>;
@@ -121,10 +137,10 @@ declare const getDirectory: (filePath: string) => string;
 declare const joinPaths: (path1: string, path2: string) => string;
 //#endregion
 //#region src/node/fs/stat.d.ts
-declare const getStatSync: (path: string) => fs.Stats | undefined;
-declare const getStatAsync: (path: string) => Promise<fs.Stats | undefined>;
+declare const getStatSync: (path: string) => Result<fs.Stats, FileSystemError>;
+declare const getStatAsync: (path: string) => Promise<Result<fs.Stats, FileSystemError>>;
 declare const doesPathExist: (path: string) => boolean;
 declare const doesPathExistAsync: (path: string) => Promise<boolean>;
 //#endregion
-export { appendToFileName, changeExtension, changeFileName, commandExistsAsync, defaultEncoding, doesCommandExist, doesDirectoryExist, doesDirectoryExistAsync, doesFileExist, doesFileExistAsync, doesPathExist, doesPathExistAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandAsyncWithResult, executeCommandString, executeCommandWithResult, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isFileEmpty, isFileOlderThan, isFileOlderThanAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, prependToFileName, putError, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryEntriesAsync, readDirectoryEntriesSync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync };
+export { type CommandError, type FileSystemError, type JsonParseError, appendToFileName, changeExtension, changeFileName, commandExistsAsync, defaultEncoding, doesCommandExist, doesDirectoryExist, doesDirectoryExistAsync, doesFileExist, doesFileExistAsync, doesPathExist, doesPathExistAsync, errorCodes, executeCommand, executeCommandAsync, executeCommandString, getDirectory, getDiskUsage, getDiskUsageAsync, getExtension, getFileName, getFileNameWithExtension, getFileSize, getFreeSpace, getFreeSpaceAsync, getFullPath, getStatAsync, getStatSync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync, isFileEmpty, isFileOlderThan, isFileOlderThanAsync, isNodeError, joinPaths, makeDirectoryAsync, makeDirectorySync, prependToFileName, readBinaryFileAsync, readBinaryFileSync, readDirectoryAsync, readDirectoryEntriesAsync, readDirectoryEntriesSync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, removeDirectoryAsync, removeDirectorySync, removeExtension, removeFileAsync, removeFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync, toFileSystemError };
 //# sourceMappingURL=node.d.mts.map

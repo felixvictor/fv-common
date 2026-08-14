@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.0](fj-byrtz/ibey/fv-common/compare/2.0.0...2.1.0) (2026-08-14)
+
+### Features
+
+* unwrapOrThrow ([1a7de76](fj-byrtz/ibey/fv-common/commits/1a7de76902c77ee2e9acff7ce31644d98b887d90))
+
 ## [2.0.0](fj-byrtz/ibey/fv-common/compare/1.70.0...2.0.0) (2026-08-14)
 
 ### ⚠ BREAKING CHANGES

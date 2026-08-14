@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.0](fj-byrtz/ibey/fv-common/compare/1.70.0...2.0.0) (2026-08-14)
+
+### ⚠ BREAKING CHANGES
+
+* node with Result type instead of PutError
+
+### Features
+
+* node with Result type instead of PutError ([8e4f197](fj-byrtz/ibey/fv-common/commits/8e4f1970cd0d980299dfb37005b7f7385cdbc683))
+
 ## [1.70.0](fj-byrtz/ibey/fv-common/compare/1.69.0...1.70.0) (2026-08-14)
 
 ### Features

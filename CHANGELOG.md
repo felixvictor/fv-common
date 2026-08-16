@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/2.1.0...v2.1.1)
+
+### 🩹 Fixes
+
+- Release-it -> changelogen ([8372d2e](https://github.com/felixvictor/fv-common/commit/8372d2e))
+
 ## [2.1.0](https://github.com/felixvictor/fv-common/compare/2.0.0...2.1.0) (2026-08-14)
 
 ### Features

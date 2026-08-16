@@ -1,12 +1,12 @@
 # Changelog
 
-## [2.1.0](fj-byrtz/ibey/fv-common/compare/2.0.0...2.1.0) (2026-08-14)
+## [2.1.0](https://github.com/felixvictor/fv-common/compare/2.0.0...2.1.0) (2026-08-14)
 
 ### Features
 
-* unwrapOrThrow ([1a7de76](fj-byrtz/ibey/fv-common/commits/1a7de76902c77ee2e9acff7ce31644d98b887d90))
+* unwrapOrThrow ([1a7de76](https://github.com/felixvictor/fv-common/commits/1a7de76902c77ee2e9acff7ce31644d98b887d90))
 
-## [2.0.0](fj-byrtz/ibey/fv-common/compare/1.70.0...2.0.0) (2026-08-14)
+## [2.0.0](https://github.com/felixvictor/fv-common/compare/1.70.0...2.0.0) (2026-08-14)
 
 ### ⚠ BREAKING CHANGES
 
@@ -14,13 +14,13 @@
 
 ### Features
 
-* node with Result type instead of PutError ([8e4f197](fj-byrtz/ibey/fv-common/commits/8e4f1970cd0d980299dfb37005b7f7385cdbc683))
+* node with Result type instead of PutError ([8e4f197](https://github.com/felixvictor/fv-common/commits/8e4f1970cd0d980299dfb37005b7f7385cdbc683))
 
-## [1.70.0](fj-byrtz/ibey/fv-common/compare/1.69.0...1.70.0) (2026-08-14)
+## [1.70.0](https://github.com/felixvictor/fv-common/compare/1.69.0...1.70.0) (2026-08-14)
 
 ### Features
 
-* node save function create parent directories ([634bd65](fj-byrtz/ibey/fv-common/commits/634bd65004fe74a59423d88c66e79a6699c10b98))
+* node save function create parent directories ([634bd65](https://github.com/felixvictor/fv-common/commits/634bd65004fe74a59423d88c66e79a6699c10b98))
 
 ## [1.69.0](fj.byrtz.de/ibey/fv-common/compare/1.68.2...1.69.0) (2026-08-08)
 

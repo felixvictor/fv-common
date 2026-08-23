@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.2.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.1.1...v2.2.0)
+
+### 🚀 Enhancements
+
+- More temporal functions ([ff2fb2c](https://github.com/felixvictor/fv-common/commit/ff2fb2c))
+
+### 📦 Build
+
+- Dist ([e9dc1e3](https://github.com/felixvictor/fv-common/commit/e9dc1e3))
+
 ## v2.1.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/2.1.0...v2.1.1)

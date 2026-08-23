@@ -1,9 +1,16 @@
 import { getLocale } from "@/locale"
+import { dateToString } from "@/temporal/convert"
 
-export const isTimeBetween = (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime): boolean =>
-    Temporal.PlainTime.compare(time, start) >= 0 && Temporal.PlainTime.compare(time, end) < 0
+const locale = getLocale()
 
-const durationStyle: Intl.DurationFormatOptions = { style: "long" }
+const durationFormatOptions: Intl.DurationFormatOptions = {
+    style: "long",
+}
+const timeFormatOptions: Intl.DateTimeFormatOptions = {
+    dateStyle: "short",
+    timeStyle: "short",
+}
+
 export const formatMs = (ms: number, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     const duration = Temporal.Duration.from({ milliseconds: ms }).round({
@@ -12,12 +19,13 @@ export const formatMs = (ms: number, locale?: string): string => {
     })
 
     // Built per call
-    const timeFormatter = new Intl.DurationFormat(effectiveLocale, durationStyle)
+    const timeFormatter = new Intl.DurationFormat(effectiveLocale, durationFormatOptions)
 
     return timeFormatter.format(duration)
 }
 
 const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", hourCycle: "h23", minute: "numeric" }
+
 export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     const formatter = new Intl.DateTimeFormat(effectiveLocale, timeOptions)
@@ -27,3 +35,13 @@ export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): stri
         .map((part) => (part.type === "hour" ? String(Number(part.value)) : part.value))
         .join("")
 }
+
+export const formatDate = (date: Date): string => Temporal.PlainDate.from(dateToString(date)).toLocaleString(locale)
+
+export const formatDateString = (dateString: string): string =>
+    Temporal.PlainDate.from(dateString).toLocaleString(locale)
+
+export const formatDuration = (duration: Temporal.Duration): string =>
+    duration.toLocaleString(locale, durationFormatOptions)
+
+export const formatInstant = (instant: Temporal.Instant): string => instant.toLocaleString(locale, timeFormatOptions)

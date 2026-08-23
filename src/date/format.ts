@@ -127,7 +127,7 @@ export const getRelativeTime = (time: string): string => {
  * @param time - Datetime string in YYYY-MM-DD HH:mm format.
  * @returns Formatted UTC datetime string.
  */
-export const formatDate = (time: string): string => {
+export const formatDateViaDayjs = (time: string): string => {
     return dayjs.utc(time, datetimeFormat).format(datetimeFormat)
 }
 

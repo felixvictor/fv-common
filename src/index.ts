@@ -17,7 +17,7 @@ export { minSeedHueDelta, minSurfaceLightnessDelta, neutralChromaMax, seedChroma
 export { clamp, clampUnsafe, isEmpty, isNullish, isNullishOrNaN, isNumeric, isObject, lerp, lerpUnsafe, toFiniteNumber } from "./common.js";
 export { datetimeFormat } from "./date/constants.js";
 export { convertBerlinTimeToUTC, convertDate, convertDEDateString, convertUTCStringToDate, getLocalHour, getRange } from "./date/convert.js";
-export { formatDate, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getRelativeTime, setDateLocale } from "./date/format.js";
+export { formatDateViaDayjs, formatFromToTime, formatLocalDate, formatLocalTime, formatTime, formatTimeRange, getDateDistance, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getRelativeTime, setDateLocale } from "./date/format.js";
 export { closestDateIndex, isBetweenTime, isDateInRange, isFutureDate, isPastDate } from "./date/test.js";
 export { getDateFromTicks, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks } from "./date/ticks.js";
 export { delay } from "./delay.js";
@@ -42,7 +42,11 @@ export { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js";
 export type { SortArgument } from "./sort.js";
 export { drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine } from "./svg/draw.js";
 export { optimisePath } from "./svg/optimise.js";
-export { formatMs, formatPlainTime, isTimeBetween } from "./temporal/common.js";
+export { isInstantAfter, isInstantAtOrAfter, isInstantAtOrBefore, isInstantBefore, isTimeBetween } from "./temporal/compare.js";
+export { dateToString } from "./temporal/convert.js";
+export { formatDate, formatDateString, formatDuration, formatInstant, formatMs, formatPlainTime } from "./temporal/format.js";
+export { addToInstant, subtractFromInstant } from "./temporal/manipulate.js";
+export { daysBetweenInstants, getMidnightUTC, hoursBetweenInstants } from "./temporal/query.js";
 export { cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak } from "./unicode.js";
 export { createUrl } from "./url.js";
 

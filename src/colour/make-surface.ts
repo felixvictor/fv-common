@@ -46,7 +46,7 @@ type SemanticRole = keyof typeof semanticTones
 
 const surfaceLadder = {
     dark: {
-        anchorLightness: 0.06,
+        anchorLightness: 0.14,
         baseChroma: 0.12,
         rungs: {
             bright: { chromaFactor: 1.3, stepDelta: 2 },

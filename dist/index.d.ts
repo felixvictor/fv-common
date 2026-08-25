@@ -122,7 +122,7 @@ declare const semanticTones: {
 type SemanticRole = keyof typeof semanticTones;
 declare const surfaceLadder: {
   readonly dark: {
-    readonly anchorLightness: 0.06;
+    readonly anchorLightness: 0.14;
     readonly baseChroma: 0.12;
     readonly rungs: {
       readonly bright: {

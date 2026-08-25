@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.2.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.2.0...v2.2.1)
+
+### 📦 Build
+
+- Dist ([ee54154](https://github.com/felixvictor/fv-common/commit/ee54154))
+
+### 🎨 Styles
+
+- **surface:** Higher anchor lightness ([49ea4e3](https://github.com/felixvictor/fv-common/commit/49ea4e3))
+
 ## v2.2.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.1.1...v2.2.0)

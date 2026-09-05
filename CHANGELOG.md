@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.3.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.2.1...v2.3.0)
+
+### 🚀 Enhancements
+
+- Empty directory suny/async ([9ca6c5f](https://github.com/felixvictor/fv-common/commit/9ca6c5f))
+
+### 📦 Build
+
+- Dist ([2196b2f](https://github.com/felixvictor/fv-common/commit/2196b2f))
+
 ## v2.2.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.2.0...v2.2.1)

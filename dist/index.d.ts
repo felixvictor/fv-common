@@ -4,32 +4,32 @@ import "dayjs/locale/de.js";
 import "dayjs/locale/en.js";
 import "dayjs/locale/en-gb.js";
 //#region src/chunkify.d.ts
-declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
+export declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
 //#region src/colour/colour-math.d.ts
-declare const backgroundLightnessThreshold: 0.18;
-declare const chromaCurveFactor: 4;
-declare const cieExponent: number;
-declare const cieMultiplierHigh: 1.16;
-declare const cieMultiplierLow: 9.032962962;
-declare const cieOffset: 0.16;
-declare const cieThreshold: 0.0088564516;
-declare const hueShiftFactor: 5;
-declare const lightnessContrastExponentLight: 2.2;
-declare const lightnessContrastExponentDark: 3.08;
-declare const lightnessContrastOffset: 0.05;
-declare const lightnessMin: 0;
-declare const lightnessMax: 1;
-declare const chromaMinOffset = 0.35;
-declare const chromaMaxOffset = 0.05;
-declare const applyToeCurve: (lightness: number) => number;
-declare const yToLightness: (y: number) => number;
-declare const luminanceY: (hex: string | undefined) => number | undefined;
-declare const hueDelta: (hex1: string, hex2: string) => number;
-declare const chromaMinOffsetForFloor: (hex: string, chromaFloor: number) => number;
+export declare const backgroundLightnessThreshold: 0.18;
+export declare const chromaCurveFactor: 4;
+export declare const cieExponent: number;
+export declare const cieMultiplierHigh: 1.16;
+export declare const cieMultiplierLow: 9.032962962;
+export declare const cieOffset: 0.16;
+export declare const cieThreshold: 0.0088564516;
+export declare const hueShiftFactor: 5;
+export declare const lightnessContrastExponentLight: 2.2;
+export declare const lightnessContrastExponentDark: 3.08;
+export declare const lightnessContrastOffset: 0.05;
+export declare const lightnessMin: 0;
+export declare const lightnessMax: 1;
+export declare const chromaMinOffset = 0.35;
+export declare const chromaMaxOffset = 0.05;
+export declare const applyToeCurve: (lightness: number) => number;
+export declare const yToLightness: (y: number) => number;
+export declare const luminanceY: (hex: string | undefined) => number | undefined;
+export declare const hueDelta: (hex1: string, hex2: string) => number;
+export declare const chromaMinOffsetForFloor: (hex: string, chromaFloor: number) => number;
 //#endregion
 //#region src/colour/okhsl-colour.d.ts
-declare class okHslColour {
+export declare class okHslColour {
   #private;
   static readonly colorSpace = "okhsl";
   static readonly hexFormat = "hex";
@@ -53,27 +53,27 @@ declare class okHslColour {
 }
 //#endregion
 //#region src/colour/colour-scale-generator.d.ts
-declare class ColourScaleGenerator {
+export declare class ColourScaleGenerator {
   #private;
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
   computeColour(scaleNumber: number): okHslColour;
 }
 //#endregion
 //#region src/colour/constant.d.ts
-declare const blackHex = "#000";
-declare const whiteHex = "#fff";
+export declare const blackHex = "#000";
+export declare const whiteHex = "#fff";
 //#endregion
 //#region src/colour/contrast.d.ts
 type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText";
-declare const wcagTextMinRatio = 4.5;
-declare const wcagUiMinRatio = 3;
-declare const getContrastRatio: (hex1: string, hex2: string) => number;
-declare const getContrastColour: (colour: string, colourBlack?: string, colourWhite?: string) => string;
-declare const getApcaContrast: (textHex: string, backgroundHex: string) => number;
-declare const apcaMinLcByRole: Record<ApcaTextRole, number>;
-declare const apcaMaxLcLargeFluentText = 90;
-declare const apcaMinLcUiComponent = 30;
-declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
+export declare const wcagTextMinRatio = 4.5;
+export declare const wcagUiMinRatio = 3;
+export declare const getContrastRatio: (hex1: string, hex2: string) => number;
+export declare const getContrastColour: (colour: string, colourBlack?: string, colourWhite?: string) => string;
+export declare const getApcaContrast: (textHex: string, backgroundHex: string) => number;
+export declare const apcaMinLcByRole: Record<ApcaTextRole, number>;
+export declare const apcaMaxLcLargeFluentText = 90;
+export declare const apcaMinLcUiComponent = 30;
+export declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
 //#endregion
 //#region src/colour/make-surface.d.ts
 type ThemeMode = "dark" | "light";
@@ -167,7 +167,7 @@ declare const surfaceLadder: {
   };
 };
 type SurfaceRung = keyof typeof surfaceLadder.light.rungs;
-declare class MakeSurface {
+export declare class MakeSurface {
   #private;
   constructor(baseHex: string);
   calculateSurface(lightness: number, chromaFactor: number): string;
@@ -175,149 +175,149 @@ declare class MakeSurface {
 }
 //#endregion
 //#region src/colour/md3-tones.d.ts
-declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+export declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
-declare const ti: (tone: Md3Tone) => number;
-declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
-declare const minTone: 0;
-declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
-declare const fallback: (array: Md3ToneArray, index: number) => string;
-declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
-declare const md3AccentToneLight: Md3Tone;
-declare const md3AccentToneDark: Md3Tone;
-declare const md3AccentOnToneLight: Md3Tone;
-declare const md3AccentOnToneDark: Md3Tone;
-declare const md3ContainerToneLight: Md3Tone;
-declare const md3ContainerToneDark: Md3Tone;
-declare const md3OnContainerToneLight: Md3Tone;
-declare const md3OnContainerToneDark: Md3Tone;
-declare const md3ScrimHex = "#000000";
-declare const md3ShadowHex = "#000000";
+export declare const ti: (tone: Md3Tone) => number;
+export declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+export declare const minTone: 0;
+export declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
+export declare const fallback: (array: Md3ToneArray, index: number) => string;
+export declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
+export declare const md3AccentToneLight: Md3Tone;
+export declare const md3AccentToneDark: Md3Tone;
+export declare const md3AccentOnToneLight: Md3Tone;
+export declare const md3AccentOnToneDark: Md3Tone;
+export declare const md3ContainerToneLight: Md3Tone;
+export declare const md3ContainerToneDark: Md3Tone;
+export declare const md3OnContainerToneLight: Md3Tone;
+export declare const md3OnContainerToneDark: Md3Tone;
+export declare const md3ScrimHex = "#000000";
+export declare const md3ShadowHex = "#000000";
 //#endregion
 //#region src/colour/md3-scale-generator.d.ts
-declare class Md3ScaleGenerator extends ColourScaleGenerator {
+export declare class Md3ScaleGenerator extends ColourScaleGenerator {
   static fromSeed(hex: string, backgroundY: number, minOffset?: number, maxOffset?: number): Md3ScaleGenerator;
   buildMd3Range: () => Md3ToneArray;
   colourAtScale: (scaleNumber: number) => string;
 }
 //#endregion
 //#region src/colour/validation.d.ts
-declare const seedLightnessMin = 0.35;
-declare const seedLightnessMax = 0.65;
-declare const seedChromaMin = 0.38;
-declare const neutralChromaMax = 0.15;
-declare const minSeedHueDelta = 5;
-declare const minSurfaceLightnessDelta = 0.02;
-declare const validateSeed: (name: string, hex: string, options?: {
+export declare const seedLightnessMin = 0.35;
+export declare const seedLightnessMax = 0.65;
+export declare const seedChromaMin = 0.38;
+export declare const neutralChromaMax = 0.15;
+export declare const minSeedHueDelta = 5;
+export declare const minSurfaceLightnessDelta = 0.02;
+export declare const validateSeed: (name: string, hex: string, options?: {
   neutral?: boolean;
 }) => void;
-declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
-declare const validateTheme: (theme: Record<string, string | undefined>, label: string) => void;
+export declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
+export declare const validateTheme: (theme: Record<string, string | undefined>, label: string) => void;
 //#endregion
 //#region src/common.d.ts
-declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
-declare const isEmpty: (value: unknown) => boolean;
-declare const isNullish: (value: unknown) => value is null | undefined;
-declare const isNullishOrNaN: (value: unknown) => boolean;
-declare const isNumeric: (value: unknown) => value is number;
-declare const toFiniteNumber: (value: unknown) => number | undefined;
-declare const clamp: (value: number | string, min: number | string, max: number | string) => number;
-declare const clampUnsafe: (x: number, min: number, max: number) => number;
-declare const lerp: (value1: number | string, value2: number | string, t: number | string) => number;
-declare const lerpUnsafe: (v1: number, v2: number, t: number) => number;
+export declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
+export declare const isEmpty: (value: unknown) => boolean;
+export declare const isNullish: (value: unknown) => value is null | undefined;
+export declare const isNullishOrNaN: (value: unknown) => boolean;
+export declare const isNumeric: (value: unknown) => value is number;
+export declare const toFiniteNumber: (value: unknown) => number | undefined;
+export declare const clamp: (value: number | string, min: number | string, max: number | string) => number;
+export declare const clampUnsafe: (x: number, min: number, max: number) => number;
+export declare const lerp: (value1: number | string, value2: number | string, t: number | string) => number;
+export declare const lerpUnsafe: (v1: number, v2: number, t: number) => number;
 //#endregion
 //#region src/date/constants.d.ts
-declare const datetimeFormat = "YYYY-MM-DD HH:mm";
+export declare const datetimeFormat = "YYYY-MM-DD HH:mm";
 //#endregion
 //#region src/date/convert.d.ts
-declare const convertDEDateString: (date: string) => string;
-declare const getRange: (dateRange: Date[]) => {
+export declare const convertDEDateString: (date: string) => string;
+export declare const getRange: (dateRange: Date[]) => {
   begin: Dayjs;
   end: Dayjs;
 };
-declare const getLocalHour: (hour: number) => number;
-declare const convertUTCStringToDate: (date: string) => Date;
-declare const convertBerlinTimeToUTC: (date: string) => Date;
-declare const convertDate: (date: string, fromFormat: string, toFormat: string, locale: string) => string | undefined;
+export declare const getLocalHour: (hour: number) => number;
+export declare const convertUTCStringToDate: (date: string) => Date;
+export declare const convertBerlinTimeToUTC: (date: string) => Date;
+export declare const convertDate: (date: string, fromFormat: string, toFormat: string, locale: string) => string | undefined;
 //#endregion
 //#region src/date/format.d.ts
-declare const setDateLocale: (locale: string) => void;
-declare const getFormattedDate: (date: string, locale?: string) => string;
-declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
-declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
-declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
-declare const getDateDistance: (date: string, locale?: string) => string;
-declare const getRelativeTime: (time: string) => string;
-declare const formatDateViaDayjs: (time: string) => string;
-declare const formatTime: (time: string) => string;
-declare const formatLocalDate: (time: string) => string;
-declare const formatLocalTime: (time: string) => string;
-declare const formatFromToTime: (from: number, to: number) => string;
-declare const formatTimeRange: (from: number, to: number) => string;
+export declare const setDateLocale: (locale: string) => void;
+export declare const getFormattedDate: (date: string, locale?: string) => string;
+export declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
+export declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
+export declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
+export declare const getDateDistance: (date: string, locale?: string) => string;
+export declare const getRelativeTime: (time: string) => string;
+export declare const formatDateViaDayjs: (time: string) => string;
+export declare const formatTime: (time: string) => string;
+export declare const formatLocalDate: (time: string) => string;
+export declare const formatLocalTime: (time: string) => string;
+export declare const formatFromToTime: (from: number, to: number) => string;
+export declare const formatTimeRange: (from: number, to: number) => string;
 //#endregion
 //#region src/date/test.d.ts
-declare const isDateInRange: (date: Date, hours: number) => boolean;
-declare const isFutureDate: (date: Date | string) => boolean;
-declare const isPastDate: (time: string) => boolean;
-declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
-declare const closestDateIndex: (datesString: string[]) => number | undefined;
+export declare const isDateInRange: (date: Date, hours: number) => boolean;
+export declare const isFutureDate: (date: Date | string) => boolean;
+export declare const isPastDate: (time: string) => boolean;
+export declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
+export declare const closestDateIndex: (datesString: string[]) => number | undefined;
 //#endregion
 //#region src/date/ticks.d.ts
-declare const getTimeFromTicks: (ticks: bigint | number | string) => string;
-declare const getDateFromTicks: (ticks: bigint | number) => dayjs.Dayjs;
-declare const getTicksFromDate: (date: dayjs.Dayjs | number) => bigint;
-declare const getTimestampFromTicks: (ticks: bigint | number | string) => number;
+export declare const getTimeFromTicks: (ticks: bigint | number | string) => string;
+export declare const getDateFromTicks: (ticks: bigint | number) => dayjs.Dayjs;
+export declare const getTicksFromDate: (date: dayjs.Dayjs | number) => bigint;
+export declare const getTimestampFromTicks: (ticks: bigint | number | string) => number;
 //#endregion
 //#region src/delay.d.ts
-declare const delay: (ms: number) => Promise<unknown>;
+export declare const delay: (ms: number) => Promise<unknown>;
 //#endregion
 //#region src/fetch.d.ts
-declare const loadFile: <T = unknown>(path: string) => Promise<T>;
+export declare const loadFile: <T = unknown>(path: string) => Promise<T>;
 //#endregion
 //#region src/format/cardinal.d.ts
-declare const getCardinalRules: (locale: string) => Intl.PluralRules;
+export declare const getCardinalRules: (locale: string) => Intl.PluralRules;
 //#endregion
 //#region src/format/email.d.ts
-declare const convertNameForEmail: (name: string) => string;
+export declare const convertNameForEmail: (name: string) => string;
 //#endregion
 //#region src/format/helpers.d.ts
-declare const addSpan: (suffix: string, isSvg: boolean) => string;
-declare const beautifySuffix: (suffix: string, isSvg: boolean) => string;
-declare const formatUnit: (u: string, isSvg?: boolean) => string;
-declare const truncate: (string: string, n: number) => string;
+export declare const addSpan: (suffix: string, isSvg: boolean) => string;
+export declare const beautifySuffix: (suffix: string, isSvg: boolean) => string;
+export declare const formatUnit: (u: string, isSvg?: boolean) => string;
+export declare const truncate: (string: string, n: number) => string;
 //#endregion
 //#region src/format/intl.d.ts
-declare const formatWithIntl: (value: number, options: Intl.NumberFormatOptions, isSvg?: boolean) => string;
+export declare const formatWithIntl: (value: number, options: Intl.NumberFormatOptions, isSvg?: boolean) => string;
 //#endregion
 //#region src/format/number.d.ts
-declare const formatFloat: (value: number, decimals?: number, options?: Intl.NumberFormatOptions, isSvg?: boolean) => string;
-declare const formatSignFloat: (value: number, decimals?: number) => string;
-declare const formatSiFloat: (value: number, isSvg?: boolean) => string;
-declare const formatFloatFixed: (value: number, decimals?: number) => string;
-declare const formatFloatWithUnit: (x: number, u: string) => string;
-declare const formatReales: (x: number) => string;
-declare const formatWeight: (x: number) => string;
-declare const round: (n: number, d?: number) => number;
-declare const roundToThousands: (value: number) => number;
-declare const formatInt: (value: number, options?: Intl.NumberFormatOptions) => string;
-declare const formatSignInt: (value: number) => string;
-declare const formatSiInt: (x: number, max?: number, options?: Intl.NumberFormatOptions) => string;
+export declare const formatFloat: (value: number, decimals?: number, options?: Intl.NumberFormatOptions, isSvg?: boolean) => string;
+export declare const formatSignFloat: (value: number, decimals?: number) => string;
+export declare const formatSiFloat: (value: number, isSvg?: boolean) => string;
+export declare const formatFloatFixed: (value: number, decimals?: number) => string;
+export declare const formatFloatWithUnit: (x: number, u: string) => string;
+export declare const formatReales: (x: number) => string;
+export declare const formatWeight: (x: number) => string;
+export declare const round: (n: number, d?: number) => number;
+export declare const roundToThousands: (value: number) => number;
+export declare const formatInt: (value: number, options?: Intl.NumberFormatOptions) => string;
+export declare const formatSignInt: (value: number) => string;
+export declare const formatSiInt: (x: number, max?: number, options?: Intl.NumberFormatOptions) => string;
 //#endregion
 //#region src/format/ordinal.d.ts
-declare const getOrdinal: (n: number, isSuperscript?: boolean, locale?: string) => string;
+export declare const getOrdinal: (n: number, isSuperscript?: boolean, locale?: string) => string;
 //#endregion
 //#region src/format/percent.d.ts
-declare const formatPercent: (value: number, decimals?: number, options?: Intl.NumberFormatOptions) => string;
-declare const formatSignPercent: (value: number, decimals?: number) => string;
-declare const formatPP: (x: number, f?: number) => string;
+export declare const formatPercent: (value: number, decimals?: number, options?: Intl.NumberFormatOptions) => string;
+export declare const formatSignPercent: (value: number, decimals?: number) => string;
+export declare const formatPP: (x: number, f?: number) => string;
 //#endregion
 //#region src/format/text.d.ts
-declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
-declare const pluralise: (count: number, wordSingle: string, wordPlural?: string) => string;
+export declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
+export declare const pluralise: (count: number, wordSingle: string, wordPlural?: string) => string;
 //#endregion
 //#region src/html.d.ts
-declare const getElementRect: (element: HTMLElement | SVGElement) => {
+export declare const getElementRect: (element: HTMLElement | SVGElement) => {
   bottom: number;
   height: number;
   left: number;
@@ -327,24 +327,24 @@ declare const getElementRect: (element: HTMLElement | SVGElement) => {
   x: number;
   y: number;
 };
-declare const getElementHeight: (element: HTMLElement | SVGElement) => number;
-declare const getElementWidth: (element: HTMLElement | SVGElement) => number;
-declare const getElementDimensions: (element: HTMLElement | SVGElement) => {
+export declare const getElementHeight: (element: HTMLElement | SVGElement) => number;
+export declare const getElementWidth: (element: HTMLElement | SVGElement) => number;
+export declare const getElementDimensions: (element: HTMLElement | SVGElement) => {
   height: number;
   width: number;
 };
-declare const getElementDimensionsPrecise: (element: HTMLElement | SVGElement) => {
+export declare const getElementDimensionsPrecise: (element: HTMLElement | SVGElement) => {
   height: number;
   width: number;
 };
 //#endregion
 //#region src/locale.d.ts
-declare const setLocale: (locale: string) => void;
-declare const getLocale: () => string;
-declare const onLocaleChange: (callback: () => void) => void;
+export declare const setLocale: (locale: string) => void;
+export declare const getLocale: () => string;
+export declare const onLocaleChange: (callback: () => void) => void;
 //#endregion
 //#region src/math/common.d.ts
-declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
+export declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
 //#endregion
 //#region src/math/find-segment.d.ts
 interface CurvePoint {
@@ -353,12 +353,12 @@ interface CurvePoint {
   time: number;
   value: number;
 }
-declare const getCurveValue: (time: number, points: CurvePoint[]) => number | undefined;
-declare const getCurveValueClamped: (time: number, points: CurvePoint[]) => number;
+export declare const getCurveValue: (time: number, points: CurvePoint[]) => number | undefined;
+export declare const getCurveValueClamped: (time: number, points: CurvePoint[]) => number;
 //#endregion
 //#region src/math/power.d.ts
-declare const nearestPow2: (value: number) => number;
-declare const nextPow2: (value: number) => number;
+export declare const nearestPow2: (value: number) => number;
+export declare const nextPow2: (value: number) => number;
 //#endregion
 //#region src/result.d.ts
 interface Err<E> {
@@ -370,84 +370,84 @@ interface Ok<T> {
   readonly value: T;
 }
 type Result<T, E> = Err<E> | Ok<T>;
-declare function andThen<T, U, E>(result: Result<T, E>, next: (value: T) => Result<U, E>): Result<U, E>;
-declare function err<E>(error: E): Err<E>;
-declare function isErr<T, E>(result: Result<T, E>): result is Err<E>;
-declare function isOk<T, E>(result: Result<T, E>): result is Ok<T>;
-declare function ok<T>(value: T): Ok<T>;
-declare function unwrapOr<T, E>(result: Result<T, E>, fallback: T): T;
-declare function unwrapOrThrow<T, E>(result: Result<T, E>, message: string): T;
+export declare function andThen<T, U, E>(result: Result<T, E>, next: (value: T) => Result<U, E>): Result<U, E>;
+export declare function err<E>(error: E): Err<E>;
+export declare function isErr<T, E>(result: Result<T, E>): result is Err<E>;
+export declare function isOk<T, E>(result: Result<T, E>): result is Ok<T>;
+export declare function ok<T>(value: T): Ok<T>;
+export declare function unwrapOr<T, E>(result: Result<T, E>, fallback: T): T;
+export declare function unwrapOrThrow<T, E>(result: Result<T, E>, message: string): T;
 //#endregion
 //#region src/sort.d.ts
 type SortArgument<T> = `-${keyof T & string}` | keyof T;
-declare const sortBy: <T extends object>(sortArguments: SortArgument<T>[]) => (a: T, b: T) => number;
-declare function simpleNumberSort(a: number, b: number): number;
-declare function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number;
-declare function simpleStringSort(a: string, b: string): number;
-declare function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number;
+export declare const sortBy: <T extends object>(sortArguments: SortArgument<T>[]) => (a: T, b: T) => number;
+export declare function simpleNumberSort(a: number, b: number): number;
+export declare function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number;
+export declare function simpleStringSort(a: string, b: string): number;
+export declare function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number;
 //#endregion
 //#region src/svg/draw.d.ts
-declare const drawSvgCircle: (x: number, y: number, r: number) => string;
-declare const drawSvgRect: (x: number, y: number, size: number) => string;
-declare const drawSvgRectWH: (x: number, y: number, width: number, height: number) => string;
-declare const drawSvgVLine: (x: number, y: number, length: number) => string;
-declare const drawSvgHLine: (x: number, y: number, length: number) => string;
-declare const drawSvgLine: (x1: number, y1: number, x2: number, y2: number) => string;
+export declare const drawSvgCircle: (x: number, y: number, r: number) => string;
+export declare const drawSvgRect: (x: number, y: number, size: number) => string;
+export declare const drawSvgRectWH: (x: number, y: number, width: number, height: number) => string;
+export declare const drawSvgVLine: (x: number, y: number, length: number) => string;
+export declare const drawSvgHLine: (x: number, y: number, length: number) => string;
+export declare const drawSvgLine: (x1: number, y1: number, x2: number, y2: number) => string;
 //#endregion
 //#region src/svg/optimise.d.ts
-declare const optimisePath: (path: string) => string;
+export declare const optimisePath: (path: string) => string;
 //#endregion
 //#region src/temporal/compare.d.ts
-declare const isTimeBetween: (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime) => boolean;
-declare const isInstantAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
-declare const isInstantAtOrAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
-declare const isInstantAtOrBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
-declare const isInstantBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
+export declare const isTimeBetween: (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime) => boolean;
+export declare const isInstantAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
+export declare const isInstantAtOrAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
+export declare const isInstantAtOrBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
+export declare const isInstantBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
 //#endregion
 //#region src/temporal/convert.d.ts
-declare const dateToString: (date: Date) => string;
+export declare const dateToString: (date: Date) => string;
 //#endregion
 //#region src/temporal/format.d.ts
-declare const formatMs: (ms: number, locale?: string) => string;
-declare const formatPlainTime: (time: Temporal.PlainTime, locale?: string) => string;
-declare const formatDate: (date: Date) => string;
-declare const formatDateString: (dateString: string) => string;
-declare const formatDuration: (duration: Temporal.Duration) => string;
-declare const formatInstant: (instant: Temporal.Instant) => string;
+export declare const formatMs: (ms: number, locale?: string) => string;
+export declare const formatPlainTime: (time: Temporal.PlainTime, locale?: string) => string;
+export declare const formatDate: (date: Date) => string;
+export declare const formatDateString: (dateString: string) => string;
+export declare const formatDuration: (duration: Temporal.Duration) => string;
+export declare const formatInstant: (instant: Temporal.Instant) => string;
 //#endregion
 //#region src/temporal/manipulate.d.ts
-declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
-declare const subtractFromInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
+export declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
+export declare const subtractFromInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
 //#endregion
 //#region src/temporal/query.d.ts
-declare const daysBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
-declare const getMidnightUTC: (dateString: string) => Temporal.ZonedDateTime;
-declare const hoursBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
+export declare const daysBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
+export declare const getMidnightUTC: (dateString: string) => Temporal.ZonedDateTime;
+export declare const hoursBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
 //#endregion
 //#region src/unicode.d.ts
-declare const cCaretRight: string;
-declare const cCircleWhite: string;
-declare const cCombiningDiaeresis: string;
-declare const cDashEm: string;
-declare const cDashEn: string;
-declare const cDashFigure: string;
-declare const cDashNoBreak: string;
-declare const cInfo: string;
-declare const cMinus: string;
-declare const cPlus: string;
-declare const cPlusSmall: string;
-declare const cSmallDot: string;
-declare const cSpace: string;
-declare const cSpaceFigure: string;
-declare const cSpaceNarrowNoBreaking: string;
-declare const cSpaceNoBreak: string;
-declare const cSpacePunctuation: string;
-declare const cSpaceThin: string;
-declare const cSpaceZeroWidthBreaking: string;
-declare const cSpaceZeroWidthNoBreak: string;
+export declare const cCaretRight: string;
+export declare const cCircleWhite: string;
+export declare const cCombiningDiaeresis: string;
+export declare const cDashEm: string;
+export declare const cDashEn: string;
+export declare const cDashFigure: string;
+export declare const cDashNoBreak: string;
+export declare const cInfo: string;
+export declare const cMinus: string;
+export declare const cPlus: string;
+export declare const cPlusSmall: string;
+export declare const cSmallDot: string;
+export declare const cSpace: string;
+export declare const cSpaceFigure: string;
+export declare const cSpaceNarrowNoBreaking: string;
+export declare const cSpaceNoBreak: string;
+export declare const cSpacePunctuation: string;
+export declare const cSpaceThin: string;
+export declare const cSpaceZeroWidthBreaking: string;
+export declare const cSpaceZeroWidthNoBreak: string;
 //#endregion
 //#region src/url.d.ts
-declare const createUrl: (options: {
+export declare const createUrl: (options: {
   host: string;
   password?: string;
   path?: string;
@@ -456,5 +456,5 @@ declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export { type ApcaTextRole, ColourScaleGenerator, type CurvePoint, type Err, MakeSurface, Md3ScaleGenerator, type Md3Tone, type Md3ToneArray, type Ok, type Result, type SortArgument, addSpan, addToInstant, andThen, apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, applyToeCurve, backgroundLightnessThreshold, beautifySuffix, blackHex, cCaretRight, cCircleWhite, cCombiningDiaeresis, cDashEm, cDashEn, cDashFigure, cDashNoBreak, cInfo, cMinus, cPlus, cPlusSmall, cSmallDot, cSpace, cSpaceFigure, cSpaceNarrowNoBreaking, cSpaceNoBreak, cSpacePunctuation, cSpaceThin, cSpaceZeroWidthBreaking, cSpaceZeroWidthNoBreak, capitalizeFirstLetter, chromaCurveFactor, chromaMaxOffset, chromaMinOffset, chromaMinOffsetForFloor, chunkify, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, clamp, clampUnsafe, closestDateIndex, convertBerlinTimeToUTC, convertDEDateString, convertDate, convertNameForEmail, convertUTCStringToDate, createUrl, dateToString, datetimeFormat, daysBetweenInstants, delay, drawSvgCircle, drawSvgHLine, drawSvgLine, drawSvgRect, drawSvgRectWH, drawSvgVLine, err, fallback, formatDate, formatDateString, formatDateViaDayjs, formatDuration, formatFloat, formatFloatFixed, formatFloatWithUnit, formatFromToTime, formatInstant, formatInt, formatLocalDate, formatLocalTime, formatMs, formatPP, formatPercent, formatPlainTime, formatReales, formatSiFloat, formatSiInt, formatSignFloat, formatSignInt, formatSignPercent, formatTime, formatTimeRange, formatUnit, formatWeight, formatWithIntl, getApcaContrast, getCardinalRules, getContrastColour, getContrastRatio, getCurveValue, getCurveValueClamped, getDateDistance, getDateFromTicks, getElementDimensions, getElementDimensionsPrecise, getElementHeight, getElementRect, getElementWidth, getFormattedDate, getFormattedDateShort, getFormattedDateShortSeconds, getFormattedShortDateFromUTC, getLocalHour, getLocale, getMidnightUTC, getOrdinal, getRange, getRelativeTime, getThemeTone, getTicksFromDate, getTimeFromTicks, getTimestampFromTicks, hoursBetweenInstants, hueDelta, hueShiftFactor, isBetween, isBetweenTime, isDateInRange, isEmpty, isErr, isFutureDate, isInstantAfter, isInstantAtOrAfter, isInstantAtOrBefore, isInstantBefore, isMeetingApcaContrast, isNullish, isNullishOrNaN, isNumeric, isObject, isOk, isPastDate, isTimeBetween, lerp, lerpUnsafe, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, loadFile, luminanceY, maxTone, md3AccentOnToneDark, md3AccentOnToneLight, md3AccentToneDark, md3AccentToneLight, md3ContainerToneDark, md3ContainerToneLight, md3OnContainerToneDark, md3OnContainerToneLight, md3ScrimHex, md3ShadowHex, md3Tones, minSeedHueDelta, minSurfaceLightnessDelta, minTone, nearestPow2, neutralChromaMax, nextPow2, ok, okHslColour, onLocaleChange, optimisePath, pluralise, round, roundToThousands, scaleNumberMax, seedChromaMin, seedLightnessMax, seedLightnessMin, setDateLocale, setLocale, simpleNumberSort, simpleStringSort, sortBy, subtractFromInstant, ti, toFiniteNumber, truncate, unwrapOr, unwrapOrThrow, validateHueDelta, validateSeed, validateTheme, wcagTextMinRatio, wcagUiMinRatio, whiteHex, yToLightness };
+export type { ApcaTextRole, CurvePoint, Err, Md3Tone, Md3ToneArray, Ok, Result, SortArgument };
 //# sourceMappingURL=index.d.ts.map

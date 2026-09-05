@@ -8,7 +8,7 @@ export { errorCodes, isNodeError, toFileSystemError } from "./node/error.js";
 export type { FileSystemError, JsonParseError } from "./node/error.js";
 export { isFileOlderThan, isFileOlderThanAsync } from "./node/fs/compare.js";
 export { defaultEncoding } from "./node/fs/constants.js";
-export { doesDirectoryExist, doesDirectoryExistAsync, makeDirectoryAsync, makeDirectorySync, readDirectoryAsync, readDirectoryEntriesAsync, readDirectoryEntriesSync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, removeDirectoryAsync, removeDirectorySync } from "./node/fs/directory.js";
+export { doesDirectoryExist, doesDirectoryExistAsync, emptyDirectoryAsync, emptyDirectorySync, makeDirectoryAsync, makeDirectorySync, readDirectoryAsync, readDirectoryEntriesAsync, readDirectoryEntriesSync, readDirectoryNotRecursive, readDirectoryNotRecursiveAsync, readDirectorySync, removeDirectoryAsync, removeDirectorySync } from "./node/fs/directory.js";
 export { readBinaryFileAsync, readBinaryFileSync, readImageAsync, readImageSync, readJsonAsync, readJsonSync, readTextFileAsync, readTextFileSync, saveBinaryFileAsync, saveBinaryFileSync, saveImageAsync, saveImageSync, saveJsonAsync, saveJsonSync, saveTextFileAsync, saveTextFileSync } from "./node/fs/file-io.js";
 export { doesFileExist, doesFileExistAsync, getFileSize, isFileEmpty, removeFileAsync, removeFileSync } from "./node/fs/file-ops.js";
 export { getDiskUsage, getDiskUsageAsync, getFreeSpace, getFreeSpaceAsync, getTotalSpace, getTotalSpaceAsync, getUsedSpace, getUsedSpaceAsync } from "./node/fs/fs.js";

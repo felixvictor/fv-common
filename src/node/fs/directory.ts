@@ -1,11 +1,11 @@
 import type { Result } from "@/result.js"
 
+import { joinPaths } from "@/node.js"
 import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
-import type { FileSystemError } from "../error.js"
-
+import { type FileSystemError } from "../error.js"
 import { toFileSystemError } from "../error.js"
 import { getStatAsync, getStatSync } from "./stat.js"
 
@@ -221,6 +221,69 @@ export const removeDirectorySync = (directoryPath: string): Result<void, FileSys
 export const removeDirectoryAsync = async (directoryPath: string): Promise<Result<void, FileSystemError>> => {
     try {
         await fsPromises.rm(directoryPath, { force: true, recursive: true })
+        return ok(undefined)
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
+}
+
+// ============================================================================
+// Directory Emptying
+// ============================================================================
+/**
+ * Removes all entries inside a directory, keeping the directory itself. Not finding the directory counts as success
+ * (nothing to empty), not a `FileSystemError`.
+ *
+ * @example
+ *     const result = emptyDirectorySync("temp/build")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
+ *
+ * @param directoryPath - Path to the directory to empty.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
+ */
+export const emptyDirectorySync = (directoryPath: string): Result<void, FileSystemError> => {
+    const entriesResult = readDirectoryNotRecursive(directoryPath)
+    if (!entriesResult.ok) {
+        return entriesResult.error.kind === "not-found" ? ok(undefined) : entriesResult
+    }
+
+    try {
+        for (const entry of entriesResult.value) {
+            fs.rmSync(joinPaths(directoryPath, entry), { force: true, recursive: true })
+        }
+        return ok(undefined)
+    } catch (error: unknown) {
+        return err(toFileSystemError(error, directoryPath))
+    }
+}
+
+/**
+ * Removes all entries inside a directory, keeping the directory itself. Async version of emptyDirectorySync. Not
+ * finding the directory counts as success.
+ *
+ * @example
+ *     const result = await emptyDirectoryAsync("temp/build")
+ *     if (!result.ok) {
+ *         console.error(result.error)
+ *     }
+ *
+ * @param directoryPath - Path to the directory to empty.
+ * @returns `Result`, empty on success, or a `FileSystemError` for anything other than "not found".
+ */
+export const emptyDirectoryAsync = async (directoryPath: string): Promise<Result<void, FileSystemError>> => {
+    const entriesResult = await readDirectoryNotRecursiveAsync(directoryPath)
+    if (!entriesResult.ok) {
+        return entriesResult.error.kind === "not-found" ? ok(undefined) : entriesResult
+    }
+
+    try {
+        await Promise.all(
+            entriesResult.value.map((entry) =>
+                fsPromises.rm(joinPaths(directoryPath, entry), { force: true, recursive: true }),
+            ),
+        )
         return ok(undefined)
     } catch (error: unknown) {
         return err(toFileSystemError(error, directoryPath))

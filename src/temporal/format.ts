@@ -8,6 +8,7 @@ const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
     dateStyle: "short",
     timeStyle: "short",
 }
+const timeFormatOptions: Intl.DateTimeFormatOptions = { hour: "numeric", hourCycle: "h23", minute: "numeric" }
 
 export const formatMs = (ms: number, options = durationFormatOptions, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
@@ -22,9 +23,7 @@ export const formatMs = (ms: number, options = durationFormatOptions, locale?: s
     return timeFormatter.format(duration)
 }
 
-const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", hourCycle: "h23", minute: "numeric" }
-
-export const formatPlainTime = (time: Temporal.PlainTime, options = timeOptions, locale?: string): string => {
+export const formatPlainTime = (time: Temporal.PlainTime, options = timeFormatOptions, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     const formatter = new Intl.DateTimeFormat(effectiveLocale, options)
 
@@ -34,12 +33,12 @@ export const formatPlainTime = (time: Temporal.PlainTime, options = timeOptions,
         .join("")
 }
 
-export const formatDate = (date: Date, options = durationFormatOptions, locale?: string): string => {
+export const formatDate = (date: Date, options = dateTimeFormatOptions, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     return Temporal.PlainDate.from(dateToString(date)).toLocaleString(effectiveLocale, options)
 }
 
-export const formatDateString = (dateString: string, options = durationFormatOptions, locale?: string): string => {
+export const formatDateString = (dateString: string, options = dateTimeFormatOptions, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
     return Temporal.PlainDate.from(dateString).toLocaleString(effectiveLocale, options)
 }

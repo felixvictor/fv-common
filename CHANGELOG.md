@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.3.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.3.0...v2.3.1)
+
+### 🩹 Fixes
+
+- **temporal:** Set locale first ([fe08ecc](https://github.com/felixvictor/fv-common/commit/fe08ecc))
+
+### 📦 Build
+
+- Dist ([4a34f53](https://github.com/felixvictor/fv-common/commit/4a34f53))
+
 ## v2.3.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.2.1...v2.3.0)

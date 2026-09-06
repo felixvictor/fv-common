@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.4.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.4.0...v2.4.1)
+
+### 🩹 Fixes
+
+- **temporal:** Parameters ([f692ac0](https://github.com/felixvictor/fv-common/commit/f692ac0))
+
+### 📦 Build
+
+- Dist ([345d576](https://github.com/felixvictor/fv-common/commit/345d576))
+
 ## v2.4.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.3.1...v2.4.0)

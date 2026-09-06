@@ -408,12 +408,12 @@ export declare const isInstantBefore: (instant1: Temporal.Instant, instant2: Tem
 export declare const dateToString: (date: Date) => string;
 //#endregion
 //#region src/temporal/format.d.ts
-export declare const formatMs: (ms: number, locale?: string) => string;
-export declare const formatPlainTime: (time: Temporal.PlainTime, locale?: string) => string;
-export declare const formatDate: (date: Date) => string;
-export declare const formatDateString: (dateString: string) => string;
-export declare const formatDuration: (duration: Temporal.Duration) => string;
-export declare const formatInstant: (instant: Temporal.Instant) => string;
+export declare const formatMs: (ms: number, options?: Intl.DurationFormatOptions, locale?: string) => string;
+export declare const formatPlainTime: (time: Temporal.PlainTime, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
+export declare const formatDate: (date: Date, options?: Intl.DurationFormatOptions, locale?: string) => string;
+export declare const formatDateString: (dateString: string, options?: Intl.DurationFormatOptions, locale?: string) => string;
+export declare const formatDuration: (duration: Temporal.Duration, options?: Intl.DurationFormatOptions, locale?: string) => string;
+export declare const formatInstant: (instant: Temporal.Instant, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
 //#endregion
 //#region src/temporal/manipulate.d.ts
 export declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;

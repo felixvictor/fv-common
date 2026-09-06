@@ -38,10 +38,17 @@ export const formatPlainTime = (time: Temporal.PlainTime, locale?: string): stri
 
 export const formatDate = (date: Date): string => Temporal.PlainDate.from(dateToString(date)).toLocaleString(locale)
 
-export const formatDateString = (dateString: string): string =>
-    Temporal.PlainDate.from(dateString).toLocaleString(locale)
+export const formatDateString = (dateString: string): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return Temporal.PlainDate.from(dateString).toLocaleString(effectiveLocale)
+}
 
-export const formatDuration = (duration: Temporal.Duration): string =>
-    duration.toLocaleString(locale, durationFormatOptions)
+export const formatDuration = (duration: Temporal.Duration): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return duration.toLocaleString(effectiveLocale, durationFormatOptions)
+}
 
-export const formatInstant = (instant: Temporal.Instant): string => instant.toLocaleString(locale, timeFormatOptions)
+export const formatInstant = (instant: Temporal.Instant): string => {
+    const effectiveLocale = locale ?? getLocale()
+    return instant.toLocaleString(effectiveLocale, timeFormatOptions)
+}

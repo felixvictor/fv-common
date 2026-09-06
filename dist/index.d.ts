@@ -410,8 +410,8 @@ export declare const dateToString: (date: Date) => string;
 //#region src/temporal/format.d.ts
 export declare const formatMs: (ms: number, options?: Intl.DurationFormatOptions, locale?: string) => string;
 export declare const formatPlainTime: (time: Temporal.PlainTime, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
-export declare const formatDate: (date: Date, options?: Intl.DurationFormatOptions, locale?: string) => string;
-export declare const formatDateString: (dateString: string, options?: Intl.DurationFormatOptions, locale?: string) => string;
+export declare const formatDate: (date: Date, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
+export declare const formatDateString: (dateString: string, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
 export declare const formatDuration: (duration: Temporal.Duration, options?: Intl.DurationFormatOptions, locale?: string) => string;
 export declare const formatInstant: (instant: Temporal.Instant, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
 //#endregion

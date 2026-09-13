@@ -47,7 +47,7 @@
         "helper:clean:src:js": "find ./src -name \"*.js\" -type f -delete -print",
         "lint": "pnpm run --sequential /^\\.oxc:.*/",
         "pnpm:dedupe": "pnpm dedupe",
-        "pnpm:renew": "pnpm install --no-frozen-lockfile",
+        "pnpm:renew": "pnpm clean --lockfile && pnpm install",
         "pnpm:update": "pnpm self-update && pnpm update --interactive --latest",
         "pretty-print": "oxfmt",
         "print-perfectionist-config": "node -e \"import('eslint-plugin-perfectionist').then(m => console.log(JSON.stringify(Object.fromEntries(Object.keys(m.default.configs['recommended-natural'].rules).sort().map(r => [r, ['error', { type: 'natural' }]])), null, 4)))\"",

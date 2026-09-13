@@ -90,26 +90,30 @@ export const sortBy = <T extends object>(sortArguments: SortArgument<T>[]) => {
     }
 }
 
-/** Comparator for numeric values, with null, undefined and NaN sorted to the end. */
-export function simpleNumberSort(a: number, b: number): number
-export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number
-export function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number {
+/** Comparator for numeric values, with null, undefined and NaN sorted to the end regardless of direction. */
+export const simpleNumberSort = (
+    a: null | number | undefined,
+    b: null | number | undefined,
+    isDescending = false,
+): number => {
     const nullishResult = getNonValueSortOrder(a, b)
     if (nullishResult !== undefined) return nullishResult
 
-    // After getNonValueSortOrder returns undefined, both a and b are guaranteed to be numbers
-    // oxlint-disable typescript/non-nullable-type-assertion-style
-    return (a as number) - (b as number)
+    // oxlint-disable-next-line typescript/non-nullable-type-assertion-style
+    const order = (a as number) - (b as number)
+    return isDescending ? -order : order
 }
 
-/** Comparator for string values, with null, undefined and NaN sorted to the end. */
-export function simpleStringSort(a: string, b: string): number
-export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number
-export function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number {
+/** Comparator for string values, with null, undefined and NaN sorted to the end regardless of direction. */
+export const simpleStringSort = (
+    a: null | string | undefined,
+    b: null | string | undefined,
+    isDescending = false,
+): number => {
     const nullishResult = getNonValueSortOrder(a, b)
     if (nullishResult !== undefined) return nullishResult
 
-    // After getNonValueSortOrder returns undefined, both a and b are guaranteed to be strings
-    // oxlint-disable typescript/non-nullable-type-assertion-style
-    return getStringSortOrder(a as string, b as string)
+    // oxlint-disable-next-line typescript/non-nullable-type-assertion-style
+    const order = getStringSortOrder(a as string, b as string)
+    return isDescending ? -order : order
 }

@@ -225,6 +225,18 @@ describe("Library Sort Functions", () => {
             numbers.sort(simpleNumberSort)
             expect(numbers).toEqual([1, 3, 5, null, undefined])
         })
+
+        it("should sort numbers in descending order when isDescending is true", () => {
+            const numbers = [10, -2, 5, 0, 3.5]
+            numbers.sort((a, b) => simpleNumberSort(a, b, true))
+            expect(numbers).toEqual([10, 5, 3.5, 0, -2])
+        })
+
+        it("should keep null and undefined at the end when isDescending is true", () => {
+            const numbers = [5, null, 1, undefined, 3]
+            numbers.sort((a, b) => simpleNumberSort(a, b, true))
+            expect(numbers).toEqual([5, 3, 1, null, undefined])
+        })
     })
 
     describe("simpleStringSort", () => {
@@ -238,6 +250,18 @@ describe("Library Sort Functions", () => {
             const strings = ["House", null, "Car", undefined]
             strings.sort(simpleStringSort)
             expect(strings).toEqual(["Car", "House", null, undefined])
+        })
+
+        it("should sort strings in descending order when isDescending is true", () => {
+            const strings = ["Zebra", "apfel", "Banane"]
+            strings.sort((a, b) => simpleStringSort(a, b, true))
+            expect(strings).toEqual(["Zebra", "Banane", "apfel"])
+        })
+
+        it("should keep null and undefined at the end when isDescending is true", () => {
+            const strings = ["House", null, "Car", undefined]
+            strings.sort((a, b) => simpleStringSort(a, b, true))
+            expect(strings).toEqual(["House", "Car", null, undefined])
         })
     })
 })

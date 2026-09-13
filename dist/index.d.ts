@@ -381,10 +381,8 @@ export declare function unwrapOrThrow<T, E>(result: Result<T, E>, message: strin
 //#region src/sort.d.ts
 type SortArgument<T> = `-${keyof T & string}` | keyof T;
 export declare const sortBy: <T extends object>(sortArguments: SortArgument<T>[]) => (a: T, b: T) => number;
-export declare function simpleNumberSort(a: number, b: number): number;
-export declare function simpleNumberSort(a: null | number | undefined, b: null | number | undefined): number;
-export declare function simpleStringSort(a: string, b: string): number;
-export declare function simpleStringSort(a: null | string | undefined, b: null | string | undefined): number;
+export declare const simpleNumberSort: (a: null | number | undefined, b: null | number | undefined, isDescending?: boolean) => number;
+export declare const simpleStringSort: (a: null | string | undefined, b: null | string | undefined, isDescending?: boolean) => number;
 //#endregion
 //#region src/svg/draw.d.ts
 export declare const drawSvgCircle: (x: number, y: number, r: number) => string;

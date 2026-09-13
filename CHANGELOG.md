@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.5.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.4.1...v2.5.0)
+
+### 🚀 Enhancements
+
+- **sort:** Add descending option ([0c930d7](https://github.com/felixvictor/fv-common/commit/0c930d7))
+
+### 📦 Build
+
+- Dist ([7c21113](https://github.com/felixvictor/fv-common/commit/7c21113))
+
 ## v2.4.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.4.0...v2.4.1)

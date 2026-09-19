@@ -1,3 +1,4 @@
+import { getMinColourDistance } from "@/colour/colour-distance"
 import { hueDelta } from "@/colour/colour-math"
 import {
     apcaMinLcByRole,
@@ -7,6 +8,7 @@ import {
     isMeetingApcaContrast,
 } from "@/colour/contrast"
 import { okHslColour } from "@/colour/okhsl-colour"
+import { type VisionDeficiency } from "@/colour/vision-deficiency"
 import { round } from "@/format/number"
 
 export const seedLightnessMin = 0.35
@@ -52,8 +54,30 @@ export const validateHueDelta = (
     }
 }
 
-export const validateTheme = (theme: Record<string, string | undefined>, label: string) => {
-    const textPairs: [string, string, ApcaTextRole][] = [
+/** Two theme colours that must stay distinguishable. */
+export interface ColourDistanceRule {
+    readonly a: string
+    readonly b: string
+    /** Vision deficiencies checked in addition to normal vision; all if omitted. */
+    readonly deficiencies?: readonly VisionDeficiency[]
+    /** Minimum ΔE2000. */
+    readonly minDistance: number
+}
+
+/** Theme keys of a foreground and its background plus the APCA role the pair has to meet. */
+export type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole]
+
+/**
+ * Checks the built-in text pairs, the outline and the surface ladder of a theme.
+ *
+ * @param additionalTextPairs Text pairs of roles that are not part of every theme (e.g. `on-home`/`home`).
+ */
+export const validateTheme = (
+    theme: Record<string, string | undefined>,
+    label: string,
+    additionalTextPairs: readonly ThemeTextPair[] = [],
+) => {
+    const textPairs: readonly ThemeTextPair[] = [
         ["on-primary", "primary", "otherContentText"],
         ["on-secondary", "secondary", "otherContentText"],
         ["on-tertiary", "tertiary", "otherContentText"],
@@ -63,6 +87,7 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         ["on-warning", "warning", "otherContentText"],
         ["on-surface", "surface", "bodyText"],
         ["on-background", "background", "bodyText"],
+        ...additionalTextPairs,
     ]
 
     for (const [fg, bg, role] of textPairs) {
@@ -98,6 +123,33 @@ export const validateTheme = (theme: Record<string, string | undefined>, label: 
         if (delta < minSurfaceLightnessDelta) {
             console.warn(
                 `${label}: ${a} and ${b} are too similar (ΔL=${round(delta, 3)} < ${minSurfaceLightnessDelta}) – surfaces may be indistinguishable`,
+            )
+        }
+    }
+}
+
+/**
+ * Warns if two theme colours are closer than their rule allows, in normal vision or with any of the rule's vision
+ * deficiencies. Unlike {@link validateHueDelta} it checks the generated colours, not the seeds: seeds a few degrees
+ * apart in hue can still produce tones that look alike.
+ */
+export const validateColourDistances = (
+    theme: Record<string, string | undefined>,
+    label: string,
+    rules: readonly ColourDistanceRule[],
+) => {
+    for (const { a, b, deficiencies, minDistance } of rules) {
+        const hexA = theme[a]
+        const hexB = theme[b]
+        if (hexA === undefined || hexB === undefined) {
+            console.warn(`${label}: ${a}/${b} cannot be compared, colour missing`)
+            continue
+        }
+
+        const { deficiency, distance } = getMinColourDistance(hexA, hexB, deficiencies)
+        if (distance < minDistance) {
+            console.warn(
+                `${label}: ${a}/${b} ΔE ${round(distance, 1)} < ${minDistance} (${deficiency ?? "normal vision"})`,
             )
         }
     }

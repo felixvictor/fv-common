@@ -6,6 +6,19 @@ import "dayjs/locale/en-gb.js";
 //#region src/chunkify.d.ts
 export declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
+//#region src/colour/vision-deficiency.d.ts
+type VisionDeficiency = "deuteranopia" | "protanopia" | "tritanopia";
+export declare const visionDeficiencies: readonly VisionDeficiency[];
+export declare const simulateVisionDeficiency: (hex: string, deficiency: VisionDeficiency) => string;
+//#endregion
+//#region src/colour/colour-distance.d.ts
+interface ColourDistance {
+  readonly deficiency: undefined | VisionDeficiency;
+  readonly distance: number;
+}
+export declare const getColourDistance: (hexA: string, hexB: string, deficiency?: VisionDeficiency) => number;
+export declare const getMinColourDistance: (hexA: string, hexB: string, deficiencies?: readonly VisionDeficiency[]) => ColourDistance;
+//#endregion
 //#region src/colour/colour-math.d.ts
 export declare const backgroundLightnessThreshold: 0.18;
 export declare const chromaCurveFactor: 4;
@@ -213,7 +226,15 @@ export declare const validateSeed: (name: string, hex: string, options?: {
   neutral?: boolean;
 }) => void;
 export declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
-export declare const validateTheme: (theme: Record<string, string | undefined>, label: string) => void;
+interface ColourDistanceRule {
+  readonly a: string;
+  readonly b: string;
+  readonly deficiencies?: readonly VisionDeficiency[];
+  readonly minDistance: number;
+}
+type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole];
+export declare const validateTheme: (theme: Record<string, string | undefined>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
+export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
 //#endregion
 //#region src/common.d.ts
 export declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
@@ -454,5 +475,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { ApcaTextRole, CurvePoint, Err, Md3Tone, Md3ToneArray, Ok, Result, SortArgument };
+export type { ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, Md3Tone, Md3ToneArray, Ok, Result, SortArgument, ThemeTextPair, VisionDeficiency };
 //# sourceMappingURL=index.d.ts.map

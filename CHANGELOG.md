@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.6.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.5.2...v2.6.0)
+
+### 🚀 Enhancements
+
+- **colour:** Validate colour distances for colour vision deficiencies ([0618d99](https://github.com/felixvictor/fv-common/commit/0618d99))
+
+### 📦 Build
+
+- Dist ([de8af8d](https://github.com/felixvictor/fv-common/commit/de8af8d))
+
 ## v2.5.2
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.5.1...v2.5.2)

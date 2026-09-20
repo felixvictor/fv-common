@@ -51,7 +51,10 @@ setDateLocale("en-GB")
  */
 export const getFormattedDate = (date: string, locale?: string): string => {
     const effectiveLocale = locale ?? getLocale()
-    return dayjs(date).locale(effectiveLocale).format("dddd, D. MMMM, H.mm")
+    return dayjs(date)
+        .locale(effectiveLocale)
+        .format("dddd, D. MMMM, H.mm")
+        .replace(". ", "." + cSpaceNoBreak)
 }
 
 /**

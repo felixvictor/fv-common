@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.6.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.6.0...v2.6.1)
+
+### 📦 Build
+
+- Dist ([0bf82f5](https://github.com/felixvictor/fv-common/commit/0bf82f5))
+
+### 🎨 Styles
+
+- **date format:** Add no break space ([b051668](https://github.com/felixvictor/fv-common/commit/b051668))
+
 ## v2.6.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.5.2...v2.6.0)

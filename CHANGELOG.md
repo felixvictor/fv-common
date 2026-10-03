@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.1.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.0.1...v3.1.0)
+
+### 🚀 Enhancements
+
+- **colour:** Add pastel chroma scale and warm neutrals ([036f3d3](https://github.com/felixvictor/fv-common/commit/036f3d3))
+
+### 📦 Build
+
+- Dist ([cc50893](https://github.com/felixvictor/fv-common/commit/cc50893))
+
 ## v3.0.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.0.0...v3.0.1)

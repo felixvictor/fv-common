@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.0.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v2.6.1...v3.0.0)
+
+### 🚀 Enhancements
+
+- **colour:** ⚠️  Generate md3 themes from oklch tonal palettes ([a723d0a](https://github.com/felixvictor/fv-common/commit/a723d0a))
+
+### 📦 Build
+
+- Dist ([5a15027](https://github.com/felixvictor/fv-common/commit/5a15027))
+
+#### ⚠️ Breaking Changes
+
+- **colour:** ⚠️  Generate md3 themes from oklch tonal palettes ([a723d0a](https://github.com/felixvictor/fv-common/commit/a723d0a))
+
 ## v2.6.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.6.0...v2.6.1)

@@ -114,6 +114,8 @@ interface HarmonisationStrength {
 export declare const noHarmonisation: HarmonisationStrength;
 export declare const harmoniseHue: (hue: number, targetHue: number, { hueFactor, maxHueRotation, minHueDistance }: HarmonisationStrength) => number;
 export declare const harmoniseChroma: (chroma: number, targetChroma: number, { chromaFactor }: HarmonisationStrength) => number;
+export declare const warmPoleHue = 80;
+export declare const warmUpHue: (hue: number, warmth: number) => number;
 export declare const harmoniseOklch: (colour: Oklch, target: Oklch, strength: HarmonisationStrength) => Oklch;
 //#endregion
 //#region src/colour/md3-roles.d.ts
@@ -297,10 +299,13 @@ type SemanticKey = Exclude<AccentKey, BrandKey>;
 type BrandKey = "primary" | "secondary" | "tertiary";
 export declare const md3DefaultSemanticSeeds: Readonly<Record<SemanticKey, string>>;
 export declare const defaultHarmonisation: Readonly<Record<HarmonisationGroup, HarmonisationStrength>>;
-export declare const defaultNeutralChroma = 0.006;
-export declare const defaultNeutralVariantChroma = 0.01;
-export declare const defaultAccentChromaFloor = 0.6;
+export declare const defaultNeutralChroma = 0.008;
+export declare const defaultNeutralVariantChroma = 0.012;
+export declare const defaultNeutralWarmth = 2;
+export declare const defaultChromaScale = 0.8;
+export declare const defaultAccentChromaFloor = 0.45;
 interface ExtendedColourConfig {
+  readonly chromaScale?: number;
   readonly seed: string | {
     readonly from: PaletteKey;
   };
@@ -308,6 +313,7 @@ interface ExtendedColourConfig {
   readonly tones?: Partial<Readonly<Record<FamilyRole, ModeTones>>>;
 }
 interface Md3ThemeConfig<TExtended extends string = never> {
+  readonly chromaScale?: number;
   readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig>>;
   readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>;
   readonly neutral?: NeutralConfig;
@@ -320,6 +326,7 @@ interface NeutralConfig {
   readonly hueOffset?: number;
   readonly seed?: string;
   readonly variantChroma?: number;
+  readonly warmth?: number;
 }
 declare const paletteThemeNames: {
   readonly error: "error";

@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.0.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.0.0...v3.0.1)
+
+### 🩹 Fixes
+
+- **colour:** Default hex ([eb7cb72](https://github.com/felixvictor/fv-common/commit/eb7cb72))
+
+### 📦 Build
+
+- Dist ([7878c27](https://github.com/felixvictor/fv-common/commit/7878c27))
+
 ## v3.0.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v2.6.1...v3.0.0)

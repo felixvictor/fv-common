@@ -1,2 +1,2 @@
-export const blackHex = "#000"
-export const whiteHex = "#fff"
+export const blackHex = "#000000"
+export const whiteHex = "#ffffff"

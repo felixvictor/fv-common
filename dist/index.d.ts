@@ -265,17 +265,14 @@ export declare const md3SchemeRoles: {
   };
 };
 type SchemeRole = keyof typeof md3SchemeRoles;
-export declare const md3SurfaceRolesWithOnSurface: readonly ["surface", "surface-bright", "surface-container", "surface-container-high", "surface-container-highest", "surface-container-low", "surface-container-lowest", "surface-dim"];
-//#endregion
-//#region src/colour/md3-tones.d.ts
-export declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
-type Md3Tone = (typeof md3Tones)[number];
-type Md3ToneArray = readonly string[];
-export declare const ti: (tone: Md3Tone) => number;
-export declare const fallback: (array: Md3ToneArray, index: number) => string;
-export declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
 export declare const md3ScrimHex = "#000000";
 export declare const md3ShadowHex = "#000000";
+//#endregion
+//#region src/colour/palette-range.d.ts
+export declare const paletteRangeTones: readonly [6, 14, 22, 30, 38, 46, 54, 62, 70, 78, 86, 94];
+type PaletteRange = readonly string[];
+type PaletteRangeTone = (typeof paletteRangeTones)[number];
+export declare const getRangeColour: (range: PaletteRange, tone: PaletteRangeTone) => string;
 //#endregion
 //#region src/colour/tonal-palette.d.ts
 interface TonalPaletteOptions {
@@ -290,7 +287,7 @@ export declare class TonalPalette {
   constructor(hue: number, chroma: number, { chromaFloor, hueShift }?: TonalPaletteOptions);
   static fromHex(hex: string, options?: TonalPaletteOptions): TonalPalette;
   tone(tone: number): string;
-  toneRange(tones?: readonly number[]): Md3ToneArray;
+  toneRange(tones?: readonly number[]): PaletteRange;
 }
 //#endregion
 //#region src/colour/md3-theme.d.ts
@@ -341,7 +338,6 @@ declare const paletteThemeNames: {
 };
 type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-container` | `on-${TName}` | TName;
 type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey];
-type SurfaceRoleWithOnSurface = (typeof md3SurfaceRolesWithOnSurface)[number];
 declare const vuetifyDarkenKeys: readonly ["primary", "secondary"];
 type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`;
 interface Md3Theme<TExtended extends string = never> {
@@ -353,7 +349,6 @@ type Md3ThemeColourKey<TExtended extends string = never> = "scrim" | "shadow" | 
 type Md3ThemeColours<TExtended extends string = never> = Readonly<Record<Md3ThemeColourKey<TExtended>, string>>;
 type VuetifyThemeVariables = {
   readonly "border-color": string;
-  readonly "border-opacity": number;
   readonly "shadow-color": string;
   readonly "theme-code": string;
   readonly "theme-kbd": string;
@@ -362,7 +357,7 @@ type VuetifyThemeVariables = {
   readonly "theme-on-kbd": string;
   readonly "theme-on-light": string;
 };
-type VuetifyAliasKey = "background" | "on-background" | "on-surface-light" | "surface-light" | `on-${SurfaceRoleWithOnSurface}` | VuetifyDarkenKey;
+type VuetifyAliasKey = "background" | "surface-light" | VuetifyDarkenKey;
 export declare const md3VuetifyDefaults: {
   readonly VSnackbar: {
     readonly color: "inverse-surface";
@@ -371,7 +366,6 @@ export declare const md3VuetifyDefaults: {
     readonly color: "inverse-surface";
   };
 };
-export declare const md3BorderOpacity = 1;
 export declare const createMd3Theme: <TExtended extends string = never>(config: Md3ThemeConfig<TExtended>) => Md3Theme<TExtended>;
 //#endregion
 //#region src/colour/tone.d.ts
@@ -637,5 +631,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, Md3Tone, Md3ToneArray, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
+export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
 //# sourceMappingURL=index.d.ts.map

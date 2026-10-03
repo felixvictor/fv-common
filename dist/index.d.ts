@@ -69,8 +69,8 @@ export declare class ColourScaleGenerator {
 }
 //#endregion
 //#region src/colour/constant.d.ts
-export declare const blackHex = "#000";
-export declare const whiteHex = "#fff";
+export declare const blackHex = "#000000";
+export declare const whiteHex = "#ffffff";
 //#endregion
 //#region src/colour/contrast.d.ts
 type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText";

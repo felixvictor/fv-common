@@ -55,6 +55,23 @@ export const harmoniseChroma = (
     { chromaFactor }: HarmonisationStrength,
 ): number => (chroma > targetChroma ? lerpUnsafe(chroma, targetChroma, chromaFactor) : chroma)
 
+/** OKLCH hue of the warm pole (amber): the hue of warm greys such as cream and greige. */
+export const warmPoleHue = 80
+
+const degreesToRadians = Math.PI / 180
+
+/**
+ * Pulls a hue towards {@link warmPoleHue}. The result is the hue of the sum of two vectors in the OKLab a/b plane: the
+ * unit vector of `hue` and the unit vector of the warm pole scaled by `warmth`. No direction has to be chosen, so hues
+ * opposite the warm pole (blue) move smoothly; with `warmth` above 1 the warm pole dominates for every hue. `warmth` 0
+ * returns `hue`.
+ */
+export const warmUpHue = (hue: number, warmth: number): number => {
+    const a = Math.cos(hue * degreesToRadians) + warmth * Math.cos(warmPoleHue * degreesToRadians)
+    const b = Math.sin(hue * degreesToRadians) + warmth * Math.sin(warmPoleHue * degreesToRadians)
+    return normaliseHue(Math.atan2(b, a) / degreesToRadians)
+}
+
 /** Pulls hue and chroma of a colour towards the target; lightness stays unchanged. */
 export const harmoniseOklch = (colour: Oklch, target: Oklch, strength: HarmonisationStrength): Oklch => ({
     chroma: harmoniseChroma(colour.chroma, target.chroma, strength),

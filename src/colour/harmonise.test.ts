@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
-import { harmoniseChroma, harmoniseHue, harmoniseOklch, noHarmonisation } from "./harmonise.js"
+import { harmoniseChroma, harmoniseHue, harmoniseOklch, noHarmonisation, warmPoleHue, warmUpHue } from "./harmonise.js"
+import { getHueDifference } from "./oklch.js"
 
 const md3Strength = { chromaFactor: 0.5, hueFactor: 0.5, maxHueRotation: 15, minHueDistance: 0 }
 
@@ -33,6 +34,29 @@ describe("harmoniseChroma", () => {
     it("lowers chroma above the target only", () => {
         expect(harmoniseChroma(0.2, 0.1, md3Strength)).toBeCloseTo(0.15)
         expect(harmoniseChroma(0.05, 0.1, md3Strength)).toBe(0.05)
+    })
+})
+
+describe("warmUpHue", () => {
+    it("keeps the hue without warmth", () => {
+        expect(warmUpHue(248, 0)).toBeCloseTo(248)
+    })
+
+    it("lets the warm pole dominate above a warmth of 1, also for hues opposite it", () => {
+        for (const hue of [0, 29, 145, 248, 300]) {
+            const warmed = warmUpHue(hue, 2)
+
+            expect(Math.abs(getHueDifference(warmed, warmPoleHue))).toBeLessThan(
+                Math.abs(getHueDifference(hue, warmPoleHue)) / 2 + 1,
+            )
+        }
+    })
+
+    it("lands between the hue and the warm pole", () => {
+        const warmed = warmUpHue(29, 2)
+
+        expect(warmed).toBeGreaterThan(29)
+        expect(warmed).toBeLessThan(warmPoleHue)
     })
 })
 

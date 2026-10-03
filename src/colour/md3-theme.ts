@@ -1,5 +1,5 @@
 import { getApcaContrast } from "@/colour/contrast"
-import { type HarmonisationStrength, harmoniseOklch, noHarmonisation } from "@/colour/harmonise"
+import { type HarmonisationStrength, harmoniseOklch, noHarmonisation, warmUpHue } from "@/colour/harmonise"
 import {
     type AccentKey,
     accentKeys,
@@ -46,12 +46,16 @@ export const defaultHarmonisation: Readonly<Record<HarmonisationGroup, Harmonisa
     semantic: { chromaFactor: 0.2, hueFactor: 0.25, maxHueRotation: 8, minHueDistance: 30 },
 }
 
-/** OKLCH chroma of the neutral palette (surfaces, `on-surface`): a barely visible tint of the neutral hue. */
-export const defaultNeutralChroma = 0.006
+/** OKLCH chroma of the neutral palette (surfaces, `on-surface`): a light tint of the neutral hue. */
+export const defaultNeutralChroma = 0.008
 /** OKLCH chroma of the neutral-variant palette (`surface-variant`, outlines): a little more tint than neutral. */
-export const defaultNeutralVariantChroma = 0.01
-/** Chroma share kept at tone 0 and 100 by accent palettes; keeps containers (tone 90 / 30) calm. */
-export const defaultAccentChromaFloor = 0.6
+export const defaultNeutralVariantChroma = 0.012
+/** Weight of the warm pole in the neutral hue (see {@link warmUpHue}): warm greys that still lean towards primary. */
+export const defaultNeutralWarmth = 2
+/** Factor on the chroma of all accent palettes after harmonisation; keeps the colours pastel. */
+export const defaultChromaScale = 0.8
+/** Chroma share kept at tone 0 and 100 by accent palettes; keeps containers (tone 90 / 30) soft. */
+export const defaultAccentChromaFloor = 0.45
 
 /**
  * App-specific colour family (e.g. home/away/draw). It gets the four family roles but no exported palette.
@@ -60,6 +64,8 @@ export const defaultAccentChromaFloor = 0.6
  * role picks the content tone (100 or 10 of the same palette) with the higher APCA contrast.
  */
 export interface ExtendedColourConfig {
+    /** Factor on the chroma of an own seed in place of the theme's `chromaScale`, e.g. 1 for vivid data fills. */
+    readonly chromaScale?: number
     /** Own seed, or the (already harmonised) palette of a core colour. */
     readonly seed: string | { readonly from: PaletteKey }
     /** Harmonise an own seed towards primary; default true. */
@@ -68,6 +74,8 @@ export interface ExtendedColourConfig {
 }
 
 export interface Md3ThemeConfig<TExtended extends string = never> {
+    /** Factor on the chroma of all accent palettes and own extended seeds; 1 keeps the seed chroma. */
+    readonly chromaScale?: number
     /** App-specific colour families; names are used as theme keys, so write them in kebab-case. */
     readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig>>
     readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>
@@ -80,15 +88,17 @@ export interface Md3ThemeConfig<TExtended extends string = never> {
 }
 
 /**
- * Neutral palettes follow primary: hue of primary (or of `seed`) plus `hueOffset`, at a fixed low chroma. A fixed
- * offset does not mean the same colour temperature for every primary; for a deliberate look set `seed`.
+ * Neutral palettes follow primary at a fixed low chroma. Their hue is the hue of primary (or of `seed`) plus
+ * `hueOffset`, pulled towards the warm pole by `warmth`.
  */
 export interface NeutralConfig {
     readonly chroma?: number
     readonly hueOffset?: number
-    /** Replaces primary as source of the neutral hue; its chroma is ignored, so a vivid seed does not tint surfaces. */
+    /** Source of the neutral hue in place of primary; its chroma is ignored, so a vivid seed does not tint surfaces. */
     readonly seed?: string
     readonly variantChroma?: number
+    /** Weight of the warm pole, see {@link warmUpHue}; 0 keeps the hue of primary. */
+    readonly warmth?: number
 }
 
 // ---------------------------------------------------------------------------
@@ -237,6 +247,7 @@ const createPalettes = (
     primary: Oklch,
     strengths: Readonly<Record<HarmonisationGroup, HarmonisationStrength>>,
     accentOptions: TonalPaletteOptions,
+    chromaScale: number,
 ): Record<PaletteKey, TonalPalette> => {
     const seeds: Readonly<Record<AccentKey, string>> = { ...md3DefaultSemanticSeeds, ...config.seeds }
 
@@ -247,7 +258,7 @@ const createPalettes = (
             else if (semanticKeys.has(key)) strength = strengths.semantic
 
             const { chroma, hue } = harmoniseOklch(hexToOklch(seeds[key]), primary, strength)
-            return [key, new TonalPalette(hue, chroma, accentOptions)]
+            return [key, new TonalPalette(hue, chroma * chromaScale, accentOptions)]
         }),
     ) as Record<AccentKey, TonalPalette>
 
@@ -256,8 +267,12 @@ const createPalettes = (
         hueOffset = 0,
         seed,
         variantChroma = defaultNeutralVariantChroma,
+        warmth = defaultNeutralWarmth,
     } = config.neutral ?? {}
-    const neutralHue = normaliseHue((seed === undefined ? primary.hue : hexToOklch(seed).hue) + hueOffset)
+    const neutralHue = warmUpHue(
+        normaliseHue((seed === undefined ? primary.hue : hexToOklch(seed).hue) + hueOffset),
+        warmth,
+    )
     const neutralOptions: TonalPaletteOptions = { chromaFloor: constantChromaFloor }
 
     return {
@@ -268,17 +283,18 @@ const createPalettes = (
 }
 
 const createExtendedPalette = (
-    { seed, shouldHarmonise = true }: ExtendedColourConfig,
+    { chromaScale: ownChromaScale, seed, shouldHarmonise = true }: ExtendedColourConfig,
     palettes: Readonly<Record<PaletteKey, TonalPalette>>,
     primary: Oklch,
     strength: HarmonisationStrength,
     accentOptions: TonalPaletteOptions,
+    chromaScale: number,
 ): TonalPalette => {
     if (typeof seed !== "string") return palettes[seed.from]
 
     const oklch = hexToOklch(seed)
     const { chroma, hue } = shouldHarmonise ? harmoniseOklch(oklch, primary, strength) : oklch
-    return new TonalPalette(hue, chroma, accentOptions)
+    return new TonalPalette(hue, chroma * (ownChromaScale ?? chromaScale), accentOptions)
 }
 
 const createColours = (
@@ -337,7 +353,8 @@ const createVariables = (colours: Md3ThemeColours, neutral: TonalPalette): Vueti
 /**
  * Generates a light and a dark MD3 theme for Vuetify from a few seeds.
  *
- * - Every colour is pulled towards primary ({@link defaultHarmonisation}); the neutral palettes take the hue of primary.
+ * - Every colour is pulled towards primary ({@link defaultHarmonisation}) and scaled to pastel chroma
+ *   ({@link defaultChromaScale}); the neutral palettes take the hue of primary, pulled towards warm greys.
  * - Core colours get a tonal palette in OKLCH with absolute tones (CIE L*), shared by both modes; the roles take MD3
  *   tones from it ({@link md3FamilyTones}, {@link md3SchemeRoles}).
  * - Extended colours get the same four family roles, with optional tone overrides, but no exported palette.
@@ -350,13 +367,14 @@ export const createMd3Theme = <TExtended extends string = never>(
     const looseConfig = config as Md3ThemeConfig<string>
     const strengths = { ...defaultHarmonisation, ...config.harmonisation }
     const accentOptions: TonalPaletteOptions = { chromaFloor: defaultAccentChromaFloor, ...config.palette }
+    const chromaScale = config.chromaScale ?? defaultChromaScale
     const primary = hexToOklch(config.seeds.primary)
 
-    const palettes = createPalettes(looseConfig, primary, strengths, accentOptions)
+    const palettes = createPalettes(looseConfig, primary, strengths, accentOptions, chromaScale)
     const extendedPalettes = new Map(
         Object.entries<ExtendedColourConfig>(looseConfig.extended ?? {}).map(([name, spec]) => [
             name,
-            createExtendedPalette(spec, palettes, primary, strengths.extended, accentOptions),
+            createExtendedPalette(spec, palettes, primary, strengths.extended, accentOptions, chromaScale),
         ]),
     )
 

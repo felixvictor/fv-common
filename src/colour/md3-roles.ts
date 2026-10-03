@@ -66,14 +66,6 @@ export const md3SchemeRoles = {
 
 export type SchemeRole = keyof typeof md3SchemeRoles
 
-/** Surface roles whose content colour is `on-surface`. */
-export const md3SurfaceRolesWithOnSurface = [
-    "surface",
-    "surface-bright",
-    "surface-container",
-    "surface-container-high",
-    "surface-container-highest",
-    "surface-container-low",
-    "surface-container-lowest",
-    "surface-dim",
-] as const satisfies readonly SchemeRole[]
+/** MD3 spec: scrim and shadow are always pure black in both themes, independent of the rest of the palette. */
+export const md3ScrimHex = "#000000"
+export const md3ShadowHex = "#000000"

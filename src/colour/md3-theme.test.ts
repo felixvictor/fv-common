@@ -30,15 +30,20 @@ describe("createMd3Theme", () => {
         for (const mode of themeModes) {
             const colours = theme.colours[mode]
 
+            const variables = theme.variables[mode]
+
             expect(colours.background).toBe(colours.surface)
-            expect(colours["on-background"]).toBe(colours["on-surface"])
             expect(colours["surface-light"]).toBe(colours["surface-container-high"])
-            expect(colours["on-surface-light"]).toBe(colours["on-surface"])
-            expect(colours["on-surface-bright"]).toBe(colours["on-surface"])
             expect(colours["on-inverse-surface"]).toBeDefined()
+            expect(Object.keys(colours)).not.toContain("on-surface-container")
+            expect([variables["theme-on-dark"], variables["theme-on-light"]].toSorted()).toEqual(
+                [colours["on-inverse-surface"], colours["on-surface"]].toSorted(),
+            )
+            expect(getTone(variables["theme-on-light"])).toBeLessThan(getTone(variables["theme-on-dark"]))
             expect(getTone(colours["primary-darken-1"])).toBeLessThan(getTone(colours.primary))
             expect(colours["neutral-variant-container"]).toBeDefined()
-            expect(theme.variables[mode]["border-color"]).toBe(colours["outline-variant"])
+            expect(variables["border-color"]).toBe(colours["on-surface"])
+            expect(Object.keys(variables)).not.toContain("border-opacity")
         }
     })
 
@@ -145,7 +150,8 @@ describe("createMd3Theme", () => {
     it("checks every content colour against its background", () => {
         const pairs = getThemeTextPairs(theme.colours.light, [["on-home", "home", "largeFluentText"]])
 
-        expect(pairs).toContainEqual(["on-surface-container-high", "surface-container-high", "bodyText"])
+        expect(pairs).toContainEqual(["on-surface", "surface-container-high", "bodyText"])
+        expect(pairs).toContainEqual(["on-surface", "background", "bodyText"])
         expect(pairs).toContainEqual(["on-primary", "primary", "otherContentText"])
         expect(pairs).toContainEqual(["on-primary-container", "primary-container", "otherContentText"])
         expect(pairs).toContainEqual(["on-home", "home", "largeFluentText"])

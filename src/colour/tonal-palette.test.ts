@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest"
 
+import { getColourDistance } from "./colour-distance.js"
 import { getContrastRatio } from "./contrast.js"
-import { md3Tones } from "./md3-tones.js"
 import { hexToOklch } from "./oklch.js"
+import { getRangeColour, paletteRangeTones } from "./palette-range.js"
 import { TonalPalette } from "./tonal-palette.js"
 import { getTone } from "./tone.js"
 
@@ -51,7 +52,14 @@ describe("TonalPalette", () => {
         expect(chromaAt(eased, 80)).toBeLessThan(chromaAt(eased, 50) - 0.01)
     })
 
-    it("builds the 13 MD3 tones", () => {
-        expect(new TonalPalette(0, 0.1).toneRange()).toHaveLength(md3Tones.length)
+    it("builds a range of distinguishable colours", () => {
+        const range = new TonalPalette(0, 0.1).toneRange()
+        const minDistance = 5
+
+        expect(range).toHaveLength(paletteRangeTones.length)
+        expect(getRangeColour(range, 38)).toBe(new TonalPalette(0, 0.1).tone(38))
+        for (let index = 1; index < range.length; index++) {
+            expect(getColourDistance(range[index - 1] ?? "", range[index] ?? "")).toBeGreaterThanOrEqual(minDistance)
+        }
     })
 })

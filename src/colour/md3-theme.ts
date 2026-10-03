@@ -6,7 +6,8 @@ import {
     type FamilyRole,
     md3FamilyTones,
     md3SchemeRoles,
-    md3SurfaceRolesWithOnSurface,
+    md3ScrimHex,
+    md3ShadowHex,
     type ModeTones,
     type PaletteKey,
     paletteKeys,
@@ -14,7 +15,6 @@ import {
     type ThemeMode,
     themeModes,
 } from "@/colour/md3-roles"
-import { md3ScrimHex, md3ShadowHex } from "@/colour/md3-tones"
 import { hexToOklch, normaliseHue, type Oklch } from "@/colour/oklch"
 import { constantChromaFloor, TonalPalette, type TonalPaletteOptions } from "@/colour/tonal-palette"
 import { toneMax } from "@/colour/tone"
@@ -122,9 +122,8 @@ export type FamilyThemeKey<TName extends string> =
     | `on-${TName}-container`
     | `on-${TName}`
     | TName
-type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey]
 
-type SurfaceRoleWithOnSurface = (typeof md3SurfaceRolesWithOnSurface)[number]
+type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey]
 
 /**
  * Keys of Vuetify's default themes `light` and `dark`, into which Vuetify deep-merges app themes of the same name. They
@@ -152,13 +151,20 @@ export type Md3ThemeColourKey<TExtended extends string = never> =
 export type Md3ThemeColours<TExtended extends string = never> = Readonly<Record<Md3ThemeColourKey<TExtended>, string>>
 
 /**
- * Vuetify theme variables derived from the colours; Vuetify keeps its defaults for all others. A type alias, not an
- * interface, so it is assignable to Vuetify's `Record<string, number | string>`.
+ * Vuetify theme variables derived from the colours; Vuetify keeps its defaults for all others, including
+ * `border-opacity`, which it also uses for translucent fills such as progress tracks, dividers and the active
+ * pagination item.
+ *
+ * Borders use `on-surface` at that opacity. `theme-on-light` and `theme-on-dark` are the dark and the light content
+ * colour of the mode (`on-surface` and `on-inverse-surface`). Vuetify gives every colour without an own `on-*` key the
+ * one with the higher contrast, so all surface levels, `background` and `surface-light` get `on-surface`, as in MD3,
+ * without own keys.
+ *
+ * A type alias, not an interface, so it is assignable to Vuetify's `Record<string, number | string>`.
  */
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type VuetifyThemeVariables = {
     readonly "border-color": string
-    readonly "border-opacity": number
     readonly "shadow-color": string
     readonly "theme-code": string
     readonly "theme-kbd": string
@@ -168,14 +174,8 @@ export type VuetifyThemeVariables = {
     readonly "theme-on-light": string
 }
 
-/** Keys Vuetify uses beyond MD3: `background` and `surface-light`, `on-*` for every surface role, `*-darken-1`. */
-type VuetifyAliasKey =
-    | "background"
-    | "on-background"
-    | "on-surface-light"
-    | "surface-light"
-    | `on-${SurfaceRoleWithOnSurface}`
-    | VuetifyDarkenKey
+/** Keys Vuetify uses beyond MD3: `background`, `surface-light` and `*-darken-1`. */
+type VuetifyAliasKey = "background" | "surface-light" | VuetifyDarkenKey
 
 /**
  * Component defaults for an MD3 theme. Vuetify draws tooltips and snackbars in `surface-variant`, which in MD3 is a
@@ -186,18 +186,12 @@ export const md3VuetifyDefaults = {
     VTooltip: { color: "inverse-surface" },
 } as const
 
-/** Borders use `outline-variant` at full opacity, as in MD3. */
-export const md3BorderOpacity = 1
-
 // ---------------------------------------------------------------------------
 // Generator
 // ---------------------------------------------------------------------------
 const darkContentTone = 10
 const lightContentTone = toneMax
 const contentToneCandidates = [lightContentTone, darkContentTone] as const
-/** Content colours Vuetify uses for colours without an `on-*` key. */
-const neutralOnDarkTone = 99
-const neutralOnLightTone = darkContentTone
 
 type FamilyTones = Readonly<Record<FamilyRole, number>>
 
@@ -317,12 +311,8 @@ const createColours = (
     ) as Record<SchemeRole, string>
     Object.assign(colours, scheme)
 
-    const onSurface = scheme["on-surface"]
-    for (const role of md3SurfaceRolesWithOnSurface) colours[`on-${role}`] = onSurface
     colours["background"] = scheme.surface
-    colours["on-background"] = onSurface
     colours["surface-light"] = scheme["surface-container-high"]
-    colours["on-surface-light"] = onSurface
     for (const key of vuetifyDarkenKeys) {
         colours[`${key}-darken-1`] = palettes[key].tone(md3FamilyTones.colour[mode] - vuetifyDarkenToneStep)
     }
@@ -338,17 +328,22 @@ const createColours = (
     return sortByKey(colours)
 }
 
-const createVariables = (colours: Md3ThemeColours, neutral: TonalPalette): VuetifyThemeVariables => ({
-    "border-color": colours["outline-variant"],
-    "border-opacity": md3BorderOpacity,
-    "shadow-color": md3ShadowHex,
-    "theme-code": colours["surface-container"],
-    "theme-kbd": colours["surface-container-highest"],
-    "theme-on-code": colours["on-surface"],
-    "theme-on-dark": neutral.tone(neutralOnDarkTone),
-    "theme-on-kbd": colours["on-surface"],
-    "theme-on-light": neutral.tone(neutralOnLightTone),
-})
+const createVariables = (mode: ThemeMode, colours: Md3ThemeColours): VuetifyThemeVariables => {
+    const onSurface = colours["on-surface"]
+    const onInverseSurface = colours["on-inverse-surface"]
+    const isLight = mode === "light"
+
+    return {
+        "border-color": onSurface,
+        "shadow-color": md3ShadowHex,
+        "theme-code": colours["surface-container"],
+        "theme-kbd": colours["surface-container-highest"],
+        "theme-on-code": onSurface,
+        "theme-on-dark": isLight ? onInverseSurface : onSurface,
+        "theme-on-kbd": onSurface,
+        "theme-on-light": isLight ? onSurface : onInverseSurface,
+    }
+}
 
 /**
  * Generates a light and a dark MD3 theme for Vuetify from a few seeds.
@@ -389,7 +384,7 @@ export const createMd3Theme = <TExtended extends string = never>(
         themeModes.map((mode) => [mode, createColours(mode, looseConfig, palettes, extendedPalettes)]),
     ) as Record<ThemeMode, Md3ThemeColours<TExtended>>
     const variables = Object.fromEntries(
-        themeModes.map((mode) => [mode, createVariables(colours[mode], palettes.neutral)]),
+        themeModes.map((mode) => [mode, createVariables(mode, colours[mode])]),
     ) as Record<ThemeMode, VuetifyThemeVariables>
 
     return { colours, palettes, variables }

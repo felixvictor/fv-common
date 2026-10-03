@@ -1,4 +1,3 @@
-import { type Md3ToneArray, md3Tones } from "@/colour/md3-tones"
 import {
     getRelativeLuminance,
     hexToOklch,
@@ -7,6 +6,7 @@ import {
     mapOklchToSrgb,
     normaliseHue,
 } from "@/colour/oklch"
+import { type PaletteRange, paletteRangeTones } from "@/colour/palette-range"
 import { toneMax, toneMin, toneToLuminance } from "@/colour/tone"
 import { clampUnsafe } from "@/common"
 
@@ -86,8 +86,8 @@ export class TonalPalette {
         return hex
     }
 
-    /** Colours at the given tones, by default the 13 MD3 tones. */
-    toneRange(tones: readonly number[] = md3Tones): Md3ToneArray {
+    /** Colours at the given tones, by default the tones of an exported palette range ({@link paletteRangeTones}). */
+    toneRange(tones: readonly number[] = paletteRangeTones): PaletteRange {
         return tones.map((tone) => this.tone(tone))
     }
 

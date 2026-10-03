@@ -65,8 +65,9 @@ const isBodyTextBackground = (key: string): boolean =>
 const pairKey = (foreground: string, background: string) => `${foreground}|${background}`
 
 /**
- * Text pairs of a theme: every `on-X` key with its background `X`. Surfaces carry body text, all other backgrounds
- * labels and icons (`otherContentText`). Additional pairs replace the role of a derived pair or add new pairs.
+ * Text pairs of a theme: every `on-X` key with its background `X`, and every surface without an own `on-*` key with
+ * `on-surface`. Surfaces carry body text, all other backgrounds labels and icons (`otherContentText`). Additional pairs
+ * replace the role of a derived pair or add new pairs.
  */
 export const getThemeTextPairs = (
     theme: Readonly<Record<string, string | undefined>>,
@@ -83,6 +84,14 @@ export const getThemeTextPairs = (
         pairs.set(pairKey(foreground, background), [foreground, background, role])
     }
 
+    const onSurface = "on-surface"
+    if (theme[onSurface] !== undefined) {
+        for (const background of Object.keys(theme)) {
+            if (!isBodyTextBackground(background) || theme[`${contentPrefix}${background}`] !== undefined) continue
+            pairs.set(pairKey(onSurface, background), [onSurface, background, "bodyText"])
+        }
+    }
+
     for (const pair of additionalTextPairs) pairs.set(pairKey(pair[0], pair[1]), pair)
 
     return [...pairs.values()]
@@ -91,8 +100,6 @@ export const getThemeTextPairs = (
 /**
  * Checks the text pairs (see {@link getThemeTextPairs}), the outline and the surface ladder of a theme.
  *
- * @param theme
- * @param label
  * @param additionalTextPairs Pairs with a different APCA role (e.g. large labels on `home`) or pairs without `on-` key.
  */
 export const validateTheme = (

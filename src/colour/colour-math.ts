@@ -1,4 +1,3 @@
-import { okHslColour } from "@/colour/okhsl-colour"
 import { clamp } from "@/common"
 import Color from "colorjs.io"
 
@@ -19,11 +18,6 @@ export const lightnessContrastExponentDark = 3.08 as const
 export const lightnessContrastOffset = 0.05 as const
 export const lightnessMin = 0 as const
 export const lightnessMax = 1 as const
-
-/** How far below the seed's saturation the chroma falls at the dark extreme. */
-export const chromaMinOffset = 0.35
-/** How far above the seed's saturation the chroma peaks at mid-tones. */
-export const chromaMaxOffset = 0.05
 
 // Toe function coefficients for perceptual lightness adjustment
 const toeK1 = 0.206 as const
@@ -50,16 +44,3 @@ export const luminanceY = (hex: string | undefined): number | undefined => {
     const c = new Color(hex).to("xyz-d65")
     return c.coords[1] ?? undefined
 }
-
-export const hueDelta = (hex1: string, hex2: string) => {
-    const h1 = new okHslColour(hex1).h
-    const h2 = new okHslColour(hex2).h
-    return Math.abs(((h2 - h1 + 540) % 360) - 180)
-}
-
-/**
- * Computes a chroma min offset such that the resulting minimum chroma never falls below the given floor, regardless of
- * seed saturation.
- */
-export const chromaMinOffsetForFloor = (hex: string, chromaFloor: number): number =>
-    Math.max(0, new okHslColour(hex).s - chromaFloor)

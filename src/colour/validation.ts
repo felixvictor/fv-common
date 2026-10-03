@@ -1,5 +1,4 @@
 import { getMinColourDistance } from "@/colour/colour-distance"
-import { hueDelta } from "@/colour/colour-math"
 import {
     apcaMinLcByRole,
     apcaMinLcUiComponent,
@@ -7,34 +6,23 @@ import {
     getApcaContrast,
     isMeetingApcaContrast,
 } from "@/colour/contrast"
-import { okHslColour } from "@/colour/okhsl-colour"
+import { getHueDistance, hexToOklch } from "@/colour/oklch"
+import { getTone } from "@/colour/tone"
 import { type VisionDeficiency } from "@/colour/vision-deficiency"
 import { round } from "@/format/number"
 
-export const seedLightnessMin = 0.35
-export const seedLightnessMax = 0.65
-export const seedChromaMin = 0.38
-export const neutralChromaMax = 0.15
+/** OKLCH chroma below which an accent seed yields washed-out, almost grey tones. */
+export const seedChromaMin = 0.03
 export const minSeedHueDelta = 5
-export const minSurfaceLightnessDelta = 0.02 // minimum ΔL between adjacent surface levels
+/** Minimum tone difference (CIE L*) between adjacent surface levels; MD3 steps by 2, the rest absorbs hex rounding. */
+export const minSurfaceToneDelta = 1.5
 
-export const validateSeed = (name: string, hex: string, options: { neutral?: boolean } = {}) => {
-    const c = new okHslColour(hex)
-    const l = c.l
-    const s = c.s
-    if (l < seedLightnessMin || l > seedLightnessMax) {
+/** Warns if an accent seed is too grey to carry a colour family. Lightness does not matter: palettes use hue and chroma. */
+export const validateSeed = (name: string, hex: string) => {
+    const { chroma } = hexToOklch(hex)
+    if (chroma < seedChromaMin) {
         console.warn(
-            `${name} (${hex}): lightness ${round(l, 2)} outside ideal range ${seedLightnessMin}–${seedLightnessMax} – generated tones may lack contrast`,
-        )
-    }
-    if (options.neutral && s > neutralChromaMax) {
-        console.warn(
-            `${name} (${hex}): saturation ${round(s, 2)} > ${neutralChromaMax} – neutral seeds should be near-grey`,
-        )
-    }
-    if (!options.neutral && s < seedChromaMin) {
-        console.warn(
-            `${name} (${hex}): saturation ${round(s, 2)} < ${seedChromaMin} – low chroma may produce washed-out tones`,
+            `${name} (${hex}): chroma ${round(chroma, 3)} < ${seedChromaMin} – the colour family may look washed out`,
         )
     }
 }
@@ -46,7 +34,7 @@ export const validateHueDelta = (
     hexB: string,
     minDelta: number = minSeedHueDelta,
 ) => {
-    const delta = hueDelta(hexA, hexB)
+    const delta = getHueDistance(hexA, hexB)
     if (delta < minDelta) {
         console.warn(
             `${nameA} and ${nameB} are only ${round(delta, 1)}° apart in hue (minimum: ${minDelta}°) – their tonal ranges may be indistinguishable`,
@@ -68,43 +56,65 @@ export interface ColourDistanceRule {
 export type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole]
 
 /**
- * Checks the built-in text pairs, the outline and the surface ladder of a theme.
+ * Backgrounds whose content colour is body text: background and surfaces. Colours, containers and `surface-variant`
+ * carry labels and icons (chips, badges, buttons, fields).
+ */
+const isBodyTextBackground = (key: string): boolean =>
+    key === "background" || key === "inverse-surface" || (key.startsWith("surface") && key !== "surface-variant")
+
+const pairKey = (foreground: string, background: string) => `${foreground}|${background}`
+
+/**
+ * Text pairs of a theme: every `on-X` key with its background `X`. Surfaces carry body text, all other backgrounds
+ * labels and icons (`otherContentText`). Additional pairs replace the role of a derived pair or add new pairs.
+ */
+export const getThemeTextPairs = (
+    theme: Readonly<Record<string, string | undefined>>,
+    additionalTextPairs: readonly ThemeTextPair[] = [],
+): ThemeTextPair[] => {
+    const pairs = new Map<string, ThemeTextPair>()
+    const contentPrefix = "on-"
+
+    for (const foreground of Object.keys(theme)) {
+        if (!foreground.startsWith(contentPrefix)) continue
+        const background = foreground.slice(contentPrefix.length)
+        if (theme[background] === undefined) continue
+        const role: ApcaTextRole = isBodyTextBackground(background) ? "bodyText" : "otherContentText"
+        pairs.set(pairKey(foreground, background), [foreground, background, role])
+    }
+
+    for (const pair of additionalTextPairs) pairs.set(pairKey(pair[0], pair[1]), pair)
+
+    return [...pairs.values()]
+}
+
+/**
+ * Checks the text pairs (see {@link getThemeTextPairs}), the outline and the surface ladder of a theme.
  *
- * @param additionalTextPairs Text pairs of roles that are not part of every theme (e.g. `on-home`/`home`).
+ * @param theme
+ * @param label
+ * @param additionalTextPairs Pairs with a different APCA role (e.g. large labels on `home`) or pairs without `on-` key.
  */
 export const validateTheme = (
-    theme: Record<string, string | undefined>,
+    theme: Readonly<Record<string, string | undefined>>,
     label: string,
     additionalTextPairs: readonly ThemeTextPair[] = [],
 ) => {
-    const textPairs: readonly ThemeTextPair[] = [
-        ["on-primary", "primary", "otherContentText"],
-        ["on-secondary", "secondary", "otherContentText"],
-        ["on-tertiary", "tertiary", "otherContentText"],
-        ["on-error", "error", "otherContentText"],
-        ["on-success", "success", "otherContentText"],
-        ["on-info", "info", "otherContentText"],
-        ["on-warning", "warning", "otherContentText"],
-        ["on-surface", "surface", "bodyText"],
-        ["on-background", "background", "bodyText"],
-        ...additionalTextPairs,
-    ]
-
-    for (const [fg, bg, role] of textPairs) {
+    for (const [fg, bg, role] of getThemeTextPairs(theme, additionalTextPairs)) {
         const fgHex = theme[fg] ?? ""
         const bgHex = theme[bg] ?? ""
         const lc = getApcaContrast(fgHex, bgHex)
         if (!isMeetingApcaContrast(fgHex, bgHex, role)) {
-            console.warn(`${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcByRole[role]} (role: ${role})`)
+            console.warn(
+                `${label}: ${fg}/${bg} APCA Lc ${lc} outside the range for ${role} (min ${apcaMinLcByRole[role]})`,
+            )
         }
     }
 
     const uiPairs: [string, string][] = [["outline", "surface"]]
     for (const [fg, bg] of uiPairs) {
-        const fgHex = theme[fg] ?? ""
-        const bgHex = theme[bg] ?? ""
-        const lc = getApcaContrast(fgHex, bgHex)
-        if (Math.abs(lc) < apcaMinLcUiComponent) {
+        const lc = getApcaContrast(theme[fg] ?? "", theme[bg] ?? "")
+        if (lc < apcaMinLcUiComponent) {
             console.warn(
                 `${label}: ${fg}/${bg} APCA Lc ${lc} < ${apcaMinLcUiComponent} (UI component, bespoke threshold)`,
             )
@@ -112,17 +122,14 @@ export const validateTheme = (
     }
 
     const surfaceLevels: [string, string][] = [
-        ["surface-bright", "surface"],
         ["surface", "surface-light"],
         ["surface-light", "surface-variant"],
     ]
     for (const [a, b] of surfaceLevels) {
-        const lA = new okHslColour(theme[a] ?? "").l
-        const lB = new okHslColour(theme[b] ?? "").l
-        const delta = Math.abs(lA - lB)
-        if (delta < minSurfaceLightnessDelta) {
+        const delta = Math.abs(getTone(theme[a] ?? "") - getTone(theme[b] ?? ""))
+        if (delta < minSurfaceToneDelta) {
             console.warn(
-                `${label}: ${a} and ${b} are too similar (ΔL=${round(delta, 3)} < ${minSurfaceLightnessDelta}) – surfaces may be indistinguishable`,
+                `${label}: ${a} and ${b} are too similar (ΔL* ${round(delta, 1)} < ${minSurfaceToneDelta}) – surfaces may be indistinguishable`,
             )
         }
     }

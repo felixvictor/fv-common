@@ -33,13 +33,9 @@ export declare const lightnessContrastExponentDark: 3.08;
 export declare const lightnessContrastOffset: 0.05;
 export declare const lightnessMin: 0;
 export declare const lightnessMax: 1;
-export declare const chromaMinOffset = 0.35;
-export declare const chromaMaxOffset = 0.05;
 export declare const applyToeCurve: (lightness: number) => number;
 export declare const yToLightness: (y: number) => number;
 export declare const luminanceY: (hex: string | undefined) => number | undefined;
-export declare const hueDelta: (hex1: string, hex2: string) => number;
-export declare const chromaMinOffsetForFloor: (hex: string, chromaFloor: number) => number;
 //#endregion
 //#region src/colour/okhsl-colour.d.ts
 export declare class okHslColour {
@@ -88,143 +84,301 @@ export declare const apcaMaxLcLargeFluentText = 90;
 export declare const apcaMinLcUiComponent = 30;
 export declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
 //#endregion
-//#region src/colour/make-surface.d.ts
+//#region src/colour/oklch.d.ts
+type LinearRgb = readonly [red: number, green: number, blue: number];
+interface Oklch {
+  readonly chroma: number;
+  readonly hue: number;
+  readonly lightness: number;
+}
+export declare const normaliseHue: (hue: number) => number;
+export declare const getHueDifference: (fromHue: number, toHue: number) => number;
+export declare const hexToLinearRgb: (hex: string) => LinearRgb;
+export declare const linearRgbToHex: ([red, green, blue]: LinearRgb) => string;
+export declare const linearRgbToOklch: (rgb: LinearRgb) => Oklch;
+export declare const oklchToLinearRgb: ({ chroma, hue, lightness }: Oklch) => LinearRgb;
+export declare const hexToOklch: (hex: string) => Oklch;
+export declare const oklchToHex: (colour: Oklch) => string;
+export declare const isInSrgbGamut: (rgb: LinearRgb) => boolean;
+export declare const mapOklchToSrgb: (colour: Oklch) => LinearRgb;
+export declare const getRelativeLuminance: ([red, green, blue]: LinearRgb) => number;
+export declare const getHueDistance: (hexA: string, hexB: string) => number;
+//#endregion
+//#region src/colour/harmonise.d.ts
+interface HarmonisationStrength {
+  readonly chromaFactor: number;
+  readonly hueFactor: number;
+  readonly maxHueRotation: number;
+  readonly minHueDistance: number;
+}
+export declare const noHarmonisation: HarmonisationStrength;
+export declare const harmoniseHue: (hue: number, targetHue: number, { hueFactor, maxHueRotation, minHueDistance }: HarmonisationStrength) => number;
+export declare const harmoniseChroma: (chroma: number, targetChroma: number, { chromaFactor }: HarmonisationStrength) => number;
+export declare const harmoniseOklch: (colour: Oklch, target: Oklch, strength: HarmonisationStrength) => Oklch;
+//#endregion
+//#region src/colour/md3-roles.d.ts
 type ThemeMode = "dark" | "light";
-declare const semanticTones: {
-  readonly onSurface: {
-    readonly dark: {
-      readonly chroma: 0.06;
-      readonly lightness: 0.92;
-    };
-    readonly light: {
-      readonly chroma: 0.1;
-      readonly lightness: 0.12;
+export declare const themeModes: readonly ThemeMode[];
+type AccentKey = "error" | "info" | "primary" | "secondary" | "success" | "tertiary" | "warning";
+type ModeTones = Readonly<Record<ThemeMode, number>>;
+type NeutralKey = "neutral" | "neutralVariant";
+type PaletteKey = AccentKey | NeutralKey;
+export declare const accentKeys: readonly AccentKey[];
+export declare const paletteKeys: readonly PaletteKey[];
+type FamilyRole = "colour" | "container" | "onColour" | "onContainer";
+export declare const md3FamilyTones: {
+  readonly colour: {
+    readonly dark: 80;
+    readonly light: 40;
+  };
+  readonly container: {
+    readonly dark: 30;
+    readonly light: 90;
+  };
+  readonly onColour: {
+    readonly dark: 20;
+    readonly light: 100;
+  };
+  readonly onContainer: {
+    readonly dark: 90;
+    readonly light: 10;
+  };
+};
+interface SchemeRoleSpec {
+  readonly palette: PaletteKey;
+  readonly tones: ModeTones;
+}
+export declare const md3SchemeRoles: {
+  readonly "inverse-primary": {
+    readonly palette: "primary";
+    readonly tones: {
+      readonly dark: 40;
+      readonly light: 80;
     };
   };
-  readonly onSurfaceVariant: {
-    readonly dark: {
-      readonly chroma: 0.1;
-      readonly lightness: 0.78;
+  readonly "inverse-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 20;
     };
-    readonly light: {
-      readonly chroma: 0.16;
-      readonly lightness: 0.32;
+  };
+  readonly "on-inverse-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 95;
+    };
+  };
+  readonly "on-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 10;
+    };
+  };
+  readonly "on-surface-variant": {
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 80;
+      readonly light: 30;
     };
   };
   readonly outline: {
-    readonly dark: {
-      readonly chroma: 0.14;
-      readonly lightness: 0.62;
-    };
-    readonly light: {
-      readonly chroma: 0.2;
-      readonly lightness: 0.48;
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 60;
+      readonly light: 50;
     };
   };
-  readonly outlineVariant: {
-    readonly dark: {
-      readonly chroma: 0.1;
-      readonly lightness: 0.32;
+  readonly "outline-variant": {
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 30;
+      readonly light: 80;
     };
-    readonly light: {
-      readonly chroma: 0.14;
-      readonly lightness: 0.82;
+  };
+  readonly surface: {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 6;
+      readonly light: 98;
+    };
+  };
+  readonly "surface-bright": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 24;
+      readonly light: 98;
+    };
+  };
+  readonly "surface-container": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 12;
+      readonly light: 94;
+    };
+  };
+  readonly "surface-container-high": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 17;
+      readonly light: 92;
+    };
+  };
+  readonly "surface-container-highest": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 22;
+      readonly light: 90;
+    };
+  };
+  readonly "surface-container-low": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 10;
+      readonly light: 96;
+    };
+  };
+  readonly "surface-container-lowest": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 4;
+      readonly light: 100;
+    };
+  };
+  readonly "surface-dim": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 6;
+      readonly light: 87;
+    };
+  };
+  readonly "surface-variant": {
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 30;
+      readonly light: 90;
     };
   };
 };
-type SemanticRole = keyof typeof semanticTones;
-declare const surfaceLadder: {
-  readonly dark: {
-    readonly anchorLightness: 0.14;
-    readonly baseChroma: 0.12;
-    readonly rungs: {
-      readonly bright: {
-        readonly chromaFactor: 1.3;
-        readonly stepDelta: 2;
-      };
-      readonly light: {
-        readonly chromaFactor: 1.1;
-        readonly stepDelta: 1;
-      };
-      readonly main: {
-        readonly chromaFactor: 1;
-        readonly stepDelta: 0;
-      };
-      readonly variant: {
-        readonly chromaFactor: 1.8;
-        readonly stepDelta: 3;
-      };
-    };
-  };
-  readonly light: {
-    readonly anchorLightness: 0.95;
-    readonly baseChroma: 0.42;
-    readonly rungs: {
-      readonly bright: {
-        readonly chromaFactor: 0.6;
-        readonly stepDelta: 1;
-      };
-      readonly light: {
-        readonly chromaFactor: 1.2;
-        readonly stepDelta: -1;
-      };
-      readonly main: {
-        readonly chromaFactor: 1;
-        readonly stepDelta: 0;
-      };
-      readonly variant: {
-        readonly chromaFactor: 1.5;
-        readonly stepDelta: -2;
-      };
-    };
-  };
-};
-type SurfaceRung = keyof typeof surfaceLadder.light.rungs;
-export declare class MakeSurface {
-  #private;
-  constructor(baseHex: string);
-  calculateSurface(lightness: number, chromaFactor: number): string;
-  makeSurface(): Record<ThemeMode, Record<SemanticRole, string> & Record<SurfaceRung, string>>;
-}
+type SchemeRole = keyof typeof md3SchemeRoles;
+export declare const md3SurfaceRolesWithOnSurface: readonly ["surface", "surface-bright", "surface-container", "surface-container-high", "surface-container-highest", "surface-container-low", "surface-container-lowest", "surface-dim"];
 //#endregion
 //#region src/colour/md3-tones.d.ts
 export declare const md3Tones: readonly [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 type Md3Tone = (typeof md3Tones)[number];
 type Md3ToneArray = readonly string[];
 export declare const ti: (tone: Md3Tone) => number;
-export declare const scaleNumberMax: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
-export declare const minTone: 0;
-export declare const maxTone: 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 95 | 99 | 100;
 export declare const fallback: (array: Md3ToneArray, index: number) => string;
 export declare const getThemeTone: (range: Md3ToneArray, tone: Md3Tone) => string;
-export declare const md3AccentToneLight: Md3Tone;
-export declare const md3AccentToneDark: Md3Tone;
-export declare const md3AccentOnToneLight: Md3Tone;
-export declare const md3AccentOnToneDark: Md3Tone;
-export declare const md3ContainerToneLight: Md3Tone;
-export declare const md3ContainerToneDark: Md3Tone;
-export declare const md3OnContainerToneLight: Md3Tone;
-export declare const md3OnContainerToneDark: Md3Tone;
 export declare const md3ScrimHex = "#000000";
 export declare const md3ShadowHex = "#000000";
 //#endregion
-//#region src/colour/md3-scale-generator.d.ts
-export declare class Md3ScaleGenerator extends ColourScaleGenerator {
-  static fromSeed(hex: string, backgroundY: number, minOffset?: number, maxOffset?: number): Md3ScaleGenerator;
-  buildMd3Range: () => Md3ToneArray;
-  colourAtScale: (scaleNumber: number) => string;
+//#region src/colour/tonal-palette.d.ts
+interface TonalPaletteOptions {
+  readonly chromaFloor?: number;
+  readonly hueShift?: number;
+}
+export declare const constantChromaFloor = 1;
+export declare class TonalPalette {
+  #private;
+  get chroma(): number;
+  get hue(): number;
+  constructor(hue: number, chroma: number, { chromaFloor, hueShift }?: TonalPaletteOptions);
+  static fromHex(hex: string, options?: TonalPaletteOptions): TonalPalette;
+  tone(tone: number): string;
+  toneRange(tones?: readonly number[]): Md3ToneArray;
 }
 //#endregion
+//#region src/colour/md3-theme.d.ts
+type HarmonisationGroup = "accent" | "extended" | "semantic";
+type SemanticKey = Exclude<AccentKey, BrandKey>;
+type BrandKey = "primary" | "secondary" | "tertiary";
+export declare const md3DefaultSemanticSeeds: Readonly<Record<SemanticKey, string>>;
+export declare const defaultHarmonisation: Readonly<Record<HarmonisationGroup, HarmonisationStrength>>;
+export declare const defaultNeutralChroma = 0.006;
+export declare const defaultNeutralVariantChroma = 0.01;
+export declare const defaultAccentChromaFloor = 0.6;
+interface ExtendedColourConfig {
+  readonly seed: string | {
+    readonly from: PaletteKey;
+  };
+  readonly shouldHarmonise?: boolean;
+  readonly tones?: Partial<Readonly<Record<FamilyRole, ModeTones>>>;
+}
+interface Md3ThemeConfig<TExtended extends string = never> {
+  readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig>>;
+  readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>;
+  readonly neutral?: NeutralConfig;
+  readonly palette?: TonalPaletteOptions;
+  readonly schemeTones?: Partial<Readonly<Record<SchemeRole, ModeTones>>>;
+  readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey, string>>;
+}
+interface NeutralConfig {
+  readonly chroma?: number;
+  readonly hueOffset?: number;
+  readonly seed?: string;
+  readonly variantChroma?: number;
+}
+declare const paletteThemeNames: {
+  readonly error: "error";
+  readonly info: "info";
+  readonly neutral: "neutral";
+  readonly neutralVariant: "neutral-variant";
+  readonly primary: "primary";
+  readonly secondary: "secondary";
+  readonly success: "success";
+  readonly tertiary: "tertiary";
+  readonly warning: "warning";
+};
+type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-container` | `on-${TName}` | TName;
+type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey];
+type SurfaceRoleWithOnSurface = (typeof md3SurfaceRolesWithOnSurface)[number];
+declare const vuetifyDarkenKeys: readonly ["primary", "secondary"];
+type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`;
+interface Md3Theme<TExtended extends string = never> {
+  readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<TExtended>>>;
+  readonly palettes: Readonly<Record<PaletteKey, TonalPalette>>;
+  readonly variables: Readonly<Record<ThemeMode, VuetifyThemeVariables>>;
+}
+type Md3ThemeColourKey<TExtended extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TExtended> | SchemeRole | VuetifyAliasKey;
+type Md3ThemeColours<TExtended extends string = never> = Readonly<Record<Md3ThemeColourKey<TExtended>, string>>;
+type VuetifyThemeVariables = {
+  readonly "border-color": string;
+  readonly "border-opacity": number;
+  readonly "shadow-color": string;
+  readonly "theme-code": string;
+  readonly "theme-kbd": string;
+  readonly "theme-on-code": string;
+  readonly "theme-on-dark": string;
+  readonly "theme-on-kbd": string;
+  readonly "theme-on-light": string;
+};
+type VuetifyAliasKey = "background" | "on-background" | "on-surface-light" | "surface-light" | `on-${SurfaceRoleWithOnSurface}` | VuetifyDarkenKey;
+export declare const md3VuetifyDefaults: {
+  readonly VSnackbar: {
+    readonly color: "inverse-surface";
+  };
+  readonly VTooltip: {
+    readonly color: "inverse-surface";
+  };
+};
+export declare const md3BorderOpacity = 1;
+export declare const createMd3Theme: <TExtended extends string = never>(config: Md3ThemeConfig<TExtended>) => Md3Theme<TExtended>;
+//#endregion
+//#region src/colour/tone.d.ts
+export declare const toneMin = 0;
+export declare const toneMax = 100;
+export declare const toneToLuminance: (tone: number) => number;
+export declare const luminanceToTone: (luminance: number) => number;
+export declare const getTone: (hex: string) => number;
+//#endregion
 //#region src/colour/validation.d.ts
-export declare const seedLightnessMin = 0.35;
-export declare const seedLightnessMax = 0.65;
-export declare const seedChromaMin = 0.38;
-export declare const neutralChromaMax = 0.15;
+export declare const seedChromaMin = 0.03;
 export declare const minSeedHueDelta = 5;
-export declare const minSurfaceLightnessDelta = 0.02;
-export declare const validateSeed: (name: string, hex: string, options?: {
-  neutral?: boolean;
-}) => void;
+export declare const minSurfaceToneDelta = 1.5;
+export declare const validateSeed: (name: string, hex: string) => void;
 export declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
 interface ColourDistanceRule {
   readonly a: string;
@@ -233,7 +387,8 @@ interface ColourDistanceRule {
   readonly minDistance: number;
 }
 type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole];
-export declare const validateTheme: (theme: Record<string, string | undefined>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
+export declare const getThemeTextPairs: (theme: Readonly<Record<string, string | undefined>>, additionalTextPairs?: readonly ThemeTextPair[]) => ThemeTextPair[];
+export declare const validateTheme: (theme: Readonly<Record<string, string | undefined>>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
 //#endregion
 //#region src/common.d.ts
@@ -475,5 +630,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, Md3Tone, Md3ToneArray, Ok, Result, SortArgument, ThemeTextPair, VisionDeficiency };
+export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, Md3Tone, Md3ToneArray, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
 //# sourceMappingURL=index.d.ts.map

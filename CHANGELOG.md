@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.1.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.0...v3.1.1)
+
+### 🩹 Fixes
+
+- **colour:** Restore vuetify border opacity and space palette range tones ([3462b01](https://github.com/felixvictor/fv-common/commit/3462b01))
+
+### 📦 Build
+
+- Dist ([b7fc6a8](https://github.com/felixvictor/fv-common/commit/b7fc6a8))
+
 ## v3.1.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.0.1...v3.1.0)

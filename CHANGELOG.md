@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.2.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.2.0...v3.2.1)
+
+### 🩹 Fixes
+
+- **colour:** Infer custom seeds from seeds only ([696c484](https://github.com/felixvictor/fv-common/commit/696c484))
+
+### 📦 Build
+
+- Dist ([35c48b6](https://github.com/felixvictor/fv-common/commit/35c48b6))
+
 ## v3.2.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.2...v3.2.0)

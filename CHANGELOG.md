@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.2.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.2...v3.2.0)
+
+### 🚀 Enhancements
+
+- **colour:** Add custom seeds with palettes ([12645b2](https://github.com/felixvictor/fv-common/commit/12645b2))
+
+### 📦 Build
+
+- Dist ([b2aa070](https://github.com/felixvictor/fv-common/commit/b2aa070))
+
 ## v3.1.2
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.1...v3.1.2)

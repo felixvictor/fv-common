@@ -186,6 +186,16 @@ describe("createMd3Theme with custom seeds", () => {
         )
     })
 
+    it("infers custom seeds from seeds only, not from palette references of extended colours", () => {
+        const inferred = createMd3Theme({
+            extended: { eins: { seed: { from: "neutral" } } },
+            seeds: { ...seeds, gold },
+        })
+
+        expect(inferred.colours.light.eins).toBe(inferred.colours.light.neutral)
+        expect(inferred.colours.light.gold).toBe(theme.colours.light.gold)
+    })
+
     it("serves as source of extended colours", () => {
         expect(theme.colours.light.medal).toBe(theme.colours.light.gold)
     })

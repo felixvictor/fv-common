@@ -81,8 +81,11 @@ export interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
 export interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
     /** Factor on the chroma of all accent palettes, custom seeds and own extended seeds; 1 keeps the seed chroma. */
     readonly chromaScale?: number
-    /** App-specific colour families without palette; names are used as theme keys, so write them in kebab-case. */
-    readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<CustomSeedKey<TSeed> | PaletteKey>>>
+    /**
+     * App-specific colour families without palette; names are used as theme keys, so write them in kebab-case. Palette
+     * references do not take part in inferring `TSeed`, which comes from `seeds` alone.
+     */
+    readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<NoInfer<CustomSeedKey<TSeed>> | PaletteKey>>>
     readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>
     readonly neutral?: NeutralConfig
     /** Options of the accent palettes; neutral palettes always keep a constant chroma. */

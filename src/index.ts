@@ -15,7 +15,7 @@ export type { HarmonisationStrength } from "./colour/harmonise.js";
 export { accentKeys, md3FamilyTones, md3SchemeRoles, md3ScrimHex, md3ShadowHex, paletteKeys, themeModes } from "./colour/md3-roles.js";
 export type { AccentKey, FamilyRole, ModeTones, NeutralKey, PaletteKey, SchemeRole, SchemeRoleSpec, ThemeMode } from "./colour/md3-roles.js";
 export { createMd3Theme, defaultAccentChromaFloor, defaultChromaScale, defaultHarmonisation, defaultNeutralChroma, defaultNeutralVariantChroma, defaultNeutralWarmth, md3DefaultSemanticSeeds, md3VuetifyDefaults } from "./colour/md3-theme.js";
-export type { ExtendedColourConfig, FamilyThemeKey, HarmonisationGroup, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, NeutralConfig, SemanticKey, VuetifyThemeVariables } from "./colour/md3-theme.js";
+export type { CustomSeedKey, ExtendedColourConfig, FamilyThemeKey, HarmonisationGroup, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, NeutralConfig, SemanticKey, VuetifyThemeVariables } from "./colour/md3-theme.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
 export { getHueDifference, getHueDistance, getRelativeLuminance, hexToLinearRgb, hexToOklch, isInSrgbGamut, linearRgbToHex, linearRgbToOklch, mapOklchToSrgb, normaliseHue, oklchToHex, oklchToLinearRgb } from "./colour/oklch.js";
 export type { LinearRgb, Oklch } from "./colour/oklch.js";

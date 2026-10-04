@@ -291,7 +291,8 @@ export declare class TonalPalette {
 }
 //#endregion
 //#region src/colour/md3-theme.d.ts
-type HarmonisationGroup = "accent" | "extended" | "semantic";
+type CustomSeedKey<TSeed extends string> = Exclude<TSeed, AccentKey>;
+type HarmonisationGroup = "accent" | "custom" | "extended" | "semantic";
 type SemanticKey = Exclude<AccentKey, BrandKey>;
 type BrandKey = "primary" | "secondary" | "tertiary";
 export declare const md3DefaultSemanticSeeds: Readonly<Record<SemanticKey, string>>;
@@ -301,22 +302,22 @@ export declare const defaultNeutralVariantChroma = 0.012;
 export declare const defaultNeutralWarmth = 2;
 export declare const defaultChromaScale = 0.8;
 export declare const defaultAccentChromaFloor = 0.45;
-interface ExtendedColourConfig {
+interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
   readonly chromaScale?: number;
   readonly seed: string | {
-    readonly from: PaletteKey;
+    readonly from: TPaletteKey;
   };
   readonly shouldHarmonise?: boolean;
   readonly tones?: Partial<Readonly<Record<FamilyRole, ModeTones>>>;
 }
-interface Md3ThemeConfig<TExtended extends string = never> {
+interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
   readonly chromaScale?: number;
-  readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig>>;
+  readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<CustomSeedKey<TSeed> | PaletteKey>>>;
   readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>;
   readonly neutral?: NeutralConfig;
   readonly palette?: TonalPaletteOptions;
   readonly schemeTones?: Partial<Readonly<Record<SchemeRole, ModeTones>>>;
-  readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey, string>>;
+  readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey | TSeed, string>>;
 }
 interface NeutralConfig {
   readonly chroma?: number;
@@ -340,13 +341,13 @@ type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-
 type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey];
 declare const vuetifyDarkenKeys: readonly ["primary", "secondary"];
 type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`;
-interface Md3Theme<TExtended extends string = never> {
-  readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<TExtended>>>;
-  readonly palettes: Readonly<Record<PaletteKey, TonalPalette>>;
+interface Md3Theme<TExtended extends string = never, TSeed extends string = BrandKey> {
+  readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<CustomSeedKey<TSeed> | TExtended>>>;
+  readonly palettes: Readonly<Record<CustomSeedKey<TSeed> | PaletteKey, TonalPalette>>;
   readonly variables: Readonly<Record<ThemeMode, VuetifyThemeVariables>>;
 }
-type Md3ThemeColourKey<TExtended extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TExtended> | SchemeRole | VuetifyAliasKey;
-type Md3ThemeColours<TExtended extends string = never> = Readonly<Record<Md3ThemeColourKey<TExtended>, string>>;
+type Md3ThemeColourKey<TFamily extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TFamily> | SchemeRole | VuetifyAliasKey;
+type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md3ThemeColourKey<TFamily>, string>>;
 type VuetifyThemeVariables = {
   readonly "border-color": string;
   readonly "shadow-color": string;
@@ -366,7 +367,7 @@ export declare const md3VuetifyDefaults: {
     readonly color: "inverse-surface";
   };
 };
-export declare const createMd3Theme: <TExtended extends string = never>(config: Md3ThemeConfig<TExtended>) => Md3Theme<TExtended>;
+export declare const createMd3Theme: <TExtended extends string = never, TSeed extends string = BrandKey>(config: Md3ThemeConfig<TExtended, TSeed>) => Md3Theme<TExtended, TSeed>;
 //#endregion
 //#region src/colour/tone.d.ts
 export declare const toneMin = 0;
@@ -631,5 +632,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
+export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, CustomSeedKey, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
 //# sourceMappingURL=index.d.ts.map

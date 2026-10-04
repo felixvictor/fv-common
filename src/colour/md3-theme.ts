@@ -19,13 +19,16 @@ import { hexToOklch, normaliseHue, type Oklch } from "@/colour/oklch"
 import { constantChromaFloor, TonalPalette, type TonalPaletteOptions } from "@/colour/tonal-palette"
 import { toneMax } from "@/colour/tone"
 
-export type HarmonisationGroup = "accent" | "extended" | "semantic"
+/** Seed keys beyond the MD3 and Vuetify colours, e.g. `gold`. */
+export type CustomSeedKey<TSeed extends string> = Exclude<TSeed, AccentKey>
+export type HarmonisationGroup = "accent" | "custom" | "extended" | "semantic"
 export type SemanticKey = Exclude<AccentKey, BrandKey>
 // ---------------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------------
 type BrandKey = "primary" | "secondary" | "tertiary"
 
+const accentKeySet: ReadonlySet<string> = new Set<string>(accentKeys)
 const semanticKeys: ReadonlySet<AccentKey> = new Set<SemanticKey>(["error", "info", "success", "warning"])
 
 /** Seeds used when a theme does not set its own semantic colours. `error` is the MD3 baseline error. */
@@ -38,10 +41,12 @@ export const md3DefaultSemanticSeeds: Readonly<Record<SemanticKey, string>> = {
 
 /**
  * Default pull towards primary. Semantic colours rotate less, so error, warning, success and info keep their meaning.
- * No colour comes closer than 30° in hue to primary through harmonisation; `primary` itself is never harmonised.
+ * Custom seeds are named colours whose hue is their meaning (gold): they keep their hue, only loud chroma is toned
+ * down. No colour comes closer than 30° in hue to primary through harmonisation; `primary` itself is never harmonised.
  */
 export const defaultHarmonisation: Readonly<Record<HarmonisationGroup, HarmonisationStrength>> = {
     accent: { chromaFactor: 0.3, hueFactor: 0.5, maxHueRotation: 15, minHueDistance: 30 },
+    custom: { chromaFactor: 0.2, hueFactor: 0, maxHueRotation: 0, minHueDistance: 30 },
     extended: { chromaFactor: 0.3, hueFactor: 0.5, maxHueRotation: 15, minHueDistance: 30 },
     semantic: { chromaFactor: 0.2, hueFactor: 0.25, maxHueRotation: 8, minHueDistance: 30 },
 }
@@ -63,28 +68,33 @@ export const defaultAccentChromaFloor = 0.45
  * Without tone overrides it uses the MD3 family tones. Overriding `colour` or `container` without the matching content
  * role picks the content tone (100 or 10 of the same palette) with the higher APCA contrast.
  */
-export interface ExtendedColourConfig {
+export interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
     /** Factor on the chroma of an own seed in place of the theme's `chromaScale`, e.g. 1 for vivid data fills. */
     readonly chromaScale?: number
-    /** Own seed, or the (already harmonised) palette of a core colour. */
-    readonly seed: string | { readonly from: PaletteKey }
+    /** Own seed, or the (already harmonised) palette of a core colour or a custom seed. */
+    readonly seed: string | { readonly from: TPaletteKey }
     /** Harmonise an own seed towards primary; default true. */
     readonly shouldHarmonise?: boolean
     readonly tones?: Partial<Readonly<Record<FamilyRole, ModeTones>>>
 }
 
-export interface Md3ThemeConfig<TExtended extends string = never> {
-    /** Factor on the chroma of all accent palettes and own extended seeds; 1 keeps the seed chroma. */
+export interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
+    /** Factor on the chroma of all accent palettes, custom seeds and own extended seeds; 1 keeps the seed chroma. */
     readonly chromaScale?: number
-    /** App-specific colour families; names are used as theme keys, so write them in kebab-case. */
-    readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig>>
+    /** App-specific colour families without palette; names are used as theme keys, so write them in kebab-case. */
+    readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<CustomSeedKey<TSeed> | PaletteKey>>>
     readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>
     readonly neutral?: NeutralConfig
     /** Options of the accent palettes; neutral palettes always keep a constant chroma. */
     readonly palette?: TonalPaletteOptions
     /** Overrides MD3 tones of surface, outline and inverse roles, e.g. a darker light-theme background. */
     readonly schemeTones?: Partial<Readonly<Record<SchemeRole, ModeTones>>>
-    readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey, string>>
+    /**
+     * `primary`, `secondary` and `tertiary` are required, the semantic colours have defaults. Further keys (e.g.
+     * `gold`) are custom seeds: they get a palette and the four family roles like the core colours. Their names are
+     * used as theme keys, so write them in kebab-case.
+     */
+    readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey | TSeed, string>>
 }
 
 /**
@@ -134,21 +144,22 @@ type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`
 /** Tone step of a Vuetify `*-darken-1` key below its colour, in both modes. */
 const vuetifyDarkenToneStep = 10
 
-export interface Md3Theme<TExtended extends string = never> {
-    readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<TExtended>>>
-    /** Palettes of the core colours, shared by both modes; extended colours have none. */
-    readonly palettes: Readonly<Record<PaletteKey, TonalPalette>>
+export interface Md3Theme<TExtended extends string = never, TSeed extends string = BrandKey> {
+    readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<CustomSeedKey<TSeed> | TExtended>>>
+    /** Palettes of the core colours and custom seeds, shared by both modes; extended colours have none. */
+    readonly palettes: Readonly<Record<CustomSeedKey<TSeed> | PaletteKey, TonalPalette>>
     readonly variables: Readonly<Record<ThemeMode, VuetifyThemeVariables>>
 }
 
-export type Md3ThemeColourKey<TExtended extends string = never> =
+/** Theme keys; `TFamily` names the families beyond the core colours (custom seeds and extended colours). */
+export type Md3ThemeColourKey<TFamily extends string = never> =
     | "scrim"
     | "shadow"
-    | FamilyThemeKey<PaletteThemeName | TExtended>
+    | FamilyThemeKey<PaletteThemeName | TFamily>
     | SchemeRole
     | VuetifyAliasKey
 
-export type Md3ThemeColours<TExtended extends string = never> = Readonly<Record<Md3ThemeColourKey<TExtended>, string>>
+export type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md3ThemeColourKey<TFamily>, string>>
 
 /**
  * Vuetify theme variables derived from the colours; Vuetify keeps its defaults for all others, including
@@ -236,25 +247,38 @@ const addFamily = (colours: Record<string, string>, name: string, palette: Tonal
 const sortByKey = <T>(record: Record<string, T>): Record<string, T> =>
     Object.fromEntries(Object.entries(record).toSorted(([a], [b]) => a.localeCompare(b)))
 
+type LooseConfig = Md3ThemeConfig<string, string>
+type Palettes = Readonly<Record<PaletteKey, TonalPalette>> & Readonly<Record<string, TonalPalette>>
+
+const getCustomSeedKeys = (config: LooseConfig): string[] =>
+    Object.keys(config.seeds).filter((key) => !accentKeySet.has(key))
+
 const createPalettes = (
-    config: Md3ThemeConfig<string>,
+    config: LooseConfig,
     primary: Oklch,
     strengths: Readonly<Record<HarmonisationGroup, HarmonisationStrength>>,
     accentOptions: TonalPaletteOptions,
     chromaScale: number,
-): Record<PaletteKey, TonalPalette> => {
-    const seeds: Readonly<Record<AccentKey, string>> = { ...md3DefaultSemanticSeeds, ...config.seeds }
+): Palettes => {
+    const seeds: Readonly<Record<string, string>> = { ...md3DefaultSemanticSeeds, ...config.seeds }
+    const createSeedPalette = (key: string, strength: HarmonisationStrength): TonalPalette => {
+        const seedHex = seeds[key]
+        if (seedHex === undefined) throw new Error(`Missing seed "${key}"`)
+        const { chroma, hue } = harmoniseOklch(hexToOklch(seedHex), primary, strength)
+        return new TonalPalette(hue, chroma * chromaScale, accentOptions)
+    }
 
     const accentPalettes = Object.fromEntries(
         accentKeys.map((key) => {
             let strength = strengths.accent
             if (key === "primary") strength = noHarmonisation
             else if (semanticKeys.has(key)) strength = strengths.semantic
-
-            const { chroma, hue } = harmoniseOklch(hexToOklch(seeds[key]), primary, strength)
-            return [key, new TonalPalette(hue, chroma * chromaScale, accentOptions)]
+            return [key, createSeedPalette(key, strength)]
         }),
     ) as Record<AccentKey, TonalPalette>
+    const customPalettes = Object.fromEntries(
+        getCustomSeedKeys(config).map((key) => [key, createSeedPalette(key, strengths.custom)]),
+    )
 
     const {
         chroma = defaultNeutralChroma,
@@ -270,6 +294,7 @@ const createPalettes = (
     const neutralOptions: TonalPaletteOptions = { chromaFloor: constantChromaFloor }
 
     return {
+        ...customPalettes,
         ...accentPalettes,
         neutral: new TonalPalette(neutralHue, chroma, neutralOptions),
         neutralVariant: new TonalPalette(neutralHue, variantChroma, neutralOptions),
@@ -277,14 +302,18 @@ const createPalettes = (
 }
 
 const createExtendedPalette = (
-    { chromaScale: ownChromaScale, seed, shouldHarmonise = true }: ExtendedColourConfig,
-    palettes: Readonly<Record<PaletteKey, TonalPalette>>,
+    { chromaScale: ownChromaScale, seed, shouldHarmonise = true }: ExtendedColourConfig<string>,
+    palettes: Palettes,
     primary: Oklch,
     strength: HarmonisationStrength,
     accentOptions: TonalPaletteOptions,
     chromaScale: number,
 ): TonalPalette => {
-    if (typeof seed !== "string") return palettes[seed.from]
+    if (typeof seed !== "string") {
+        const palette = palettes[seed.from]
+        if (palette === undefined) throw new Error(`Extended colour refers to unknown palette "${seed.from}"`)
+        return palette
+    }
 
     const oklch = hexToOklch(seed)
     const { chroma, hue } = shouldHarmonise ? harmoniseOklch(oklch, primary, strength) : oklch
@@ -293,14 +322,19 @@ const createExtendedPalette = (
 
 const createColours = (
     mode: ThemeMode,
-    config: Md3ThemeConfig<string>,
-    palettes: Readonly<Record<PaletteKey, TonalPalette>>,
+    config: LooseConfig,
+    palettes: Palettes,
+    customSeedKeys: readonly string[],
     extendedPalettes: ReadonlyMap<string, TonalPalette>,
 ): Record<string, string> => {
     const colours: Record<string, string> = {}
 
     for (const key of paletteKeys) {
         addFamily(colours, paletteThemeNames[key], palettes[key], resolveFamilyTones(palettes[key], mode))
+    }
+    for (const key of customSeedKeys) {
+        const palette = palettes[key]
+        if (palette !== undefined) addFamily(colours, key, palette, resolveFamilyTones(palette, mode))
     }
 
     const scheme = Object.fromEntries(
@@ -319,7 +353,7 @@ const createColours = (
     colours["scrim"] = md3ScrimHex
     colours["shadow"] = md3ShadowHex
 
-    for (const [name, spec] of Object.entries<ExtendedColourConfig>(config.extended ?? {})) {
+    for (const [name, spec] of Object.entries<ExtendedColourConfig<string>>(config.extended ?? {})) {
         const palette = extendedPalettes.get(name)
         if (palette === undefined) continue
         addFamily(colours, name, palette, resolveFamilyTones(palette, mode, spec.tones))
@@ -352,40 +386,49 @@ const createVariables = (mode: ThemeMode, colours: Md3ThemeColours): VuetifyThem
  *   ({@link defaultChromaScale}); the neutral palettes take the hue of primary, pulled towards warm greys.
  * - Core colours get a tonal palette in OKLCH with absolute tones (CIE L*), shared by both modes; the roles take MD3
  *   tones from it ({@link md3FamilyTones}, {@link md3SchemeRoles}).
+ * - Custom seeds (e.g. `gold`) get a palette and the four family roles like the core colours.
  * - Extended colours get the same four family roles, with optional tone overrides, but no exported palette.
  *
- * @throws Error if an extended colour name collides with a core theme key.
+ * @throws Error if a custom seed or an extended colour collides with another theme key, or an extended colour refers to
+ *   an unknown palette.
  */
-export const createMd3Theme = <TExtended extends string = never>(
-    config: Md3ThemeConfig<TExtended>,
-): Md3Theme<TExtended> => {
-    const looseConfig = config as Md3ThemeConfig<string>
+export const createMd3Theme = <TExtended extends string = never, TSeed extends string = BrandKey>(
+    config: Md3ThemeConfig<TExtended, TSeed>,
+): Md3Theme<TExtended, TSeed> => {
+    const looseConfig = config as unknown as LooseConfig
     const strengths = { ...defaultHarmonisation, ...config.harmonisation }
     const accentOptions: TonalPaletteOptions = { chromaFloor: defaultAccentChromaFloor, ...config.palette }
     const chromaScale = config.chromaScale ?? defaultChromaScale
     const primary = hexToOklch(config.seeds.primary)
 
     const palettes = createPalettes(looseConfig, primary, strengths, accentOptions, chromaScale)
+    const customSeedKeys = getCustomSeedKeys(looseConfig)
     const extendedPalettes = new Map(
-        Object.entries<ExtendedColourConfig>(looseConfig.extended ?? {}).map(([name, spec]) => [
+        Object.entries<ExtendedColourConfig<string>>(looseConfig.extended ?? {}).map(([name, spec]) => [
             name,
             createExtendedPalette(spec, palettes, primary, strengths.extended, accentOptions, chromaScale),
         ]),
     )
 
-    const coreKeys = new Set(Object.keys(createColours("light", { seeds: config.seeds }, palettes, new Map())))
-    for (const name of extendedPalettes.keys()) {
-        for (const key of [name, `on-${name}`, `${name}-container`, `on-${name}-container`]) {
-            if (coreKeys.has(key)) throw new Error(`Extended colour "${name}" collides with theme key "${key}"`)
+    const takenKeys = new Set(Object.keys(createColours("light", looseConfig, palettes, [], new Map())))
+    for (const [kind, names] of [
+        ["Custom seed", customSeedKeys],
+        ["Extended colour", [...extendedPalettes.keys()]],
+    ] as const) {
+        for (const name of names) {
+            for (const key of [name, `on-${name}`, `${name}-container`, `on-${name}-container`]) {
+                if (takenKeys.has(key)) throw new Error(`${kind} "${name}" collides with theme key "${key}"`)
+                takenKeys.add(key)
+            }
         }
     }
 
     const colours = Object.fromEntries(
-        themeModes.map((mode) => [mode, createColours(mode, looseConfig, palettes, extendedPalettes)]),
-    ) as Record<ThemeMode, Md3ThemeColours<TExtended>>
+        themeModes.map((mode) => [mode, createColours(mode, looseConfig, palettes, customSeedKeys, extendedPalettes)]),
+    ) as Record<ThemeMode, Md3ThemeColours<CustomSeedKey<TSeed> | TExtended>>
     const variables = Object.fromEntries(
         themeModes.map((mode) => [mode, createVariables(mode, colours[mode])]),
     ) as Record<ThemeMode, VuetifyThemeVariables>
 
-    return { colours, palettes, variables }
+    return { colours, palettes: palettes as Md3Theme<TExtended, TSeed>["palettes"], variables }
 }

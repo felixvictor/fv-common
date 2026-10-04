@@ -3,8 +3,15 @@ import { describe, expect, it } from "vitest"
 import { getContrastRatio } from "./contrast.js"
 import { harmoniseChroma, warmUpHue } from "./harmonise.js"
 import { accentKeys, md3FamilyTones, themeModes } from "./md3-roles.js"
-import { createMd3Theme, defaultChromaScale, defaultNeutralWarmth, type Md3ThemeConfig } from "./md3-theme.js"
+import {
+    createMd3Theme,
+    defaultChromaScale,
+    defaultHarmonisation,
+    defaultNeutralWarmth,
+    type Md3ThemeConfig,
+} from "./md3-theme.js"
 import { getHueDifference, hexToOklch } from "./oklch.js"
+import { paletteRangeTones } from "./palette-range.js"
 import { getTone } from "./tone.js"
 import { getThemeTextPairs } from "./validation.js"
 
@@ -155,5 +162,35 @@ describe("createMd3Theme", () => {
         expect(pairs).toContainEqual(["on-primary", "primary", "otherContentText"])
         expect(pairs).toContainEqual(["on-primary-container", "primary-container", "otherContentText"])
         expect(pairs).toContainEqual(["on-home", "home", "largeFluentText"])
+    })
+})
+
+describe("createMd3Theme with custom seeds", () => {
+    const gold = "#d4af37"
+    const theme = createMd3Theme({ extended: { medal: { seed: { from: "gold" } } }, seeds: { ...seeds, gold } })
+
+    it("builds a palette and the family roles", () => {
+        expect(theme.palettes.gold.toneRange()).toHaveLength(paletteRangeTones.length)
+        expect(theme.colours.light.gold).toBe(theme.palettes.gold.tone(md3FamilyTones.colour.light))
+        expect(theme.colours.dark["on-gold-container"]).toBe(theme.palettes.gold.tone(md3FamilyTones.onContainer.dark))
+    })
+
+    it("keeps the hue and tones loud chroma down", () => {
+        const seed = hexToOklch(gold)
+
+        expect(theme.palettes.gold.hue).toBeCloseTo(seed.hue, 6)
+        expect(theme.palettes.gold.chroma).toBeCloseTo(
+            harmoniseChroma(seed.chroma, hexToOklch(seeds.primary).chroma, defaultHarmonisation.custom) *
+                defaultChromaScale,
+            6,
+        )
+    })
+
+    it("serves as source of extended colours", () => {
+        expect(theme.colours.light.medal).toBe(theme.colours.light.gold)
+    })
+
+    it("rejects names that collide with core keys", () => {
+        expect(() => createMd3Theme({ seeds: { ...seeds, surface: "#ff0000" } })).toThrow(/collides/)
     })
 })

@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.1.2
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.1...v3.1.2)
+
+### 🩹 Fixes
+
+- **colour:** Give exact greys chroma 0 and hue 0 ([e26dbc8](https://github.com/felixvictor/fv-common/commit/e26dbc8))
+
+### 📦 Build
+
+- Dist ([be75880](https://github.com/felixvictor/fv-common/commit/be75880))
+
 ## v3.1.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.1.0...v3.1.1)

@@ -24,6 +24,19 @@ describe("hexToOklch", () => {
     })
 })
 
+describe("hexToOklch of greys", () => {
+    it.each(["#000000", "#777777", "#fff"])("gives %s chroma 0 and hue 0", (hex) => {
+        const { chroma, hue } = hexToOklch(hex)
+
+        expect(chroma).toBe(0)
+        expect(hue).toBe(0)
+    })
+
+    it("keeps the hue of the faintest 8-bit tint", () => {
+        expect(hexToOklch("#777778").chroma).toBeGreaterThan(0)
+    })
+})
+
 describe("getHueDifference", () => {
     it("takes the shorter way round", () => {
         expect(getHueDifference(350, 10)).toBeCloseTo(20)

@@ -62,6 +62,11 @@ const hexRadix = 16
 const hexDigitsPerChannel = 2
 /** Tolerance for rounding noise when testing gamut membership. */
 const gamutEpsilon = 1e-6
+/**
+ * Chroma below which a colour is an exact grey: the conversion matrices leave about 4e-8 for greys, while the smallest
+ * chroma of a non-grey 8-bit colour is about 1e-3. Exact greys get chroma 0 and hue 0 instead of an arbitrary hue.
+ */
+const greyChromaLimit = 1e-5
 /** Halving steps of the chroma search; 2^-20 of the chroma is far below the 8-bit resolution of hex output. */
 const gamutSearchIterations = 20
 
@@ -112,11 +117,10 @@ export const linearRgbToHex = ([red, green, blue]: LinearRgb): string =>
 export const linearRgbToOklch = (rgb: LinearRgb): Oklch => {
     const [l, m, s] = multiply(linearRgbToLms, rgb)
     const [lightness, a, b] = multiply(lmsRootToOklab, [Math.cbrt(l), Math.cbrt(m), Math.cbrt(s)])
-    return {
-        chroma: Math.hypot(a, b),
-        hue: normaliseHue(Math.atan2(b, a) / degreesToRadians),
-        lightness,
-    }
+    const chroma = Math.hypot(a, b)
+    if (chroma < greyChromaLimit) return { chroma: 0, hue: 0, lightness }
+
+    return { chroma, hue: normaliseHue(Math.atan2(b, a) / degreesToRadians), lightness }
 }
 
 export const oklchToLinearRgb = ({ chroma, hue, lightness }: Oklch): LinearRgb => {

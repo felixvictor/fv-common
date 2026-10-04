@@ -312,7 +312,7 @@ interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
 }
 interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
   readonly chromaScale?: number;
-  readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<CustomSeedKey<TSeed> | PaletteKey>>>;
+  readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<NoInfer<CustomSeedKey<TSeed>> | PaletteKey>>>;
   readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>;
   readonly neutral?: NeutralConfig;
   readonly palette?: TonalPaletteOptions;

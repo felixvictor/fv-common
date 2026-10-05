@@ -1,37 +1,27 @@
-import { defineConfig } from "tsdown"
+import { defineConfig, type UserConfig } from "tsdown"
 
-import type { BarrelCategory } from "./scripts/barrel-categories.types.js"
-
-import categoriesJson from "./scripts/barrel-categories.json" with { type: "json" }
-
-const barrelCategories = categoriesJson as BarrelCategory[]
+import { entryFiles } from "./scripts/barrels.ts"
 
 const sharedConfig = {
     format: "esm",
     minify: true,
+    platform: "neutral",
     sourcemap: true,
     target: false,
     treeshake: true,
-} as const
+    tsconfig: "./tsconfig.browser.json",
+} as const satisfies UserConfig
 
-const categoryEntries = barrelCategories.map((category) => {
-    const needsCustomExtension = category.outputExtension && category.outputExtension !== ".js"
+const entryOverrides: Readonly<Record<string, UserConfig>> = {
+    index: { platform: "browser" },
+    // platform "node" implies fixed extensions (.mjs, .d.mts)
+    node: { platform: "node", tsconfig: "./tsconfig.node.json" },
+}
 
-    return {
-        entry: `src/${category.name}.ts`,
-        platform: category.platform ?? "neutral",
-        tsconfig: category.tsconfig ?? "./tsconfig.browser.json",
-        ...(needsCustomExtension ? { outputOptions: { entryFileNames: `[name]${category.outputExtension}` } } : {}),
+export default defineConfig(
+    Object.entries(entryFiles).map(([entryName, entryFile]) => ({
         ...sharedConfig,
-    }
-})
-
-export default defineConfig([
-    {
-        entry: "src/index.ts",
-        platform: "browser",
-        tsconfig: "./tsconfig.browser.json",
-        ...sharedConfig,
-    },
-    ...categoryEntries,
-])
+        entry: { [entryName]: entryFile },
+        ...entryOverrides[entryName],
+    })),
+)

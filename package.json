@@ -31,15 +31,15 @@
         }
     },
     "scripts": {
-        ".build:1:lint": "pnpm run lint",
-        ".build:2:barrel": "pnpm run barrel",
+        ".build:1:barrel": "pnpm run barrel",
+        ".build:2:lint": "pnpm run lint",
         ".build:3:gen": "tsdown",
         ".build:4:commit": "git add dist/ src/ && git diff --staged --quiet || git commit -m 'build: dist'",
         ".deploy:1:build": "pnpm run build",
         ".deploy:2:release": "changelogen --clean --release --no-github --push",
         ".oxc:1:lint": "oxlint --fix",
         ".oxc:2:fmt": "pnpm run pretty-print",
-        "barrel": "tsx scripts/generate-barrel.ts",
+        "barrel": "node scripts/barrels.ts",
         "build": "pnpm run --sequential /^\\.build:.*/",
         "deploy": "pnpm run --sequential /^\\.deploy:.*/",
         "dev": "tsc --watch",
@@ -70,9 +70,7 @@
         "oxfmt": "^0.71.0",
         "oxlint": "^1.86.0",
         "oxlint-tsgolint": "^7.0.2003",
-        "ts-morph": "^28.0.0",
         "tsdown": "^0.23.0",
-        "tsx": "^4.23.15",
         "typescript": "^7.0.2",
         "vitest": "^4.1.11"
     },

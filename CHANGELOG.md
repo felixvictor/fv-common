@@ -1,5 +1,21 @@
 # Changelog
 
+## v4.0.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v3.2.1...v4.0.0)
+
+### 💅 Refactors
+
+- **colour:** ⚠️  Base oklch handling on colorjs.io in okLchColour ([3098d97](https://github.com/felixvictor/fv-common/commit/3098d97))
+
+### 📦 Build
+
+- Dist ([fcb8072](https://github.com/felixvictor/fv-common/commit/fcb8072))
+
+#### ⚠️ Breaking Changes
+
+- **colour:** ⚠️  Base oklch handling on colorjs.io in okLchColour ([3098d97](https://github.com/felixvictor/fv-common/commit/3098d97))
+
 ## v3.2.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.2.0...v3.2.1)

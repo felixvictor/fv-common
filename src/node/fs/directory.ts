@@ -1,12 +1,12 @@
 import type { Result } from "@/result.js"
 
-import { joinPaths } from "@/node.js"
 import { err, isOk, ok } from "@/result.js"
 import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 
 import { type FileSystemError } from "../error.js"
 import { toFileSystemError } from "../error.js"
+import { joinPaths } from "./path.js"
 import { getStatAsync, getStatSync } from "./stat.js"
 
 // ============================================================================

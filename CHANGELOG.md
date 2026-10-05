@@ -1,5 +1,26 @@
 # Changelog
 
+## v4.0.2
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.1...v4.0.2)
+
+### 🩹 Fixes
+
+- **build:** Share module state across entry points ([22ebbc8](https://github.com/felixvictor/fv-common/commit/22ebbc8))
+
+### 💅 Refactors
+
+- **node:** Import joinPaths from its module ([dff0800](https://github.com/felixvictor/fv-common/commit/dff0800))
+
+### 📖 Documentation
+
+- Describe entry points, barrels and build ([5c060c0](https://github.com/felixvictor/fv-common/commit/5c060c0))
+
+### 📦 Build
+
+- Replace ts-morph barrel generator with export-star barrels ([b5049b0](https://github.com/felixvictor/fv-common/commit/b5049b0))
+- Dist ([dbe9c98](https://github.com/felixvictor/fv-common/commit/dbe9c98))
+
 ## v4.0.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.0...v4.0.1)

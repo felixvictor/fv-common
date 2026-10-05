@@ -25,7 +25,28 @@ once as shared chunks, so every entry point works on the same module instance.
 - Modules inside the library import from the defining module, never from a barrel, to avoid import cycles.
 - Default exports are not re-exported. Clashing export names within one entry point fail the type check (TS2308).
 
+## Date and time
+
+Date and time helpers live in `src/temporal/` and use the global `Temporal`, either native or from
+`temporal-polyfill/global` loaded before the library. `fv-common/trading` and `fv-common/na` create Temporal values when
+they are loaded.
+
+- Strings: an ISO 8601 string with offset or `Z` is an exact instant; any other ISO 8601 date or date-time string (`T`
+  or space separator) is wall-clock time in the system time zone, or in the time zone a function names. Datetime
+  strings in `datetimeFormat` (`YYYY-MM-DD HH:mm`) are UTC unless a function states otherwise.
+- Patterns: `formatPattern` and `parsePattern` use Moment.js/Day.js token syntax with names from `Intl.DateTimeFormat`.
+- Conversions: `toInstant` and `toZonedDateTime` accept `Date`, epoch milliseconds, ISO strings and instants and throw a
+  RangeError on invalid input; `parseInstant`, `parseZonedDateTime` and `parseUtcDateTime` return undefined instead.
+- Errors: formatters throw a RangeError on unparsable input, predicates return false.
+- Determinism: functions that depend on the current time accept an optional `now`; functions that depend on the system
+  time zone accept an optional `timeZone` where useful.
+- Relative time: `formatRelativeTime`, `getDateDistance` and `getRelativeTime` word distances with
+  `Intl.RelativeTimeFormat`, e.g. "now", "1 hour ago", "in 3 days".
+- Server time (`fv-common/na`): server days and weeks start at the maintenance hour in UTC, weeks on Monday; periods are
+  `Temporal.ZonedDateTime` values in UTC.
+
 ## Build
 
 `pnpm build` regenerates the barrels, lints and type-checks, bundles with tsdown and commits `dist/`, `src/` and
-`package.json`. `dist/` is committed because the package is installed from GitHub.
+`package.json`. `dist/` is committed because the package is installed from GitHub. `pnpm test` runs with the system
+time zone Europe/Berlin (set in `vitest.config.ts`).

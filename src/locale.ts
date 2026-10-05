@@ -22,3 +22,6 @@ export const getLocale = (): string => currentLocale
 export const onLocaleChange = (callback: () => void): void => {
     localeChangeCallbacks.push(callback)
 }
+
+/** @deprecated Use {@link setLocale}. */
+export const setDateLocale = setLocale

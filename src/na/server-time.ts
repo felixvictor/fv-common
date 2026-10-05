@@ -1,65 +1,62 @@
-import dayjs from "dayjs"
-import customParseFormat from "dayjs/plugin/customParseFormat.js"
-import utc from "dayjs/plugin/utc.js"
+/**
+ * Server days. A server day starts at {@link serverMaintenanceHour}:00 UTC.
+ *
+ * The exported date strings are computed when the module is loaded.
+ */
+import { datetimeFormat, utcTimeZone } from "@/temporal/constants"
+import { formatPattern } from "@/temporal/pattern"
 
 import { serverMaintenanceHour } from "./constants.js"
 
-// eslint-disable-next-line unicorn/no-top-level-side-effects
-dayjs.extend(customParseFormat)
-// eslint-disable-next-line unicorn/no-top-level-side-effects
-dayjs.extend(utc)
+const twoDigits = 2
 
 /**
- * Gets the server start datetime for a given day offset. The server "day" starts at serverMaintenanceHour UTC.
+ * Start of the server day `dayOffset` days away from the current one.
  *
  * @example
- *     // If current time is 2024-01-15 08:00 UTC (before 10:00)
- *     getServerStartDateTime(0) // Returns 2024-01-14 10:00 (current server day)
- *     getServerStartDateTime(-1) // Returns 2024-01-13 10:00 (previous server day)
- *     getServerStartDateTime(1) // Returns 2024-01-15 10:00 (next server day)
+ *     // At 2024-01-15T08:00Z, before maintenance
+ *     getServerStart(0) // 2024-01-14T10:00Z, current server day
+ *     getServerStart(-1) // 2024-01-13T10:00Z
+ *     getServerStart(1) // 2024-01-15T10:00Z
  *
- * @param dayOffset - Offset from current server day (0 = current, -1 = previous, 1 = next).
- * @returns The server start datetime.
+ * @param dayOffset - 0 for the current server day, -1 for the previous one, 1 for the next one.
+ * @param now - Reference instant; defaults to the current instant.
+ * @returns Start of the server day in UTC.
  */
-const getServerStartDateTime = (dayOffset: number): dayjs.Dayjs => {
-    const now = dayjs().utc()
+export const getServerStart = (
+    dayOffset: number,
+    now: Temporal.Instant = Temporal.Now.instant(),
+): Temporal.ZonedDateTime => {
+    const zonedNow = now.toZonedDateTimeISO(utcTimeZone)
+    const todaysStart = zonedNow.withPlainTime({ hour: serverMaintenanceHour })
+    const isBeforeMaintenance = Temporal.ZonedDateTime.compare(zonedNow, todaysStart) < 0
+    const currentStart = isBeforeMaintenance ? todaysStart.subtract({ days: 1 }) : todaysStart
 
-    // Start with today's maintenance hour
-    let serverStart = now.hour(serverMaintenanceHour).minute(0).second(0).millisecond(0)
-
-    // If we're before maintenance hour, current server day started yesterday
-    if (now.isBefore(serverStart)) {
-        serverStart = serverStart.subtract(1, "day")
-    }
-
-    // Apply the requested offset
-    if (dayOffset !== 0) {
-        serverStart = serverStart.add(dayOffset, "day")
-    }
-
-    return serverStart
+    return currentStart.add({ days: dayOffset })
 }
 
-/** Get current server start (date and time). This is the most recent maintenance time that has passed. */
-export const getCurrentServerStart = (): dayjs.Dayjs => getServerStartDateTime(0)
+/** Start of the current server day in UTC, i.e. the most recent maintenance time. */
+export const getCurrentServerStart = (now?: Temporal.Instant): Temporal.ZonedDateTime => getServerStart(0, now)
 
-/** Get previous server start (date and time). */
-export const getPreviousServerStart = (): dayjs.Dayjs => getServerStartDateTime(-1)
+/** Start of the previous server day in UTC. */
+export const getPreviousServerStart = (now?: Temporal.Instant): Temporal.ZonedDateTime => getServerStart(-1, now)
 
-/** Get next server start (date and time). */
-export const getNextServerStart = (): dayjs.Dayjs => getServerStartDateTime(1)
+/** Start of the next server day in UTC. */
+export const getNextServerStart = (now?: Temporal.Instant): Temporal.ZonedDateTime => getServerStart(1, now)
 
-/** Current server start datetime formatted as "YYYY-MM-DD HH:mm". */
-export const currentServerStartDateTime = getCurrentServerStart().format("YYYY-MM-DD HH:mm")
+const currentServerStart = getCurrentServerStart()
 
-/** Current server start date formatted as "YYYY-MM-DD". */
-export const currentServerStartDate = getCurrentServerStart().format("YYYY-MM-DD")
+/** Start of the current server day as `YYYY-MM-DD HH:mm` (UTC). */
+export const currentServerStartDateTime = formatPattern(currentServerStart, datetimeFormat)
 
-/** Previous server start date formatted as "YYYY-MM-DD". */
-export const previousServerStartDate = getPreviousServerStart().format("YYYY-MM-DD")
+/** Date of the current server day as `YYYY-MM-DD`. */
+export const currentServerStartDate = currentServerStart.toPlainDate().toString()
 
-/** Current server date year as a string. */
-export const currentServerDateYear = String(getCurrentServerStart().year())
+/** Date of the previous server day as `YYYY-MM-DD`. */
+export const previousServerStartDate = currentServerStart.subtract({ days: 1 }).toPlainDate().toString()
 
-/** Current server date month as a zero-padded string (01-12). */
-export const currentServerDateMonth = String(getCurrentServerStart().month() + 1).padStart(2, "0")
+/** Year of the current server day. */
+export const currentServerDateYear = String(currentServerStart.year)
+
+/** Month of the current server day, zero-padded (01–12). */
+export const currentServerDateMonth = String(currentServerStart.month).padStart(twoDigits, "0")

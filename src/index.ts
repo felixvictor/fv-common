@@ -17,13 +17,13 @@ export type { AccentKey, FamilyRole, ModeTones, NeutralKey, PaletteKey, SchemeRo
 export { createMd3Theme, defaultAccentChromaFloor, defaultChromaScale, defaultHarmonisation, defaultNeutralChroma, defaultNeutralVariantChroma, defaultNeutralWarmth, md3DefaultSemanticSeeds, md3VuetifyDefaults } from "./colour/md3-theme.js";
 export type { CustomSeedKey, ExtendedColourConfig, FamilyThemeKey, HarmonisationGroup, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, NeutralConfig, SemanticKey, VuetifyThemeVariables } from "./colour/md3-theme.js";
 export { okHslColour } from "./colour/okhsl-colour.js";
-export { getHueDifference, getHueDistance, getRelativeLuminance, hexToLinearRgb, hexToOklch, isInSrgbGamut, linearRgbToHex, linearRgbToOklch, mapOklchToSrgb, normaliseHue, oklchToHex, oklchToLinearRgb } from "./colour/oklch.js";
-export type { LinearRgb, Oklch } from "./colour/oklch.js";
+export { okLchColour } from "./colour/oklch-colour.js";
+export type { Oklch } from "./colour/oklch-colour.js";
 export { getRangeColour, paletteRangeTones } from "./colour/palette-range.js";
 export type { PaletteRange, PaletteRangeTone } from "./colour/palette-range.js";
 export { constantChromaFloor, TonalPalette } from "./colour/tonal-palette.js";
 export type { TonalPaletteOptions } from "./colour/tonal-palette.js";
-export { getTone, luminanceToTone, toneMax, toneMin, toneToLuminance } from "./colour/tone.js";
+export { getTone, toneMax, toneMin } from "./colour/tone.js";
 export { getThemeTextPairs, minSeedHueDelta, minSurfaceToneDelta, seedChromaMin, validateColourDistances, validateHueDelta, validateSeed, validateTheme } from "./colour/validation.js";
 export type { ColourDistanceRule, ThemeTextPair } from "./colour/validation.js";
 export { simulateVisionDeficiency, visionDeficiencies } from "./colour/vision-deficiency.js";

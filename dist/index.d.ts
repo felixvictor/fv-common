@@ -84,25 +84,43 @@ export declare const apcaMaxLcLargeFluentText = 90;
 export declare const apcaMinLcUiComponent = 30;
 export declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
 //#endregion
-//#region src/colour/oklch.d.ts
-type LinearRgb = readonly [red: number, green: number, blue: number];
+//#region src/colour/oklch-colour.d.ts
 interface Oklch {
   readonly chroma: number;
   readonly hue: number;
   readonly lightness: number;
 }
-export declare const normaliseHue: (hue: number) => number;
-export declare const getHueDifference: (fromHue: number, toHue: number) => number;
-export declare const hexToLinearRgb: (hex: string) => LinearRgb;
-export declare const linearRgbToHex: ([red, green, blue]: LinearRgb) => string;
-export declare const linearRgbToOklch: (rgb: LinearRgb) => Oklch;
-export declare const oklchToLinearRgb: ({ chroma, hue, lightness }: Oklch) => LinearRgb;
-export declare const hexToOklch: (hex: string) => Oklch;
-export declare const oklchToHex: (colour: Oklch) => string;
-export declare const isInSrgbGamut: (rgb: LinearRgb) => boolean;
-export declare const mapOklchToSrgb: (colour: Oklch) => LinearRgb;
-export declare const getRelativeLuminance: ([red, green, blue]: LinearRgb) => number;
-export declare const getHueDistance: (hexA: string, hexB: string) => number;
+export declare class okLchColour implements Oklch {
+  #private;
+  static readonly chromaMin = 0;
+  static readonly colorSpace = "oklch";
+  static readonly gamutMappingMethod = "oklch.c";
+  static readonly gamutMappingTolerance = 0;
+  static readonly gamutSpace = "srgb";
+  static readonly hexFormat = "hex";
+  static readonly hueMax = 360;
+  static readonly hueMin = 0;
+  static readonly lightnessMax = 1;
+  static readonly lightnessMin = 0;
+  static readonly toneCoordinate = "lab-d65.l";
+  get chroma(): number;
+  set chroma(value: number | string);
+  get colourObject(): Color;
+  get hex(): string;
+  get hue(): number;
+  set hue(value: number | string);
+  get isInGamut(): boolean;
+  get lightness(): number;
+  set lightness(value: number | string);
+  get tone(): number;
+  constructor(argument: Color | Coords | string);
+  static hueDifference(fromHue: number, toHue: number): number;
+  static hueDistance(colourA: okLchColour, colourB: okLchColour): number;
+  static normaliseHue(hue: number): number;
+  clone(): okLchColour;
+  toGamut(): okLchColour;
+  toString(): string;
+}
 //#endregion
 //#region src/colour/harmonise.d.ts
 interface HarmonisationStrength {
@@ -372,9 +390,7 @@ export declare const createMd3Theme: <TExtended extends string = never, TSeed ex
 //#region src/colour/tone.d.ts
 export declare const toneMin = 0;
 export declare const toneMax = 100;
-export declare const toneToLuminance: (tone: number) => number;
-export declare const luminanceToTone: (luminance: number) => number;
-export declare const getTone: (hex: string) => number;
+export declare const getTone: (colour: string) => number;
 //#endregion
 //#region src/colour/validation.d.ts
 export declare const seedChromaMin = 0.03;
@@ -632,5 +648,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, CustomSeedKey, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, LinearRgb, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
+export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, CustomSeedKey, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
 //# sourceMappingURL=index.d.ts.map

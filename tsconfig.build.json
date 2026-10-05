@@ -2,9 +2,8 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        //"isolatedDeclarations": true,
-        "module": "ESNext",
-        "moduleResolution": "Bundler"
+        "types": ["node"]
     },
-    "include": ["src/**"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["src/**/*.test.ts"]
 }

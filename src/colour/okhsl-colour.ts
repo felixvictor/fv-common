@@ -1,4 +1,3 @@
-import { lightnessMax, lightnessMin } from "@/colour/colour-math"
 import { clamp } from "@/common"
 import Color, { type Coords } from "colorjs.io"
 
@@ -7,6 +6,8 @@ export class okHslColour {
     static readonly hexFormat = "hex"
     static readonly hueMax = 360
     static readonly hueMin = 0
+    static readonly lightnessMax = 1
+    static readonly lightnessMin = 0
     static readonly outputColorSpace = "srgb"
     static readonly saturationMax = 1
     static readonly saturationMin = 0
@@ -28,11 +29,11 @@ export class okHslColour {
     }
 
     get l(): number {
-        return (this.#colour.l as number | undefined) ?? lightnessMin
+        return (this.#colour.l as number | undefined) ?? okHslColour.lightnessMin
     }
 
     set l(value: number | string) {
-        this.#safeSet("lightness", "l", value, (v) => clamp(v, lightnessMin, lightnessMax))
+        this.#safeSet("lightness", "l", value, (v) => clamp(v, okHslColour.lightnessMin, okHslColour.lightnessMax))
     }
 
     get s(): number {

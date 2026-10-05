@@ -79,6 +79,11 @@ export class okLchColour implements Oklch {
         this.#safeSet("lightness", "l", value, (v) => clamp(v, okLchColour.lightnessMin, okLchColour.lightnessMax))
     }
 
+    /** Relative luminance (CIE Y, 0–1) of the colour, mapped into sRGB; the quantity WCAG contrast is based on. */
+    get luminance(): number {
+        return this.#mapped().luminance
+    }
+
     /** CIE L* (0–100) of the colour, mapped into sRGB. */
     get tone(): number {
         return this.#mapped().get(okLchColour.toneCoordinate)

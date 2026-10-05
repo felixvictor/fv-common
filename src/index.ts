@@ -5,7 +5,6 @@
 export { chunkify } from "./chunkify.js";
 export { getColourDistance, getMinColourDistance } from "./colour/colour-distance.js";
 export type { ColourDistance } from "./colour/colour-distance.js";
-export { applyToeCurve, backgroundLightnessThreshold, chromaCurveFactor, cieExponent, cieMultiplierHigh, cieMultiplierLow, cieOffset, cieThreshold, hueShiftFactor, lightnessContrastExponentDark, lightnessContrastExponentLight, lightnessContrastOffset, lightnessMax, lightnessMin, luminanceY, yToLightness } from "./colour/colour-math.js";
 export { ColourScaleGenerator } from "./colour/colour-scale-generator.js";
 export { blackHex, whiteHex } from "./colour/constant.js";
 export { apcaMaxLcLargeFluentText, apcaMinLcByRole, apcaMinLcUiComponent, getApcaContrast, getContrastColour, getContrastRatio, isMeetingApcaContrast, wcagTextMinRatio, wcagUiMinRatio } from "./colour/contrast.js";

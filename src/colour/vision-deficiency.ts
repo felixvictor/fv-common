@@ -1,20 +1,16 @@
-import { clamp } from "@/common"
-import Color, { type Coords } from "colorjs.io"
+import Color from "colorjs.io"
 
 export type VisionDeficiency = "deuteranopia" | "protanopia" | "tritanopia"
 
 /** Simulated vision deficiencies, ordered from most to least common. */
 export const visionDeficiencies: readonly VisionDeficiency[] = ["deuteranopia", "protanopia", "tritanopia"]
 
-type Matrix = readonly [
-    readonly [number, number, number],
-    readonly [number, number, number],
-    readonly [number, number, number],
-]
+type Matrix = Parameters<typeof Color.util.multiply_v3_m3x3>[1]
+type Vector = Parameters<typeof Color.util.multiply_v3_m3x3>[0]
 
 /**
  * Machado, Oliveira & Fernandes (2009), "A Physiologically-based Model for Simulation of Color Vision Deficiency",
- * severity 1.0 (complete dichromacy). The matrices apply to linear sRGB.
+ * severity 1.0 (complete dichromacy). The matrices apply to linear sRGB; colorjs.io has no simulation of its own.
  */
 const machadoMatrices: Record<VisionDeficiency, Matrix> = {
     deuteranopia: [
@@ -35,29 +31,25 @@ const machadoMatrices: Record<VisionDeficiency, Matrix> = {
 }
 
 const channelMin = 0
-const channelMax = 1
 const linearSrgbSpace = "srgb-linear"
 const srgbSpace = "srgb"
+const clipMethod = "clip"
 const hexFormat = "hex"
 
 /**
  * Simulates how a colour appears with the given vision deficiency.
  *
- * Achromatic colours stay unchanged (each matrix row sums to 1). Out-of-gamut results are clamped per channel.
+ * Achromatic colours stay unchanged (each matrix row sums to 1). Out-of-gamut results are clipped per channel.
  *
  * @returns The simulated colour as hex string.
  */
 export const simulateVisionDeficiency = (hex: string, deficiency: VisionDeficiency): string => {
-    const [red = channelMin, green = channelMin, blue = channelMin] = new Color(hex)
-        .to(linearSrgbSpace)
-        .coords.map((channel) => channel ?? channelMin)
-    const [[m00, m01, m02], [m10, m11, m12], [m20, m21, m22]] = machadoMatrices[deficiency]
+    const [red, green, blue] = new Color(hex).to(linearSrgbSpace).coords
+    const linear: Vector = [red ?? channelMin, green ?? channelMin, blue ?? channelMin]
+    const simulated = Color.util.multiply_v3_m3x3(linear, machadoMatrices[deficiency])
 
-    const coords: Coords = [
-        clamp(m00 * red + m01 * green + m02 * blue, channelMin, channelMax),
-        clamp(m10 * red + m11 * green + m12 * blue, channelMin, channelMax),
-        clamp(m20 * red + m21 * green + m22 * blue, channelMin, channelMax),
-    ]
-
-    return new Color({ coords, space: linearSrgbSpace }).to(srgbSpace).toString({ format: hexFormat })
+    return new Color({ coords: simulated, space: linearSrgbSpace })
+        .toGamut({ method: clipMethod, space: srgbSpace })
+        .to(srgbSpace)
+        .toString({ format: hexFormat })
 }

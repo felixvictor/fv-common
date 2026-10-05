@@ -1,5 +1,21 @@
 # Changelog
 
+## v5.0.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.2...v5.0.0)
+
+### 💅 Refactors
+
+- ⚠️  Replace Day.js with Temporal in date and na modules ([9bfa85c](https://github.com/felixvictor/fv-common/commit/9bfa85c))
+
+### 📦 Build
+
+- Dist ([219b869](https://github.com/felixvictor/fv-common/commit/219b869))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Replace Day.js with Temporal in date and na modules ([9bfa85c](https://github.com/felixvictor/fv-common/commit/9bfa85c))
+
 ## v4.0.2
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.1...v4.0.2)

@@ -1,7 +1,4 @@
-import dayjs from "dayjs";
-import "dayjs/locale/de.js";
-import "dayjs/locale/en.js";
-import "dayjs/locale/en-gb.js";
+import { i as setLocale } from "./locale-B4Vv9qpd.js";
 //#region src/na/compass.d.ts
 export declare const compassDirections: readonly ["N", "N⅓NE", "N⅔NE", "NE", "E⅔NE", "E⅓NE", "E", "E⅓SE", "E⅔SE", "SE", "S⅔SE", "S⅓SE", "S", "S⅓SW", "S⅔SW", "SW", "W⅔SW", "W⅓SW", "W", "W⅓NW", "W⅔NW", "NW", "N⅔NW", "N⅓NW"];
 export declare const degreesPerDirection: number;
@@ -58,9 +55,10 @@ export declare const getDistance: (pt0: Coordinate, pt1: Coordinate) => number;
 export declare const coordinateAdjust: (x: number | PointTuple | PointTuple[], y?: number) => PointTuple | PointTuple[];
 //#endregion
 //#region src/na/server-time.d.ts
-export declare const getCurrentServerStart: () => dayjs.Dayjs;
-export declare const getPreviousServerStart: () => dayjs.Dayjs;
-export declare const getNextServerStart: () => dayjs.Dayjs;
+export declare const getServerStart: (dayOffset: number, now?: Temporal.Instant) => Temporal.ZonedDateTime;
+export declare const getCurrentServerStart: (now?: Temporal.Instant) => Temporal.ZonedDateTime;
+export declare const getPreviousServerStart: (now?: Temporal.Instant) => Temporal.ZonedDateTime;
+export declare const getNextServerStart: (now?: Temporal.Instant) => Temporal.ZonedDateTime;
 export declare const currentServerStartDateTime: string;
 export declare const currentServerStartDate: string;
 export declare const previousServerStartDate: string;
@@ -68,24 +66,16 @@ export declare const currentServerDateYear: string;
 export declare const currentServerDateMonth: string;
 //#endregion
 //#region src/na/time.d.ts
-export declare const setDateLocale: (locale: string) => void;
-export declare const getPortBattleTime: (startHoursFromSMH: number, isNeutralPort?: boolean) => string;
-export declare const getToday: () => {
-  begin: dayjs.Dayjs;
-  end: dayjs.Dayjs;
-};
-export declare const getYesterday: () => {
-  begin: dayjs.Dayjs;
-  end: dayjs.Dayjs;
-};
-export declare const getThisWeek: () => {
-  begin: dayjs.Dayjs;
-  end: dayjs.Dayjs;
-};
-export declare const getLastWeek: () => {
-  begin: dayjs.Dayjs;
-  end: dayjs.Dayjs;
-};
+export interface ServerTimePeriod {
+  begin: Temporal.ZonedDateTime;
+  end: Temporal.ZonedDateTime;
+}
+export declare const setDateLocale: typeof setLocale;
+export declare const getPortBattleTime: (startHoursFromSMH: number, isNeutralPort?: boolean, timeZone?: string) => string;
+export declare const getToday: (now?: Temporal.Instant) => ServerTimePeriod;
+export declare const getYesterday: (now?: Temporal.Instant) => ServerTimePeriod;
+export declare const getThisWeek: (now?: Temporal.Instant) => ServerTimePeriod;
+export declare const getLastWeek: (now?: Temporal.Instant) => ServerTimePeriod;
 //#endregion
 //#region src/na/wind.d.ts
 export declare const numberSegments = 24;

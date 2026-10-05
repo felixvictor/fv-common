@@ -1,9 +1,6 @@
+import { i as setLocale, n as onLocaleChange, r as setDateLocale, t as getLocale } from "./locale-B4Vv9qpd.js";
 import { a as err, c as ok, i as andThen, l as unwrapOr, n as Ok, o as isErr, r as Result, s as isOk, t as Err, u as unwrapOrThrow } from "./result-SaC_idVt.js";
 import Color, { Coords } from "colorjs.io";
-import dayjs, { Dayjs } from "dayjs";
-import "dayjs/locale/de.js";
-import "dayjs/locale/en.js";
-import "dayjs/locale/en-gb.js";
 //#region src/chunkify.d.ts
 export declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
@@ -413,48 +410,6 @@ export declare const clampUnsafe: (x: number, min: number, max: number) => numbe
 export declare const lerp: (value1: number | string, value2: number | string, t: number | string) => number;
 export declare const lerpUnsafe: (v1: number, v2: number, t: number) => number;
 //#endregion
-//#region src/date/constants.d.ts
-export declare const datetimeFormat = "YYYY-MM-DD HH:mm";
-//#endregion
-//#region src/date/convert.d.ts
-export declare const convertDEDateString: (date: string) => string;
-export declare const getRange: (dateRange: Date[]) => {
-  begin: Dayjs;
-  end: Dayjs;
-};
-export declare const getLocalHour: (hour: number) => number;
-export declare const convertUTCStringToDate: (date: string) => Date;
-export declare const convertBerlinTimeToUTC: (date: string) => Date;
-export declare const convertDate: (date: string, fromFormat: string, toFormat: string, locale: string) => string | undefined;
-//#endregion
-//#region src/date/format.d.ts
-export declare const setDateLocale: (locale: string) => void;
-export declare const getFormattedDate: (date: string, locale?: string) => string;
-export declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
-export declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
-export declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
-export declare const getDateDistance: (date: string, locale?: string) => string;
-export declare const getRelativeTime: (time: string) => string;
-export declare const formatDateViaDayjs: (time: string) => string;
-export declare const formatTime: (time: string) => string;
-export declare const formatLocalDate: (time: string) => string;
-export declare const formatLocalTime: (time: string) => string;
-export declare const formatFromToTime: (from: number, to: number) => string;
-export declare const formatTimeRange: (from: number, to: number) => string;
-//#endregion
-//#region src/date/test.d.ts
-export declare const isDateInRange: (date: Date, hours: number) => boolean;
-export declare const isFutureDate: (date: Date | string) => boolean;
-export declare const isPastDate: (time: string) => boolean;
-export declare const isBetweenTime: (time: string | undefined, begin: Dayjs, end: Dayjs) => boolean;
-export declare const closestDateIndex: (datesString: string[]) => number | undefined;
-//#endregion
-//#region src/date/ticks.d.ts
-export declare const getTimeFromTicks: (ticks: bigint | number | string) => string;
-export declare const getDateFromTicks: (ticks: bigint | number) => dayjs.Dayjs;
-export declare const getTicksFromDate: (date: dayjs.Dayjs | number) => bigint;
-export declare const getTimestampFromTicks: (ticks: bigint | number | string) => number;
-//#endregion
 //#region src/delay.d.ts
 export declare const delay: (ms: number) => Promise<unknown>;
 //#endregion
@@ -524,11 +479,6 @@ export declare const getElementDimensionsPrecise: (element: HTMLElement | SVGEle
   width: number;
 };
 //#endregion
-//#region src/locale.d.ts
-export declare const setLocale: (locale: string) => void;
-export declare const getLocale: () => string;
-export declare const onLocaleChange: (callback: () => void) => void;
-//#endregion
 //#region src/math/common.d.ts
 export declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
 //#endregion
@@ -569,9 +519,36 @@ export declare const isInstantAfter: (instant1: Temporal.Instant, instant2: Temp
 export declare const isInstantAtOrAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
 export declare const isInstantAtOrBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
 export declare const isInstantBefore: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
+export declare const isDateInRange: (date: Date, hours: number, now?: Temporal.Instant) => boolean;
+export declare const isFutureDate: (date: Date | string, now?: Temporal.Instant) => boolean;
+export declare const isPastDate: (time: string, now?: Temporal.Instant) => boolean;
+export declare const isBetweenTime: (time: string | undefined, begin: Temporal.Instant, end: Temporal.Instant) => boolean;
+//#endregion
+//#region src/temporal/constants.d.ts
+export declare const datetimeFormat = "YYYY-MM-DD HH:mm";
+export declare const deDatetimeFormat = "DD.MM.YYYY HH:mm";
+export declare const berlinTimeZone = "Europe/Berlin";
+export declare const utcTimeZone = "UTC";
 //#endregion
 //#region src/temporal/convert.d.ts
+export type DateTimeInput = Date | number | string | Temporal.Instant;
+export interface InstantRange {
+  begin: Temporal.Instant;
+  end: Temporal.Instant;
+}
+export declare const toInstant: (value: DateTimeInput, timeZone?: string) => Temporal.Instant;
+export declare const toZonedDateTime: (value: DateTimeInput, timeZone?: string) => Temporal.ZonedDateTime;
+export declare const toDate: (instant: Temporal.Instant) => Date;
+export declare const parseInstant: (value: DateTimeInput, timeZone?: string) => Temporal.Instant | undefined;
+export declare const parseZonedDateTime: (value: string, pattern: string, timeZone?: string) => Temporal.ZonedDateTime | undefined;
+export declare const parseUtcDateTime: (time: string) => Temporal.ZonedDateTime | undefined;
 export declare const dateToString: (date: Date) => string;
+export declare const convertDEDateString: (date: string) => string;
+export declare const getRange: (dateRange: readonly Date[]) => InstantRange;
+export declare const getLocalHour: (hour: number, timeZone?: string) => number;
+export declare const convertUTCStringToDate: (date: string) => Date;
+export declare const convertBerlinTimeToUTC: (date: string) => Date;
+export declare const convertDate: (date: string, fromFormat: string, toFormat: string, locale?: string) => string | undefined;
 //#endregion
 //#region src/temporal/format.d.ts
 export declare const formatMs: (ms: number, options?: Intl.DurationFormatOptions, locale?: string) => string;
@@ -580,15 +557,48 @@ export declare const formatDate: (date: Date, options?: Intl.DateTimeFormatOptio
 export declare const formatDateString: (dateString: string, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
 export declare const formatDuration: (duration: Temporal.Duration, options?: Intl.DurationFormatOptions, locale?: string) => string;
 export declare const formatInstant: (instant: Temporal.Instant, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
+export declare const getFormattedDate: (date: string, locale?: string) => string;
+export declare const getFormattedDateShort: (date: number | string, locale?: string) => string;
+export declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
+export declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
+export declare const formatUtcDateTime: (time: string) => string;
+export declare const formatDateViaDayjs: typeof formatUtcDateTime;
+export declare const formatTime: (time: string) => string;
+export declare const formatLocalDate: (time: string, timeZone?: string) => string;
+export declare const formatLocalTime: (time: string, timeZone?: string) => string;
+export declare const formatFromToTime: (from: number, to: number) => string;
+export declare const formatTimeRange: (from: number, to: number, timeZone?: string) => string;
 //#endregion
 //#region src/temporal/manipulate.d.ts
 export declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
 export declare const subtractFromInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
 //#endregion
+//#region src/temporal/pattern.d.ts
+export interface ParsePatternOptions {
+  isStrict?: boolean | undefined;
+  locale?: string | undefined;
+}
+export type PatternDateTime = Temporal.PlainDateTime | Temporal.ZonedDateTime;
+export declare const formatPattern: (dateTime: PatternDateTime, pattern: string, locale?: string) => string;
+export declare const parsePattern: (value: string, pattern: string, options?: ParsePatternOptions) => Temporal.PlainDateTime | undefined;
+//#endregion
 //#region src/temporal/query.d.ts
 export declare const daysBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
 export declare const getMidnightUTC: (dateString: string) => Temporal.ZonedDateTime;
 export declare const hoursBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
+export declare const closestDateIndex: (datesString: readonly string[], now?: Temporal.Instant) => number | undefined;
+//#endregion
+//#region src/temporal/relative-time.d.ts
+export declare const formatRelativeTime: (target: Temporal.ZonedDateTime, locale?: string, now?: Temporal.Instant) => string;
+export declare const getDateDistance: (date: string, locale?: string, now?: Temporal.Instant) => string;
+export declare const getRelativeTime: (time: string, locale?: string, now?: Temporal.Instant) => string;
+//#endregion
+//#region src/temporal/ticks.d.ts
+export type TicksInput = bigint | number | string;
+export declare const getTimestampFromTicks: (ticks: TicksInput) => number;
+export declare const getInstantFromTicks: (ticks: TicksInput) => Temporal.Instant;
+export declare const getTimeFromTicks: (ticks: TicksInput) => string;
+export declare const getTicksFromDate: (date: Date | number | Temporal.Instant) => bigint;
 //#endregion
 //#region src/unicode.d.ts
 export declare const cCaretRight: string;
@@ -622,5 +632,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export { Err, Ok, Result, andThen, err, isErr, isOk, ok, unwrapOr, unwrapOrThrow };
+export { Err, Ok, Result, andThen, err, getLocale, isErr, isOk, ok, onLocaleChange, setDateLocale, setLocale, unwrapOr, unwrapOrThrow };
 //# sourceMappingURL=index.d.ts.map

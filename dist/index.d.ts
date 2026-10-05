@@ -1,3 +1,4 @@
+import { a as err, c as ok, i as andThen, l as unwrapOr, n as Ok, o as isErr, r as Result, s as isOk, t as Err, u as unwrapOrThrow } from "./result-SaC_idVt.js";
 import Color, { Coords } from "colorjs.io";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/de.js";
@@ -7,12 +8,12 @@ import "dayjs/locale/en-gb.js";
 export declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
 //#endregion
 //#region src/colour/vision-deficiency.d.ts
-type VisionDeficiency = "deuteranopia" | "protanopia" | "tritanopia";
+export type VisionDeficiency = "deuteranopia" | "protanopia" | "tritanopia";
 export declare const visionDeficiencies: readonly VisionDeficiency[];
 export declare const simulateVisionDeficiency: (hex: string, deficiency: VisionDeficiency) => string;
 //#endregion
 //#region src/colour/colour-distance.d.ts
-interface ColourDistance {
+export interface ColourDistance {
   readonly deficiency: undefined | VisionDeficiency;
   readonly distance: number;
 }
@@ -63,7 +64,7 @@ export declare const blackHex = "#000000";
 export declare const whiteHex = "#ffffff";
 //#endregion
 //#region src/colour/contrast.d.ts
-type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText";
+export type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText";
 export declare const wcagTextMinRatio = 4.5;
 export declare const wcagUiMinRatio = 3;
 export declare const getContrastRatio: (hex1: string, hex2: string) => number;
@@ -75,7 +76,7 @@ export declare const apcaMinLcUiComponent = 30;
 export declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
 //#endregion
 //#region src/colour/oklch-colour.d.ts
-interface Oklch {
+export interface Oklch {
   readonly chroma: number;
   readonly hue: number;
   readonly lightness: number;
@@ -114,7 +115,7 @@ export declare class okLchColour implements Oklch {
 }
 //#endregion
 //#region src/colour/harmonise.d.ts
-interface HarmonisationStrength {
+export interface HarmonisationStrength {
   readonly chromaFactor: number;
   readonly hueFactor: number;
   readonly maxHueRotation: number;
@@ -128,15 +129,15 @@ export declare const warmUpHue: (hue: number, warmth: number) => number;
 export declare const harmoniseOklch: (colour: Oklch, target: Oklch, strength: HarmonisationStrength) => Oklch;
 //#endregion
 //#region src/colour/md3-roles.d.ts
-type ThemeMode = "dark" | "light";
+export type ThemeMode = "dark" | "light";
 export declare const themeModes: readonly ThemeMode[];
-type AccentKey = "error" | "info" | "primary" | "secondary" | "success" | "tertiary" | "warning";
-type ModeTones = Readonly<Record<ThemeMode, number>>;
-type NeutralKey = "neutral" | "neutralVariant";
-type PaletteKey = AccentKey | NeutralKey;
+export type AccentKey = "error" | "info" | "primary" | "secondary" | "success" | "tertiary" | "warning";
+export type ModeTones = Readonly<Record<ThemeMode, number>>;
+export type NeutralKey = "neutral" | "neutralVariant";
+export type PaletteKey = AccentKey | NeutralKey;
 export declare const accentKeys: readonly AccentKey[];
 export declare const paletteKeys: readonly PaletteKey[];
-type FamilyRole = "colour" | "container" | "onColour" | "onContainer";
+export type FamilyRole = "colour" | "container" | "onColour" | "onContainer";
 export declare const md3FamilyTones: {
   readonly colour: {
     readonly dark: 80;
@@ -155,7 +156,7 @@ export declare const md3FamilyTones: {
     readonly light: 10;
   };
 };
-interface SchemeRoleSpec {
+export interface SchemeRoleSpec {
   readonly palette: PaletteKey;
   readonly tones: ModeTones;
 }
@@ -273,18 +274,18 @@ export declare const md3SchemeRoles: {
     };
   };
 };
-type SchemeRole = keyof typeof md3SchemeRoles;
+export type SchemeRole = keyof typeof md3SchemeRoles;
 export declare const md3ScrimHex = "#000000";
 export declare const md3ShadowHex = "#000000";
 //#endregion
 //#region src/colour/palette-range.d.ts
 export declare const paletteRangeTones: readonly [6, 14, 22, 30, 38, 46, 54, 62, 70, 78, 86, 94];
-type PaletteRange = readonly string[];
-type PaletteRangeTone = (typeof paletteRangeTones)[number];
+export type PaletteRange = readonly string[];
+export type PaletteRangeTone = (typeof paletteRangeTones)[number];
 export declare const getRangeColour: (range: PaletteRange, tone: PaletteRangeTone) => string;
 //#endregion
 //#region src/colour/tonal-palette.d.ts
-interface TonalPaletteOptions {
+export interface TonalPaletteOptions {
   readonly chromaFloor?: number;
   readonly hueShift?: number;
 }
@@ -300,9 +301,9 @@ export declare class TonalPalette {
 }
 //#endregion
 //#region src/colour/md3-theme.d.ts
-type CustomSeedKey<TSeed extends string> = Exclude<TSeed, AccentKey>;
-type HarmonisationGroup = "accent" | "custom" | "extended" | "semantic";
-type SemanticKey = Exclude<AccentKey, BrandKey>;
+export type CustomSeedKey<TSeed extends string> = Exclude<TSeed, AccentKey>;
+export type HarmonisationGroup = "accent" | "custom" | "extended" | "semantic";
+export type SemanticKey = Exclude<AccentKey, BrandKey>;
 type BrandKey = "primary" | "secondary" | "tertiary";
 export declare const md3DefaultSemanticSeeds: Readonly<Record<SemanticKey, string>>;
 export declare const defaultHarmonisation: Readonly<Record<HarmonisationGroup, HarmonisationStrength>>;
@@ -311,7 +312,7 @@ export declare const defaultNeutralVariantChroma = 0.012;
 export declare const defaultNeutralWarmth = 2;
 export declare const defaultChromaScale = 0.8;
 export declare const defaultAccentChromaFloor = 0.45;
-interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
+export interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
   readonly chromaScale?: number;
   readonly seed: string | {
     readonly from: TPaletteKey;
@@ -319,7 +320,7 @@ interface ExtendedColourConfig<TPaletteKey extends string = PaletteKey> {
   readonly shouldHarmonise?: boolean;
   readonly tones?: Partial<Readonly<Record<FamilyRole, ModeTones>>>;
 }
-interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
+export interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string = BrandKey> {
   readonly chromaScale?: number;
   readonly extended?: Readonly<Record<TExtended, ExtendedColourConfig<NoInfer<CustomSeedKey<TSeed>> | PaletteKey>>>;
   readonly harmonisation?: Partial<Readonly<Record<HarmonisationGroup, HarmonisationStrength>>>;
@@ -328,7 +329,7 @@ interface Md3ThemeConfig<TExtended extends string = never, TSeed extends string 
   readonly schemeTones?: Partial<Readonly<Record<SchemeRole, ModeTones>>>;
   readonly seeds: Partial<Readonly<Record<SemanticKey, string>>> & Readonly<Record<BrandKey | TSeed, string>>;
 }
-interface NeutralConfig {
+export interface NeutralConfig {
   readonly chroma?: number;
   readonly hueOffset?: number;
   readonly seed?: string;
@@ -346,18 +347,18 @@ declare const paletteThemeNames: {
   readonly tertiary: "tertiary";
   readonly warning: "warning";
 };
-type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-container` | `on-${TName}` | TName;
+export type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-container` | `on-${TName}` | TName;
 type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey];
 declare const vuetifyDarkenKeys: readonly ["primary", "secondary"];
 type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`;
-interface Md3Theme<TExtended extends string = never, TSeed extends string = BrandKey> {
+export interface Md3Theme<TExtended extends string = never, TSeed extends string = BrandKey> {
   readonly colours: Readonly<Record<ThemeMode, Md3ThemeColours<CustomSeedKey<TSeed> | TExtended>>>;
   readonly palettes: Readonly<Record<CustomSeedKey<TSeed> | PaletteKey, TonalPalette>>;
   readonly variables: Readonly<Record<ThemeMode, VuetifyThemeVariables>>;
 }
-type Md3ThemeColourKey<TFamily extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TFamily> | SchemeRole | VuetifyAliasKey;
-type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md3ThemeColourKey<TFamily>, string>>;
-type VuetifyThemeVariables = {
+export type Md3ThemeColourKey<TFamily extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TFamily> | SchemeRole | VuetifyAliasKey;
+export type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md3ThemeColourKey<TFamily>, string>>;
+export type VuetifyThemeVariables = {
   readonly "border-color": string;
   readonly "shadow-color": string;
   readonly "theme-code": string;
@@ -389,13 +390,13 @@ export declare const minSeedHueDelta = 5;
 export declare const minSurfaceToneDelta = 1.5;
 export declare const validateSeed: (name: string, hex: string) => void;
 export declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
-interface ColourDistanceRule {
+export interface ColourDistanceRule {
   readonly a: string;
   readonly b: string;
   readonly deficiencies?: readonly VisionDeficiency[];
   readonly minDistance: number;
 }
-type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole];
+export type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole];
 export declare const getThemeTextPairs: (theme: Readonly<Record<string, string | undefined>>, additionalTextPairs?: readonly ThemeTextPair[]) => ThemeTextPair[];
 export declare const validateTheme: (theme: Readonly<Record<string, string | undefined>>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
@@ -532,7 +533,7 @@ export declare const onLocaleChange: (callback: () => void) => void;
 export declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
 //#endregion
 //#region src/math/find-segment.d.ts
-interface CurvePoint {
+export interface CurvePoint {
   tangentIn: number;
   tangentOut: number;
   time: number;
@@ -545,26 +546,8 @@ export declare const getCurveValueClamped: (time: number, points: CurvePoint[]) 
 export declare const nearestPow2: (value: number) => number;
 export declare const nextPow2: (value: number) => number;
 //#endregion
-//#region src/result.d.ts
-interface Err<E> {
-  readonly error: E;
-  readonly ok: false;
-}
-interface Ok<T> {
-  readonly ok: true;
-  readonly value: T;
-}
-type Result<T, E> = Err<E> | Ok<T>;
-export declare function andThen<T, U, E>(result: Result<T, E>, next: (value: T) => Result<U, E>): Result<U, E>;
-export declare function err<E>(error: E): Err<E>;
-export declare function isErr<T, E>(result: Result<T, E>): result is Err<E>;
-export declare function isOk<T, E>(result: Result<T, E>): result is Ok<T>;
-export declare function ok<T>(value: T): Ok<T>;
-export declare function unwrapOr<T, E>(result: Result<T, E>, fallback: T): T;
-export declare function unwrapOrThrow<T, E>(result: Result<T, E>, message: string): T;
-//#endregion
 //#region src/sort.d.ts
-type SortArgument<T> = `-${keyof T & string}` | keyof T;
+export type SortArgument<T> = `-${keyof T & string}` | keyof T;
 export declare const sortBy: <T extends object>(sortArguments: SortArgument<T>[]) => (a: T, b: T) => number;
 export declare const simpleNumberSort: (a: null | number | undefined, b: null | number | undefined, isDescending?: boolean) => number;
 export declare const simpleStringSort: (a: null | string | undefined, b: null | string | undefined, isDescending?: boolean) => number;
@@ -639,5 +622,5 @@ export declare const createUrl: (options: {
   user?: string;
 }, name?: string) => URL;
 //#endregion
-export type { AccentKey, ApcaTextRole, ColourDistance, ColourDistanceRule, CurvePoint, CustomSeedKey, Err, ExtendedColourConfig, FamilyRole, FamilyThemeKey, HarmonisationGroup, HarmonisationStrength, Md3Theme, Md3ThemeColourKey, Md3ThemeColours, Md3ThemeConfig, ModeTones, NeutralConfig, NeutralKey, Ok, Oklch, PaletteKey, PaletteRange, PaletteRangeTone, Result, SchemeRole, SchemeRoleSpec, SemanticKey, SortArgument, ThemeMode, ThemeTextPair, TonalPaletteOptions, VisionDeficiency, VuetifyThemeVariables };
+export { Err, Ok, Result, andThen, err, isErr, isOk, ok, unwrapOr, unwrapOrThrow };
 //# sourceMappingURL=index.d.ts.map

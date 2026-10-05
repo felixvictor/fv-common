@@ -1,19 +1,9 @@
+import { r as Result } from "./result-SaC_idVt.js";
 import { ExecSyncOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-//#region src/result.d.ts
-interface Err<E> {
-  readonly error: E;
-  readonly ok: false;
-}
-interface Ok<T> {
-  readonly ok: true;
-  readonly value: T;
-}
-type Result<T, E> = Err<E> | Ok<T>;
-//#endregion
 //#region src/node/command.d.ts
-interface CommandError {
+export interface CommandError {
   readonly cause: unknown;
   readonly command: string;
   readonly stderr?: string;
@@ -40,7 +30,7 @@ export declare const errorCodes: {
   readonly timeout: "ETIMEDOUT";
   readonly tooManyOpenFiles: "EMFILE";
 };
-type FileSystemError = {
+export type FileSystemError = {
   readonly cause: unknown;
   readonly kind: "unknown";
   readonly path: string;
@@ -48,7 +38,7 @@ type FileSystemError = {
   readonly kind: "not-found";
   readonly path: string;
 };
-interface JsonParseError {
+export interface JsonParseError {
   readonly cause: unknown;
   readonly kind: "parse-error";
   readonly path: string;
@@ -144,5 +134,4 @@ export declare const getStatAsync: (path: string) => Promise<Result<fs.Stats, Fi
 export declare const doesPathExist: (path: string) => boolean;
 export declare const doesPathExistAsync: (path: string) => Promise<boolean>;
 //#endregion
-export type { CommandError, FileSystemError, JsonParseError };
-//# sourceMappingURL=node.d.mts.map
+//# sourceMappingURL=node.d.ts.map

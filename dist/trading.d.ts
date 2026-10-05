@@ -28,15 +28,15 @@ export declare const nyseHolidayDates: ReadonlySet<string>;
 export declare const nyseHolidayDataKnownThroughYear = 2028;
 //#endregion
 //#region src/trading/nyse-time-windows.interface.d.ts
-interface EarlyCloseAdjustedTime {
+export interface EarlyCloseAdjustedTime {
   default: Temporal.PlainTime;
   earlyClose: Temporal.PlainTime;
 }
-interface PlainTimeWindow {
+export interface PlainTimeWindow {
   end: EarlyCloseAdjustedTime | Temporal.PlainTime;
   start: Temporal.PlainTime;
 }
-interface TimeWindow {
+export interface TimeWindow {
   info: (nyDate?: Temporal.PlainDate) => string;
   order: number;
   text: string;
@@ -44,7 +44,7 @@ interface TimeWindow {
 }
 //#endregion
 //#region src/trading/nyse-time-windows.d.ts
-type NyseTimeWindowKey = keyof typeof windows;
+export type NyseTimeWindowKey = keyof typeof windows;
 export declare const nyseRegularSessionOpenTime: Temporal.PlainTime;
 export declare const nyseRegularSessionDefaultCloseTime: Temporal.PlainTime;
 declare const windows: {
@@ -95,5 +95,4 @@ export declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 export declare const secHolidayDates: ReadonlySet<string>;
 export declare const secHolidayDataKnownThroughYear = 2028;
 //#endregion
-export type { EarlyCloseAdjustedTime, NyseTimeWindowKey, PlainTimeWindow, TimeWindow };
 //# sourceMappingURL=trading.d.ts.map

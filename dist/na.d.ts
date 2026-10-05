@@ -31,21 +31,21 @@ export declare const convertCoordX: (x: number, y: number) => number;
 export declare const convertCoordY: (x: number, y: number) => number;
 export declare const convertInvCoordX: (x: number, y: number) => number;
 export declare const convertInvCoordY: (x: number, y: number) => number;
-interface Coordinate {
+export interface Coordinate {
   x: number;
   y: number;
 }
-interface Distance extends Array<number> {
+export interface Distance extends Array<number> {
   0: number;
   1: number;
   2: number;
 }
-type Extent = [Point, Point];
-interface Point extends Array<number> {
+export type Extent = [Point, Point];
+export interface Point extends Array<number> {
   0: number;
   1: number;
 }
-type PointTuple = [number, number];
+export type PointTuple = [number, number];
 export declare const radiansToDegrees: (radians: number) => number;
 export declare const degreesToRadians: (degrees: number) => number;
 export declare const rotationAngleInDegrees: (centerPt: Point, targetPt: Point) => number;
@@ -95,5 +95,4 @@ export declare const degreesPerSecond: number;
 export declare const subtractFromWind: (wind: number, sub: number) => number;
 export declare const subtractFromWindAlt: (wind: number, sub: number) => number;
 //#endregion
-export type { Coordinate, Distance, Extent, Point, PointTuple };
 //# sourceMappingURL=na.d.ts.map

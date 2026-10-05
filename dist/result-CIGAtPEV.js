@@ -1,0 +1,2 @@
+function e(e,t){return r(e)?t(e.value):e}function t(e){return{error:e,ok:!1}}function n(e){return!e.ok}function r(e){return e.ok}function i(e){return{ok:!0,value:e}}function a(e,t){return r(e)?e.value:t}function o(e,t){if(n(e))throw Error(t,{cause:e.error});return e.value}export{i as a,r as i,t as n,a as o,n as r,o as s,e as t};
+//# sourceMappingURL=result-CIGAtPEV.js.map

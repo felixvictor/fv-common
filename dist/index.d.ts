@@ -19,24 +19,6 @@ interface ColourDistance {
 export declare const getColourDistance: (hexA: string, hexB: string, deficiency?: VisionDeficiency) => number;
 export declare const getMinColourDistance: (hexA: string, hexB: string, deficiencies?: readonly VisionDeficiency[]) => ColourDistance;
 //#endregion
-//#region src/colour/colour-math.d.ts
-export declare const backgroundLightnessThreshold: 0.18;
-export declare const chromaCurveFactor: 4;
-export declare const cieExponent: number;
-export declare const cieMultiplierHigh: 1.16;
-export declare const cieMultiplierLow: 9.032962962;
-export declare const cieOffset: 0.16;
-export declare const cieThreshold: 0.0088564516;
-export declare const hueShiftFactor: 5;
-export declare const lightnessContrastExponentLight: 2.2;
-export declare const lightnessContrastExponentDark: 3.08;
-export declare const lightnessContrastOffset: 0.05;
-export declare const lightnessMin: 0;
-export declare const lightnessMax: 1;
-export declare const applyToeCurve: (lightness: number) => number;
-export declare const yToLightness: (y: number) => number;
-export declare const luminanceY: (hex: string | undefined) => number | undefined;
-//#endregion
 //#region src/colour/okhsl-colour.d.ts
 export declare class okHslColour {
   #private;
@@ -44,6 +26,8 @@ export declare class okHslColour {
   static readonly hexFormat = "hex";
   static readonly hueMax = 360;
   static readonly hueMin = 0;
+  static readonly lightnessMax = 1;
+  static readonly lightnessMin = 0;
   static readonly outputColorSpace = "srgb";
   static readonly saturationMax = 1;
   static readonly saturationMin = 0;
@@ -64,6 +48,12 @@ export declare class okHslColour {
 //#region src/colour/colour-scale-generator.d.ts
 export declare class ColourScaleGenerator {
   #private;
+  static readonly backgroundLuminanceThreshold = 0.18;
+  static readonly chromaCurveFactor = 4;
+  static readonly contrastExponentDark = 3.08;
+  static readonly contrastExponentLight = 2.2;
+  static readonly contrastOffset = 0.05;
+  static readonly hueShift = 5;
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
   computeColour(scaleNumber: number): okHslColour;
 }
@@ -112,6 +102,7 @@ export declare class okLchColour implements Oklch {
   get isInGamut(): boolean;
   get lightness(): number;
   set lightness(value: number | string);
+  get luminance(): number;
   get tone(): number;
   constructor(argument: Color | Coords | string);
   static hueDifference(fromHue: number, toHue: number): number;

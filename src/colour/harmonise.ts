@@ -1,4 +1,4 @@
-import { getHueDifference, normaliseHue, type Oklch } from "@/colour/oklch"
+import { type Oklch, okLchColour } from "@/colour/oklch-colour"
 import { clampUnsafe, lerpUnsafe } from "@/common"
 
 /**
@@ -38,14 +38,14 @@ export const harmoniseHue = (
     targetHue: number,
     { hueFactor, maxHueRotation, minHueDistance }: HarmonisationStrength,
 ): number => {
-    const difference = getHueDifference(hue, targetHue)
+    const difference = okLchColour.hueDifference(hue, targetHue)
     const distance = Math.abs(difference)
     const rotation = clampUnsafe(
         distance * hueFactor,
         0,
         Math.min(maxHueRotation, Math.max(0, distance - minHueDistance)),
     )
-    return normaliseHue(hue + Math.sign(difference) * rotation)
+    return okLchColour.normaliseHue(hue + Math.sign(difference) * rotation)
 }
 
 /** Lowers a chroma above the target chroma by `chromaFactor` of the excess; lower chroma stays unchanged. */
@@ -69,7 +69,7 @@ const degreesToRadians = Math.PI / 180
 export const warmUpHue = (hue: number, warmth: number): number => {
     const a = Math.cos(hue * degreesToRadians) + warmth * Math.cos(warmPoleHue * degreesToRadians)
     const b = Math.sin(hue * degreesToRadians) + warmth * Math.sin(warmPoleHue * degreesToRadians)
-    return normaliseHue(Math.atan2(b, a) / degreesToRadians)
+    return okLchColour.normaliseHue(Math.atan2(b, a) / degreesToRadians)
 }
 
 /** Pulls hue and chroma of a colour towards the target; lightness stays unchanged. */

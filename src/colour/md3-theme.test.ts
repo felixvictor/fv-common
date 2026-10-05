@@ -10,7 +10,7 @@ import {
     defaultNeutralWarmth,
     type Md3ThemeConfig,
 } from "./md3-theme.js"
-import { getHueDifference, hexToOklch } from "./oklch.js"
+import { okLchColour } from "./oklch-colour.js"
 import { paletteRangeTones } from "./palette-range.js"
 import { getTone } from "./tone.js"
 import { getThemeTextPairs } from "./validation.js"
@@ -74,7 +74,7 @@ describe("createMd3Theme", () => {
     })
 
     it("derives the neutral palettes from the hue of primary, pulled towards warm greys", () => {
-        const primaryHue = hexToOklch(seeds.primary).hue
+        const primaryHue = new okLchColour(seeds.primary).hue
 
         expect(theme.palettes.neutral.hue).toBeCloseTo(warmUpHue(primaryHue, defaultNeutralWarmth), 6)
         expect(createMd3Theme({ neutral: { warmth: 0 }, seeds }).palettes.neutral.hue).toBeCloseTo(primaryHue, 6)
@@ -82,25 +82,27 @@ describe("createMd3Theme", () => {
     })
 
     it("keeps colours near primary apart from it", () => {
-        const primaryHue = hexToOklch(seeds.primary).hue
-        const secondary = hexToOklch(seeds.secondary)
+        const primaryHue = new okLchColour(seeds.primary).hue
+        const secondary = new okLchColour(seeds.secondary)
 
         expect(theme.palettes.secondary.hue).toBeCloseTo(secondary.hue, 6)
         expect(theme.palettes.secondary.chroma).toBeCloseTo(secondary.chroma * defaultChromaScale, 6)
-        expect(Math.abs(getHueDifference(theme.palettes.secondary.hue, primaryHue))).toBeLessThan(30)
+        expect(Math.abs(okLchColour.hueDifference(theme.palettes.secondary.hue, primaryHue))).toBeLessThan(30)
     })
 
     it("pulls other colours towards primary, semantic colours less", () => {
-        const primaryHue = hexToOklch(seeds.primary).hue
-        const distanceToPrimary = (hue: number) => Math.abs(getHueDifference(hue, primaryHue))
-        const errorRotation = Math.abs(getHueDifference(hexToOklch("#b3261e").hue, theme.palettes.error.hue))
+        const primaryHue = new okLchColour(seeds.primary).hue
+        const distanceToPrimary = (hue: number) => Math.abs(okLchColour.hueDifference(hue, primaryHue))
+        const errorRotation = Math.abs(
+            okLchColour.hueDifference(new okLchColour("#b3261e").hue, theme.palettes.error.hue),
+        )
 
         expect(distanceToPrimary(theme.palettes.tertiary.hue)).toBeLessThan(
-            distanceToPrimary(hexToOklch(seeds.tertiary).hue),
+            distanceToPrimary(new okLchColour(seeds.tertiary).hue),
         )
         expect(errorRotation).toBeLessThanOrEqual(8 + 1e-9)
         expect(theme.palettes.error.chroma).toBeCloseTo(
-            harmoniseChroma(hexToOklch("#b3261e").chroma, hexToOklch(seeds.primary).chroma, {
+            harmoniseChroma(new okLchColour("#b3261e").chroma, new okLchColour(seeds.primary).chroma, {
                 chromaFactor: 0.2,
                 hueFactor: 0,
                 maxHueRotation: 0,
@@ -122,13 +124,13 @@ describe("createMd3Theme", () => {
     })
 
     it("scales own extended seeds by their own chroma factor", () => {
-        const seedChroma = hexToOklch("#4b798c").chroma
+        const seedChroma = new okLchColour("#4b798c").chroma
         const chromaTolerance = 0.003
 
-        expect(Math.abs(hexToOklch(theme.colours.light.vivid).chroma - seedChroma)).toBeLessThan(chromaTolerance)
-        expect(Math.abs(hexToOklch(theme.colours.light.muted).chroma - seedChroma * defaultChromaScale)).toBeLessThan(
-            chromaTolerance,
-        )
+        expect(Math.abs(new okLchColour(theme.colours.light.vivid).chroma - seedChroma)).toBeLessThan(chromaTolerance)
+        expect(
+            Math.abs(new okLchColour(theme.colours.light.muted).chroma - seedChroma * defaultChromaScale),
+        ).toBeLessThan(chromaTolerance)
     })
 
     it("picks the content colour with the higher contrast for overridden tones", () => {
@@ -146,8 +148,11 @@ describe("createMd3Theme", () => {
 
         expect(Math.abs(getTone(custom.colours.light.surface) - 95)).toBeLessThan(toneTolerance)
         expect(Math.abs(getTone(custom.colours.dark.background) - 12)).toBeLessThan(toneTolerance)
-        expect(getHueDifference(hexToOklch("#7e7246").hue, custom.palettes.neutral.hue)).toBeCloseTo(30, 6)
-        expect(custom.palettes.secondary.chroma).toBeCloseTo(hexToOklch(seeds.secondary).chroma, 6)
+        expect(okLchColour.hueDifference(new okLchColour("#7e7246").hue, custom.palettes.neutral.hue)).toBeCloseTo(
+            30,
+            6,
+        )
+        expect(custom.palettes.secondary.chroma).toBeCloseTo(new okLchColour(seeds.secondary).chroma, 6)
     })
 
     it("rejects extended names that collide with core keys", () => {
@@ -176,14 +181,22 @@ describe("createMd3Theme with custom seeds", () => {
     })
 
     it("keeps the hue and tones loud chroma down", () => {
-        const seed = hexToOklch(gold)
+        const seed = new okLchColour(gold)
 
         expect(theme.palettes.gold.hue).toBeCloseTo(seed.hue, 6)
         expect(theme.palettes.gold.chroma).toBeCloseTo(
-            harmoniseChroma(seed.chroma, hexToOklch(seeds.primary).chroma, defaultHarmonisation.custom) *
+            harmoniseChroma(seed.chroma, new okLchColour(seeds.primary).chroma, defaultHarmonisation.custom) *
                 defaultChromaScale,
             6,
         )
+    })
+
+    it("serves as source of extended colours", () => {
+        expect(theme.colours.light.medal).toBe(theme.colours.light.gold)
+    })
+
+    it("rejects names that collide with core keys", () => {
+        expect(() => createMd3Theme({ seeds: { ...seeds, surface: "#ff0000" } })).toThrow(/collides/)
     })
 
     it("infers custom seeds from seeds only, not from palette references of extended colours", () => {
@@ -194,13 +207,5 @@ describe("createMd3Theme with custom seeds", () => {
 
         expect(inferred.colours.light.eins).toBe(inferred.colours.light.neutral)
         expect(inferred.colours.light.gold).toBe(theme.colours.light.gold)
-    })
-
-    it("serves as source of extended colours", () => {
-        expect(theme.colours.light.medal).toBe(theme.colours.light.gold)
-    })
-
-    it("rejects names that collide with core keys", () => {
-        expect(() => createMd3Theme({ seeds: { ...seeds, surface: "#ff0000" } })).toThrow(/collides/)
     })
 })

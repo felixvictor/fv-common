@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import { getColourDistance } from "./colour-distance.js"
 import { getContrastRatio } from "./contrast.js"
-import { hexToOklch } from "./oklch.js"
+import { okLchColour } from "./oklch-colour.js"
 import { getRangeColour, paletteRangeTones } from "./palette-range.js"
 import { TonalPalette } from "./tonal-palette.js"
 import { getTone } from "./tone.js"
@@ -39,14 +39,14 @@ describe("TonalPalette", () => {
         const seed = "#3a6c9a"
         const palette = TonalPalette.fromHex(seed)
 
-        expect(palette.hue).toBeCloseTo(hexToOklch(seed).hue, 6)
-        expect(hexToOklch(palette.tone(40)).hue).toBeCloseTo(palette.hue, 0)
+        expect(palette.hue).toBeCloseTo(new okLchColour(seed).hue, 6)
+        expect(new okLchColour(palette.tone(40)).hue).toBeCloseTo(palette.hue, 0)
     })
 
     it("eases chroma towards the ends with a chroma floor below 1", () => {
         const constant = new TonalPalette(250, 0.05)
         const eased = new TonalPalette(250, 0.05, { chromaFloor: 0.5 })
-        const chromaAt = (palette: TonalPalette, tone: number) => hexToOklch(palette.tone(tone)).chroma
+        const chromaAt = (palette: TonalPalette, tone: number) => new okLchColour(palette.tone(tone)).chroma
 
         expect(Math.abs(chromaAt(constant, 30) - chromaAt(constant, 70))).toBeLessThan(0.003)
         expect(chromaAt(eased, 80)).toBeLessThan(chromaAt(eased, 50) - 0.01)

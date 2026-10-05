@@ -15,7 +15,7 @@ import {
     type ThemeMode,
     themeModes,
 } from "@/colour/md3-roles"
-import { hexToOklch, normaliseHue, type Oklch } from "@/colour/oklch"
+import { type Oklch, okLchColour } from "@/colour/oklch-colour"
 import { constantChromaFloor, TonalPalette, type TonalPaletteOptions } from "@/colour/tonal-palette"
 import { toneMax } from "@/colour/tone"
 
@@ -267,7 +267,7 @@ const createPalettes = (
     const createSeedPalette = (key: string, strength: HarmonisationStrength): TonalPalette => {
         const seedHex = seeds[key]
         if (seedHex === undefined) throw new Error(`Missing seed "${key}"`)
-        const { chroma, hue } = harmoniseOklch(hexToOklch(seedHex), primary, strength)
+        const { chroma, hue } = harmoniseOklch(new okLchColour(seedHex), primary, strength)
         return new TonalPalette(hue, chroma * chromaScale, accentOptions)
     }
 
@@ -291,7 +291,7 @@ const createPalettes = (
         warmth = defaultNeutralWarmth,
     } = config.neutral ?? {}
     const neutralHue = warmUpHue(
-        normaliseHue((seed === undefined ? primary.hue : hexToOklch(seed).hue) + hueOffset),
+        okLchColour.normaliseHue((seed === undefined ? primary.hue : new okLchColour(seed).hue) + hueOffset),
         warmth,
     )
     const neutralOptions: TonalPaletteOptions = { chromaFloor: constantChromaFloor }
@@ -318,7 +318,7 @@ const createExtendedPalette = (
         return palette
     }
 
-    const oklch = hexToOklch(seed)
+    const oklch = new okLchColour(seed)
     const { chroma, hue } = shouldHarmonise ? harmoniseOklch(oklch, primary, strength) : oklch
     return new TonalPalette(hue, chroma * (ownChromaScale ?? chromaScale), accentOptions)
 }
@@ -402,7 +402,7 @@ export const createMd3Theme = <TExtended extends string = never, TSeed extends s
     const strengths = { ...defaultHarmonisation, ...config.harmonisation }
     const accentOptions: TonalPaletteOptions = { chromaFloor: defaultAccentChromaFloor, ...config.palette }
     const chromaScale = config.chromaScale ?? defaultChromaScale
-    const primary = hexToOklch(config.seeds.primary)
+    const primary = new okLchColour(config.seeds.primary)
 
     const palettes = createPalettes(looseConfig, primary, strengths, accentOptions, chromaScale)
     const customSeedKeys = getCustomSeedKeys(looseConfig)

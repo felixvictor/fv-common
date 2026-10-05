@@ -6,7 +6,7 @@ import {
     getApcaContrast,
     isMeetingApcaContrast,
 } from "@/colour/contrast"
-import { getHueDistance, hexToOklch } from "@/colour/oklch"
+import { okLchColour } from "@/colour/oklch-colour"
 import { getTone } from "@/colour/tone"
 import { type VisionDeficiency } from "@/colour/vision-deficiency"
 import { round } from "@/format/number"
@@ -19,7 +19,7 @@ export const minSurfaceToneDelta = 1.5
 
 /** Warns if an accent seed is too grey to carry a colour family. Lightness does not matter: palettes use hue and chroma. */
 export const validateSeed = (name: string, hex: string) => {
-    const { chroma } = hexToOklch(hex)
+    const { chroma } = new okLchColour(hex)
     if (chroma < seedChromaMin) {
         console.warn(
             `${name} (${hex}): chroma ${round(chroma, 3)} < ${seedChromaMin} – the colour family may look washed out`,
@@ -34,7 +34,7 @@ export const validateHueDelta = (
     hexB: string,
     minDelta: number = minSeedHueDelta,
 ) => {
-    const delta = getHueDistance(hexA, hexB)
+    const delta = okLchColour.hueDistance(new okLchColour(hexA), new okLchColour(hexB))
     if (delta < minDelta) {
         console.warn(
             `${nameA} and ${nameB} are only ${round(delta, 1)}° apart in hue (minimum: ${minDelta}°) – their tonal ranges may be indistinguishable`,

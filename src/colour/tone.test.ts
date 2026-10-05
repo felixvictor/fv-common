@@ -1,19 +1,16 @@
 import { describe, expect, it } from "vitest"
 
-import { getTone, luminanceToTone, toneToLuminance } from "./tone.js"
+import { getTone } from "./tone.js"
 
-describe("tone", () => {
-    it.each([0, 4, 8, 10, 40, 50, 87, 98, 100])("round-trips tone %d through luminance", (tone) => {
-        expect(luminanceToTone(toneToLuminance(tone))).toBeCloseTo(tone, 6)
-    })
-
-    it("gives middle grey (CIE L* 50) a luminance of about 0.184", () => {
-        expect(toneToLuminance(50)).toBeCloseTo(0.1842, 4)
-    })
-
+describe("getTone", () => {
     it("measures black, white and mid grey", () => {
-        expect(getTone("#000000")).toBe(0)
+        expect(getTone("#000000")).toBeCloseTo(0, 6)
         expect(getTone("#ffffff")).toBeCloseTo(100, 6)
         expect(getTone("#777777")).toBeCloseTo(50, 0)
+    })
+
+    it("depends on luminance only", () => {
+        expect(getTone("#ff0000")).toBeCloseTo(53.2, 1)
+        expect(getTone("#0000ff")).toBeCloseTo(32.3, 1)
     })
 })

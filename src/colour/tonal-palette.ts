@@ -1,13 +1,6 @@
-import {
-    getRelativeLuminance,
-    hexToOklch,
-    type LinearRgb,
-    linearRgbToHex,
-    mapOklchToSrgb,
-    normaliseHue,
-} from "@/colour/oklch"
+import { okLchColour } from "@/colour/oklch-colour"
 import { type PaletteRange, paletteRangeTones } from "@/colour/palette-range"
-import { toneMax, toneMin, toneToLuminance } from "@/colour/tone"
+import { toneMax, toneMin } from "@/colour/tone"
 import { clampUnsafe } from "@/common"
 
 export interface TonalPaletteOptions {
@@ -31,17 +24,18 @@ const defaultHueShift = 0
 const midTone = (toneMin + toneMax) / 2
 const unitMin = 0
 const unitMax = 1
-const blackRgb: LinearRgb = [unitMin, unitMin, unitMin]
-const whiteRgb: LinearRgb = [unitMax, unitMax, unitMax]
-/** Halving steps of the lightness search; 2^-32 is far below the 8-bit resolution of hex output. */
-const lightnessSearchIterations = 32
+const { lightnessMax, lightnessMin } = okLchColour
+const black = new okLchColour([lightnessMin, okLchColour.chromaMin, okLchColour.hueMin])
+const white = new okLchColour([lightnessMax, okLchColour.chromaMin, okLchColour.hueMin])
+/** Halving steps of the lightness search; 2^-20 of the lightness range is far below the 8-bit resolution of hex output. */
+const lightnessSearchIterations = 20
 
 /**
  * Tonal palette of one hue: any tone (CIE L*, 0–100) maps to an sRGB colour of that hue.
  *
  * Hue and chroma are set in OKLCH. For a tone, the OKLCH lightness is searched so that the colour, after mapping into
- * sRGB by reducing chroma, has exactly the luminance of the tone. Hence tones are absolute, shared by light and dark
- * themes, and the contrast between two tones does not depend on the hue.
+ * sRGB by reducing chroma, has exactly that tone. Hence tones are absolute, shared by light and dark themes, and the
+ * contrast between two tones does not depend on the hue.
  */
 export class TonalPalette {
     get chroma(): number {
@@ -63,7 +57,7 @@ export class TonalPalette {
         chroma: number,
         { chromaFloor = constantChromaFloor, hueShift = defaultHueShift }: TonalPaletteOptions = {},
     ) {
-        this.#hue = normaliseHue(hue)
+        this.#hue = okLchColour.normaliseHue(hue)
         this.#chroma = Math.max(0, chroma)
         this.#chromaFloor = clampUnsafe(chromaFloor, unitMin, unitMax)
         this.#hueShift = hueShift
@@ -71,7 +65,7 @@ export class TonalPalette {
 
     /** Palette with hue and chroma of the seed; the seed's lightness is irrelevant. */
     static fromHex(hex: string, options: TonalPaletteOptions = {}): TonalPalette {
-        const { chroma, hue } = hexToOklch(hex)
+        const { chroma, hue } = new okLchColour(hex)
         return new TonalPalette(hue, chroma, options)
     }
 
@@ -97,30 +91,29 @@ export class TonalPalette {
     }
 
     #computeTone(tone: number): string {
-        if (tone <= toneMin) return linearRgbToHex(blackRgb)
-        if (tone >= toneMax) return linearRgbToHex(whiteRgb)
+        if (tone <= toneMin) return black.hex
+        if (tone >= toneMax) return white.hex
 
-        const targetLuminance = toneToLuminance(tone)
         const chroma = this.#chromaAt(tone)
         const hue = this.#hueAt(tone)
 
-        let lower = unitMin
-        let upper = unitMax
-        let rgb = blackRgb
+        let lower = lightnessMin
+        let upper = lightnessMax
+        let colour = black
         for (let iteration = 0; iteration < lightnessSearchIterations; iteration++) {
             const lightness = (lower + upper) / 2
-            rgb = mapOklchToSrgb({ chroma, hue, lightness })
-            if (getRelativeLuminance(rgb) < targetLuminance) {
+            colour = new okLchColour([lightness, chroma, hue]).toGamut()
+            if (colour.tone < tone) {
                 lower = lightness
             } else {
                 upper = lightness
             }
         }
 
-        return linearRgbToHex(rgb)
+        return colour.hex
     }
 
     #hueAt(tone: number): number {
-        return normaliseHue(this.#hue + (this.#hueShift * (tone - midTone)) / midTone)
+        return okLchColour.normaliseHue(this.#hue + (this.#hueShift * (tone - midTone)) / midTone)
     }
 }

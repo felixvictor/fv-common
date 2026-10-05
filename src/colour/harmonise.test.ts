@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { harmoniseChroma, harmoniseHue, harmoniseOklch, noHarmonisation, warmPoleHue, warmUpHue } from "./harmonise.js"
-import { getHueDifference } from "./oklch.js"
+import { okLchColour } from "./oklch-colour.js"
 
 const md3Strength = { chromaFactor: 0.5, hueFactor: 0.5, maxHueRotation: 15, minHueDistance: 0 }
 
@@ -46,8 +46,8 @@ describe("warmUpHue", () => {
         for (const hue of [0, 29, 145, 248, 300]) {
             const warmed = warmUpHue(hue, 2)
 
-            expect(Math.abs(getHueDifference(warmed, warmPoleHue))).toBeLessThan(
-                Math.abs(getHueDifference(hue, warmPoleHue)) / 2 + 1,
+            expect(Math.abs(okLchColour.hueDifference(warmed, warmPoleHue))).toBeLessThan(
+                Math.abs(okLchColour.hueDifference(hue, warmPoleHue)) / 2 + 1,
             )
         }
     })

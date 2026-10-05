@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.0.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.0...v4.0.1)
+
+### 💅 Refactors
+
+- **colour:** Replace colour-math with colorjs.io ([c52b7a7](https://github.com/felixvictor/fv-common/commit/c52b7a7))
+
+### 📦 Build
+
+- Dist ([6db773e](https://github.com/felixvictor/fv-common/commit/6db773e))
+
 ## v4.0.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v3.2.1...v4.0.0)

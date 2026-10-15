@@ -95,4 +95,5 @@ export declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
 export declare const secHolidayDates: ReadonlySet<string>;
 export declare const secHolidayDataKnownThroughYear = 2028;
 //#endregion
+export {};
 //# sourceMappingURL=trading.d.ts.map

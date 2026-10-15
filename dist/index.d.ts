@@ -398,18 +398,6 @@ export declare const getThemeTextPairs: (theme: Readonly<Record<string, string |
 export declare const validateTheme: (theme: Readonly<Record<string, string | undefined>>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
 //#endregion
-//#region src/common.d.ts
-export declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
-export declare const isEmpty: (value: unknown) => boolean;
-export declare const isNullish: (value: unknown) => value is null | undefined;
-export declare const isNullishOrNaN: (value: unknown) => boolean;
-export declare const isNumeric: (value: unknown) => value is number;
-export declare const toFiniteNumber: (value: unknown) => number | undefined;
-export declare const clamp: (value: number | string, min: number | string, max: number | string) => number;
-export declare const clampUnsafe: (x: number, min: number, max: number) => number;
-export declare const lerp: (value1: number | string, value2: number | string, t: number | string) => number;
-export declare const lerpUnsafe: (v1: number, v2: number, t: number) => number;
-//#endregion
 //#region src/delay.d.ts
 export declare const delay: (ms: number) => Promise<unknown>;
 //#endregion
@@ -457,6 +445,21 @@ export declare const formatPP: (x: number, f?: number) => string;
 export declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
 export declare const pluralise: (count: number, wordSingle: string, wordPlural?: string) => string;
 //#endregion
+//#region src/guard.d.ts
+export type NumberLike = number | string;
+export declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
+export declare const isEmpty: (value: unknown) => boolean;
+export declare const isNullish: (value: unknown) => value is null | undefined;
+export declare const isNullishOrNaN: (value: unknown) => boolean;
+export declare const isNumberLike: (value: unknown) => value is NumberLike;
+export declare const parseNumberLike: (value: NumberLike) => number;
+export declare const toFiniteNumber: (value: unknown) => number | undefined;
+export declare const isNumeric: (value: unknown) => boolean;
+export declare const clampUnsafe: (value: number, min: number, max: number) => number;
+export declare const clamp: (value: NumberLike, min: NumberLike, max: NumberLike) => number;
+export declare const lerpUnsafe: (start: number, end: number, t: number) => number;
+export declare const lerp: (start: NumberLike, end: NumberLike, t: NumberLike) => number;
+//#endregion
 //#region src/html.d.ts
 export declare const getElementRect: (element: HTMLElement | SVGElement) => {
   bottom: number;
@@ -497,8 +500,10 @@ export declare const nearestPow2: (value: number) => number;
 export declare const nextPow2: (value: number) => number;
 //#endregion
 //#region src/sort.d.ts
-export type SortArgument<T> = `-${keyof T & string}` | keyof T;
-export declare const sortBy: <T extends object>(sortArguments: SortArgument<T>[]) => (a: T, b: T) => number;
+declare const descendingPrefix = "-";
+export type Comparator<T> = (a: T, b: T) => number;
+export type SortArgument<T> = `${typeof descendingPrefix}${keyof T & string}` | keyof T;
+export declare const sortBy: <T extends object>(sortArguments: readonly SortArgument<T>[]) => Comparator<T>;
 export declare const simpleNumberSort: (a: null | number | undefined, b: null | number | undefined, isDescending?: boolean) => number;
 export declare const simpleStringSort: (a: null | string | undefined, b: null | string | undefined, isDescending?: boolean) => number;
 //#endregion

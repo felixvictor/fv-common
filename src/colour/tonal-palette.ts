@@ -1,7 +1,7 @@
 import { okLchColour } from "@/colour/oklch-colour"
 import { type PaletteRange, paletteRangeTones } from "@/colour/palette-range"
 import { toneMax, toneMin } from "@/colour/tone"
-import { clampUnsafe } from "@/common"
+import { clampUnsafe } from "@/guard"
 
 export interface TonalPaletteOptions {
     /**

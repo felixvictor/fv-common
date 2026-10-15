@@ -12,7 +12,7 @@
     "include": [
         "*.config.*",
         "scripts/**/*",
-        "src/common.ts",
+        "src/guard.ts",
         "src/locale.ts",
         "src/node.ts",
         "src/node/**/*",

@@ -1,4 +1,4 @@
-import { clamp } from "@/common"
+import { clamp } from "@/guard"
 import Color, { type Coords } from "colorjs.io"
 
 import { okHslColour } from "./okhsl-colour.js"

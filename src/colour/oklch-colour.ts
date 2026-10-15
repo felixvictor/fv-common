@@ -1,4 +1,4 @@
-import { clamp } from "@/common"
+import { clamp } from "@/guard"
 import Color, { type Coords } from "colorjs.io"
 import { deltas } from "colorjs.io/fn"
 

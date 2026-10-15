@@ -1,5 +1,5 @@
 import { type Oklch, okLchColour } from "@/colour/oklch-colour"
-import { clampUnsafe, lerpUnsafe } from "@/common"
+import { clampUnsafe, lerpUnsafe } from "@/guard"
 
 /**
  * How strongly a colour is pulled towards a target colour (usually primary).

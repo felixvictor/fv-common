@@ -1,4 +1,4 @@
-import { toFiniteNumber } from "@/common"
+import { toFiniteNumber } from "@/guard"
 
 const minPort = 0 as const
 const maxPort = 65_535 as const

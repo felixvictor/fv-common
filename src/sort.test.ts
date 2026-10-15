@@ -1,267 +1,202 @@
-/* oxlint-disable unicorn/no-null, typescript/non-nullable-type-assertion-style, typescript/no-non-null-assertion */
+/* oxlint-disable unicorn/no-null */
 
 import { describe, expect, it } from "vitest"
 
-import { simpleNumberSort, simpleStringSort, sortBy } from "./sort.js"
+import { simpleNumberSort, simpleStringSort, type SortArgument, sortBy } from "./sort.js"
 
-interface Item {
+interface Person {
     age: null | number | undefined
-    category?: string
-    custom?: Record<string, unknown>
-    id?: number
-    metadata?: Record<string, unknown>
     name: string
-    score?: number | string
-    tags?: string[]
+}
+
+interface Row {
+    category?: string
     value?: unknown
 }
 
-describe("Library Sort Functions", () => {
-    describe("sortBy", () => {
-        it("should sort objects by a single property in ascending order", () => {
-            const data: Item[] = [
-                { age: 30, name: "Charlie" },
-                { age: 25, name: "Alice" },
-                { age: 35, name: "Bob" },
-            ]
+/** Sorts a copy of `data` with {@link sortBy}, leaving the fixture untouched. */
+const sortCopy = <T extends object>(data: readonly T[], sortArguments: readonly SortArgument<T>[]): T[] =>
+    data.toSorted(sortBy(sortArguments))
 
-            data.sort(sortBy(["name"]))
+const toRows = (values: readonly unknown[]): Row[] => values.map((value) => ({ value }))
+const valuesOf = (rows: readonly Row[]): unknown[] => rows.map((row) => row.value)
 
-            expect(data).toEqual([
-                { age: 25, name: "Alice" },
-                { age: 35, name: "Bob" },
-                { age: 30, name: "Charlie" },
-            ])
-        })
+/** Binds a simple comparator to descending order. */
+const descending =
+    <T>(comparator: (a: T, b: T, isDescending?: boolean) => number) =>
+    (a: T, b: T): number =>
+        comparator(a, b, true)
 
-        it('should sort objects in descending order using the "-" prefix', () => {
-            const data: Item[] = [
-                { age: 25, name: "Alice" },
-                { age: 35, name: "Bob" },
-                { age: 30, name: "Charlie" },
-            ]
+const people: readonly Person[] = [
+    { age: 30, name: "Charlie" },
+    { age: null, name: "Alice" },
+    { age: 20, name: "Bob" },
+    { age: undefined, name: "Dave" },
+]
 
-            data.sort(sortBy(["-age"]))
-
-            expect(data).toEqual([
-                { age: 35, name: "Bob" },
-                { age: 30, name: "Charlie" },
-                { age: 25, name: "Alice" },
-            ])
-        })
-
-        it("should sort by multiple properties (first equal -> second decides)", () => {
-            const data = [
-                { category: "A", value: 10 },
-                { category: "B", value: 5 },
-                { category: "A", value: 2 },
-            ]
-
-            data.sort(sortBy(["category", "value"]))
-
-            expect(data).toEqual([
-                { category: "A", value: 2 },
-                { category: "A", value: 10 },
-                { category: "B", value: 5 },
-            ])
-        })
-
-        it("should move null and undefined values to the end", () => {
-            const data: Item[] = [
-                { age: 30, name: "Charlie" },
-                { age: null, name: "Alice" },
-                { age: 20, name: "Bob" },
-                { age: undefined, name: "Dave" },
-            ]
-
-            data.sort(sortBy(["age"]))
-
-            expect(data).toEqual([
-                { age: 20, name: "Bob" },
-                { age: 30, name: "Charlie" },
-                { age: null, name: "Alice" },
-                { age: undefined, name: "Dave" },
-            ])
-        })
-
-        it('should handle null and undefined correctly even with descending ("-") prefix', () => {
-            const data: Item[] = [
-                { age: 30, name: "Charlie" },
-                { age: null, name: "Alice" },
-                { age: 20, name: "Bob" },
-                { age: undefined, name: "Dave" },
-            ]
-
-            // Descending sort should still keep null/undefined at the end,
-            // while sorting the valid numbers in reverse.
-            data.sort(sortBy(["-age"]))
-
-            expect(data[0]!.age).toBe(30)
-            expect(data[1]!.age).toBe(20)
-            expect(data[2]!.age).toBeNull()
-            expect(data[3]!.age).toBeUndefined()
-        })
-
-        it("should correctly handle both numerical and string-recognised values", () => {
-            const data = [{ score: "10" }, { score: 2 }, { score: "1" }]
-
-            data.sort(sortBy(["score"]))
-
-            expect(data).toEqual([{ score: "1" }, { score: 2 }, { score: "10" }])
-        })
+describe("sortBy", () => {
+    it("sorts by a single property in ascending order", () => {
+        expect(sortCopy(people, ["name"]).map((person) => person.name)).toEqual(["Alice", "Bob", "Charlie", "Dave"])
     })
 
-    describe("sortBy - Edge Cases and Complex Data Types", () => {
-        it("should handle arrays as property values correctly", () => {
-            const data = [{ tags: ["b", "a"] }, { tags: ["a", "c"] }, { tags: ["a", "b"] }]
-
-            data.sort(sortBy(["tags"]))
-
-            expect(data).toBeDefined()
-        })
-
-        it("should handle nested or complex objects gracefully", () => {
-            const data = [{ metadata: { id: 2 } }, { metadata: { id: 1 } }, { metadata: { id: 3 } }]
-
-            data.sort(sortBy(["metadata"]))
-
-            expect(data).toBeDefined()
-        })
-
-        it("should return 0 (equal) when all properties across items are identical or incomparable", () => {
-            const data = [
-                { custom: { foo: "bar" }, id: 1 },
-                { custom: { foo: "bar" }, id: 1 },
-            ]
-
-            const comparator = sortBy(["id", "custom"])
-            const result = comparator(data[0]!, data[1]!)
-
-            expect(result).toBe(0)
-        })
-
-        it("should handle empty property names array without throwing", () => {
-            const data = [{ id: 2 }, { id: 1 }]
-
-            data.sort(sortBy([]))
-
-            expect(data).toEqual([{ id: 2 }, { id: 1 }])
-        })
+    it("sorts non-values (null, undefined) last in ascending order", () => {
+        expect(sortCopy(people, ["age"]).map((person) => person.age)).toEqual([20, 30, null, undefined])
     })
 
-    describe("sortBy - Edge Cases, NaN and Regressions", () => {
-        it("should handle NaN values correctly without breaking surrounding element sorting", () => {
-            const data = [{ v: 5 }, { v: Number.NaN }, { v: 1 }]
-
-            // Sorting by 'v' should not let NaN lock 5 and 1 in the wrong order
-            data.sort(sortBy(["v"]))
-
-            // Verify that valid numbers are sorted correctly (1 before 5),
-            // and NaN is handled safely (e.g. pushed to the end alongside nullish values)
-            expect(data[0]!.v).toBe(1)
-            expect(data[1]!.v).toBe(5)
-            expect(Number.isNaN(data[2]!.v)).toBe(true)
-        })
-
-        it("should correctly handle simpleNumberSort with NaN values", () => {
-            const numbers = [5, Number.NaN, 1]
-            numbers.sort(simpleNumberSort)
-
-            // Ensures NaN does not corrupt the numeric sorting order of 1 and 5
-            expect(numbers[0]).toBe(1)
-            expect(numbers[1]).toBe(5)
-            expect(Number.isNaN(numbers[2] as number)).toBe(true)
-        })
-
-        it('should correctly push null/undefined to the end even on secondary (multi-key) sort properties with descending ("-") prefix', () => {
-            const data = [
-                { category: "A", value: 10 },
-                { category: "A", value: undefined },
-                { category: "A", value: 5 },
-            ]
-
-            // Multi-key sort where the first key is identical ('A'),
-            // testing if nullish handling works correctly on the secondary key ('value')
-            data.sort(sortBy(["category", "-value"]))
-
-            expect(data[0]!.value).toBe(10)
-            expect(data[1]!.value).toBe(5)
-            expect(data[2]!.value).toBeUndefined() // Must land at the end, not at the front
-        })
-
-        it("should hit the referential equality fast-path (a === b) when instances are identical", () => {
-            const sharedObject = { foo: "bar" }
-            const data = [
-                { custom: sharedObject, id: 1 },
-                { custom: sharedObject, id: 1 },
-            ]
-
-            const comparator = sortBy(["id", "custom"])
-            const result = comparator(data[0]!, data[1]!)
-
-            // This specifically exercises the `if (a === b) return 0` fast-path
-            expect(result).toBe(0)
-        })
-
-        it("should preserve original order for incomparable types (arrays), not scramble it", () => {
-            const data = [{ tags: ["b", "a"] }, { tags: ["a", "b"] }]
-            data.sort(sortBy(["tags"]))
-            // Arrays coerce to neither a finite number nor a string, so the comparator returns 0 for
-            // any pair — a stable sort then leaves the original order untouched.
-            expect(data[0]!.tags).toEqual(["b", "a"])
-            expect(data[1]!.tags).toEqual(["a", "b"])
-        })
+    it('keeps non-values last in descending order ("-" prefix)', () => {
+        expect(sortCopy(people, ["-age"]).map((person) => person.age)).toEqual([30, 20, null, undefined])
     })
 
-    describe("simpleNumberSort", () => {
-        it("should sort pure numbers correctly", () => {
-            const numbers = [10, -2, 5, 0, 3.5]
-            numbers.sort(simpleNumberSort)
-            expect(numbers).toEqual([-2, 0, 3.5, 5, 10])
-        })
+    it("consults the next property only when the preceding one is equal", () => {
+        const rows: Row[] = [
+            { category: "A", value: 10 },
+            { category: "B", value: 5 },
+            { category: "A", value: 2 },
+        ]
 
-        it("should sort null and undefined to the end for numbers", () => {
-            const numbers = [5, null, 1, undefined, 3]
-            numbers.sort(simpleNumberSort)
-            expect(numbers).toEqual([1, 3, 5, null, undefined])
-        })
-
-        it("should sort numbers in descending order when isDescending is true", () => {
-            const numbers = [10, -2, 5, 0, 3.5]
-            numbers.sort((a, b) => simpleNumberSort(a, b, true))
-            expect(numbers).toEqual([10, 5, 3.5, 0, -2])
-        })
-
-        it("should keep null and undefined at the end when isDescending is true", () => {
-            const numbers = [5, null, 1, undefined, 3]
-            numbers.sort((a, b) => simpleNumberSort(a, b, true))
-            expect(numbers).toEqual([5, 3, 1, null, undefined])
-        })
+        expect(sortCopy(rows, ["category", "value"])).toEqual([
+            { category: "A", value: 2 },
+            { category: "A", value: 10 },
+            { category: "B", value: 5 },
+        ])
     })
 
-    describe("simpleStringSort", () => {
-        it("should sort strings alphabetically and localised", () => {
-            const strings = ["Zebra", "apfel", "Banane"]
-            strings.sort(simpleStringSort)
-            expect(strings).toEqual(["apfel", "Banane", "Zebra"])
-        })
+    it("keeps non-values last on a descending secondary property", () => {
+        const rows: Row[] = [
+            { category: "A", value: 10 },
+            { category: "A", value: undefined },
+            { category: "A", value: 5 },
+        ]
 
-        it("should sort null and undefined to the end for strings", () => {
-            const strings = ["House", null, "Car", undefined]
-            strings.sort(simpleStringSort)
-            expect(strings).toEqual(["Car", "House", null, undefined])
-        })
+        expect(valuesOf(sortCopy(rows, ["category", "-value"]))).toEqual([10, 5, undefined])
+    })
 
-        it("should sort strings in descending order when isDescending is true", () => {
-            const strings = ["Zebra", "apfel", "Banane"]
-            strings.sort((a, b) => simpleStringSort(a, b, true))
-            expect(strings).toEqual(["Zebra", "Banane", "apfel"])
-        })
+    it("keeps the original order for an empty sort argument list", () => {
+        const rows = [{ id: 2 }, { id: 1 }]
+        expect(sortCopy(rows, [])).toEqual(rows)
+    })
 
-        it("should keep null and undefined at the end when isDescending is true", () => {
-            const strings = ["House", null, "Car", undefined]
-            strings.sort((a, b) => simpleStringSort(a, b, true))
-            expect(strings).toEqual(["House", "Car", null, undefined])
-        })
+    it("sorts by symbol keys", () => {
+        const rank = Symbol("rank")
+        const rows = [{ [rank]: 2 }, { [rank]: 1 }, { [rank]: 3 }]
+        expect(sortCopy(rows, [rank]).map((row) => row[rank])).toEqual([1, 2, 3])
+    })
+})
+
+describe("sortBy - numeric and mixed values", () => {
+    it("compares numeric strings and numbers numerically", () => {
+        expect(valuesOf(sortCopy(toRows(["10", 2, "1"]), ["value"]))).toEqual(["1", 2, "10"])
+    })
+
+    it("sorts infinite values numerically", () => {
+        const values = [Number.POSITIVE_INFINITY, 0, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]
+        expect(valuesOf(sortCopy(toRows(values), ["value"]))).toEqual([
+            Number.NEGATIVE_INFINITY,
+            0,
+            Number.POSITIVE_INFINITY,
+            Number.POSITIVE_INFINITY,
+        ])
+    })
+
+    it("sorts NaN last without disturbing the order of valid numbers", () => {
+        expect(valuesOf(sortCopy(toRows([5, Number.NaN, 1]), ["value"]))).toEqual([1, 5, Number.NaN])
+    })
+
+    const mixedValues: readonly unknown[] = ["b", { id: 1 }, 3, "a", "10", Number.POSITIVE_INFINITY]
+    const mixedAscending: readonly unknown[] = [3, "10", Number.POSITIVE_INFINITY, "a", "b", { id: 1 }]
+
+    it.each([
+        { inputOrder: "original", values: mixedValues },
+        { inputOrder: "reversed", values: mixedValues.toReversed() },
+    ])("orders mixed types as numeric, string, other ($inputOrder input order)", ({ values }) => {
+        expect(valuesOf(sortCopy(toRows(values), ["value"]))).toEqual(mixedAscending)
+    })
+
+    it("reverses the mixed-type order when descending", () => {
+        expect(valuesOf(sortCopy(toRows(mixedValues), ["-value"]))).toEqual(mixedAscending.toReversed())
+    })
+})
+
+describe("sortBy - incomparable values", () => {
+    it.each([
+        {
+            kind: "arrays",
+            values: [
+                ["b", "a"],
+                ["a", "c"],
+                ["a", "b"],
+            ],
+        },
+        { kind: "objects", values: [{ id: 2 }, { id: 1 }, { id: 3 }] },
+    ])("treats $kind as equal and keeps their original order", ({ values }) => {
+        expect(valuesOf(sortCopy(toRows(values), ["value"]))).toEqual(values)
+    })
+
+    it("returns 0 for distinct but incomparable instances", () => {
+        const comparator = sortBy<{ custom: object; id: number }>(["id", "custom"])
+        expect(comparator({ custom: { foo: "bar" }, id: 1 }, { custom: { foo: "bar" }, id: 1 })).toBe(0)
+    })
+
+    it("returns 0 for identical instances (referential equality fast path)", () => {
+        const shared = { foo: "bar" }
+        const comparator = sortBy<{ custom: object; id: number }>(["id", "custom"])
+        expect(comparator({ custom: shared, id: 1 }, { custom: shared, id: 1 })).toBe(0)
+    })
+})
+
+describe("simpleNumberSort", () => {
+    const numbers = [10, -2, 5, 0, 3.5]
+    const numbersWithNonValues = [5, null, 1, Number.NaN, undefined, 3]
+
+    it("sorts ascending", () => {
+        expect(numbers.toSorted(simpleNumberSort)).toEqual([-2, 0, 3.5, 5, 10])
+    })
+
+    it("sorts descending", () => {
+        expect(numbers.toSorted(descending(simpleNumberSort))).toEqual([10, 5, 3.5, 0, -2])
+    })
+
+    it("sorts non-values (null, NaN, undefined) last in ascending order", () => {
+        expect(numbersWithNonValues.toSorted(simpleNumberSort)).toEqual([1, 3, 5, null, Number.NaN, undefined])
+    })
+
+    it("keeps non-values last in descending order", () => {
+        expect(numbersWithNonValues.toSorted(descending(simpleNumberSort))).toEqual([
+            5,
+            3,
+            1,
+            null,
+            Number.NaN,
+            undefined,
+        ])
+    })
+
+    it("treats equal infinite values as equal", () => {
+        expect(simpleNumberSort(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)).toBe(0)
+    })
+})
+
+describe("simpleStringSort", () => {
+    const strings = ["Zebra", "apfel", "Banane"]
+    const stringsWithNonValues = ["House", null, "Car", undefined]
+
+    it("sorts ascending, locale-aware and case-insensitive", () => {
+        expect(strings.toSorted(simpleStringSort)).toEqual(["apfel", "Banane", "Zebra"])
+    })
+
+    it("sorts descending", () => {
+        expect(strings.toSorted(descending(simpleStringSort))).toEqual(["Zebra", "Banane", "apfel"])
+    })
+
+    it("sorts embedded numbers numerically", () => {
+        expect(["a10", "a2", "a1"].toSorted(simpleStringSort)).toEqual(["a1", "a2", "a10"])
+    })
+
+    it("sorts non-values (null, undefined) last in ascending order", () => {
+        expect(stringsWithNonValues.toSorted(simpleStringSort)).toEqual(["Car", "House", null, undefined])
+    })
+
+    it("keeps non-values last in descending order", () => {
+        expect(stringsWithNonValues.toSorted(descending(simpleStringSort))).toEqual(["House", "Car", null, undefined])
     })
 })

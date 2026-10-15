@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.0.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.0.0...v5.0.1)
+
+### 💅 Refactors
+
+- ClaudeAI ([aa13465](https://github.com/felixvictor/fv-common/commit/aa13465))
+
+### 📦 Build
+
+- Dist ([11d663e](https://github.com/felixvictor/fv-common/commit/11d663e))
+
 ## v5.0.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v4.0.2...v5.0.0)

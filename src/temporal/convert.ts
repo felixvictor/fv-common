@@ -11,7 +11,13 @@ import { formatPattern, parsePattern } from "@/temporal/pattern"
 /** Point in time as `Date`, epoch milliseconds, ISO 8601 string or `Temporal.Instant`. */
 export type DateTimeInput = Date | number | string | Temporal.Instant
 
-/** First and last instant of a date list, see {@link getRange}. */
+/** First and last item of a date list, see {@link getDateTimeRange}. */
+export interface DateTimeRange {
+    begin: Temporal.ZonedDateTime
+    end: Temporal.ZonedDateTime
+}
+
+/** First and last instant of a date list, see {@link getInstantRange}. */
 export interface InstantRange {
     begin: Temporal.Instant
     end: Temporal.Instant
@@ -54,6 +60,14 @@ export const toZonedDateTime = (
     value: DateTimeInput,
     timeZone: string = Temporal.Now.timeZoneId(),
 ): Temporal.ZonedDateTime => toInstant(value, timeZone).toZonedDateTimeISO(timeZone)
+
+/**
+ * Converts a point in time to a date-time in UTC.
+ *
+ * @param value - Point in time; numbers are epoch milliseconds.
+ * @throws {RangeError} If `value` is an invalid date or string.
+ */
+export const toUTCDateTime = (value: DateTimeInput): Temporal.ZonedDateTime => toZonedDateTime(value, utcTimeZone)
 
 /** Converts an instant to a `Date` (millisecond precision). */
 export const toDate = (instant: Temporal.Instant): Date => new Date(instant.epochMilliseconds)
@@ -134,12 +148,31 @@ export const convertDEDateString = (date: string): string => {
  *
  * @returns Both ends; an empty list yields the current instant for both.
  */
-export const getRange = (dateRange: readonly Date[]): InstantRange => {
+export const getInstantRange = (dateRange: readonly Date[]): InstantRange => {
     const now = Temporal.Now.instant()
     const first = dateRange.at(0)
     const last = dateRange.at(-1)
 
     return { begin: first === undefined ? now : toInstant(first), end: last === undefined ? now : toInstant(last) }
+}
+
+/**
+ * Returns the first and last element of a date list as instants.
+ *
+ * @example
+ *     const { begin, end } = getRange([new Date("2024-01-01"), new Date("2024-01-31")])
+ *
+ * @returns Both ends; an empty list yields the current instant for both.
+ */
+export const getDateTimeRange = (dateRange: readonly Date[]): DateTimeRange => {
+    const now = toUTCDateTime(Temporal.Now.instant())
+    const first = dateRange.at(0)
+    const last = dateRange.at(-1)
+
+    return {
+        begin: first === undefined ? now : toUTCDateTime(first),
+        end: last === undefined ? now : toUTCDateTime(last),
+    }
 }
 
 /**
@@ -177,6 +210,9 @@ export const convertBerlinTimeToUTC = (date: string): Date => toDate(toInstant(d
  * @example
  *     convertDate("15.01.2024", "DD.MM.YYYY", "D. MMMM YYYY", "de") // "15. Januar 2024"
  *
+ * @param date
+ * @param fromFormat
+ * @param toFormat
  * @param locale - Locale for month and weekday names; defaults to the library locale.
  * @returns The re-formatted string, or undefined if `date` does not match `fromFormat`.
  */

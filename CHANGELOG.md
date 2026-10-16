@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.1.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.0.1...v5.1.0)
+
+### 🚀 Enhancements
+
+- GetInstantRange, getDateTimeRange ([3a7a813](https://github.com/felixvictor/fv-common/commit/3a7a813))
+
+### 📦 Build
+
+- Dist ([876f7e9](https://github.com/felixvictor/fv-common/commit/876f7e9))
+
 ## v5.0.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.0.0...v5.0.1)

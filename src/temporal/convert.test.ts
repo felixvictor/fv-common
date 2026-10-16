@@ -5,8 +5,8 @@ import {
     convertDate,
     convertDEDateString,
     convertUTCStringToDate,
+    getInstantRange,
     getLocalHour,
-    getRange,
     parseInstant,
     parseUtcDateTime,
     toInstant,
@@ -92,7 +92,7 @@ describe("legacy conversions", () => {
             new Date("2024-01-15T00:00:00Z"),
             new Date("2024-01-31T00:00:00Z"),
         ]
-        const { begin, end } = getRange(dates)
+        const { begin, end } = getInstantRange(dates)
         expect(begin.toString()).toBe("2024-01-01T00:00:00Z")
         expect(end.toString()).toBe("2024-01-31T00:00:00Z")
     })

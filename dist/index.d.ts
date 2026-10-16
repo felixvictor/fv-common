@@ -537,19 +537,25 @@ export declare const utcTimeZone = "UTC";
 //#endregion
 //#region src/temporal/convert.d.ts
 export type DateTimeInput = Date | number | string | Temporal.Instant;
+export interface DateTimeRange {
+  begin: Temporal.ZonedDateTime;
+  end: Temporal.ZonedDateTime;
+}
 export interface InstantRange {
   begin: Temporal.Instant;
   end: Temporal.Instant;
 }
 export declare const toInstant: (value: DateTimeInput, timeZone?: string) => Temporal.Instant;
 export declare const toZonedDateTime: (value: DateTimeInput, timeZone?: string) => Temporal.ZonedDateTime;
+export declare const toUTCDateTime: (value: DateTimeInput) => Temporal.ZonedDateTime;
 export declare const toDate: (instant: Temporal.Instant) => Date;
 export declare const parseInstant: (value: DateTimeInput, timeZone?: string) => Temporal.Instant | undefined;
 export declare const parseZonedDateTime: (value: string, pattern: string, timeZone?: string) => Temporal.ZonedDateTime | undefined;
 export declare const parseUtcDateTime: (time: string) => Temporal.ZonedDateTime | undefined;
 export declare const dateToString: (date: Date) => string;
 export declare const convertDEDateString: (date: string) => string;
-export declare const getRange: (dateRange: readonly Date[]) => InstantRange;
+export declare const getInstantRange: (dateRange: readonly Date[]) => InstantRange;
+export declare const getDateTimeRange: (dateRange: readonly Date[]) => DateTimeRange;
 export declare const getLocalHour: (hour: number, timeZone?: string) => number;
 export declare const convertUTCStringToDate: (date: string) => Date;
 export declare const convertBerlinTimeToUTC: (date: string) => Date;

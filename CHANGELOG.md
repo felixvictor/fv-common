@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.2.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.2.0...v5.2.1)
+
 ## v5.2.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.1.0...v5.2.0)

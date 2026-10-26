@@ -2,6 +2,14 @@ import { getLocale } from "@/locale"
 
 import { getCardinalRules } from "./cardinal.js"
 
+const htmlEntities = new Map([
+    ["&", "&amp;"],
+    ["'", "&#39;"],
+    ["<", "&lt;"],
+    [">", "&gt;"],
+    ['"', "&quot;"],
+])
+
 /**
  * Capitalizes the first letter of a string using locale-aware rules.
  *
@@ -31,3 +39,12 @@ export const pluralise = (count: number, wordSingle: string, wordPlural?: string
     const rule = cardinalRules.select(count)
     return rule === "one" ? wordSingle : (wordPlural ?? `${wordSingle}s`)
 }
+
+/**
+ * Escapes the characters with a special meaning in HTML text and attribute values.
+ *
+ * @example
+ *     escapeHtml('<a href="x">') → "&lt;a href=&quot;x&quot;&gt;"
+ */
+export const escapeHtml = (text: string): string =>
+    text.replaceAll(/["&'<>]/g, (character) => htmlEntities.get(character) ?? character)

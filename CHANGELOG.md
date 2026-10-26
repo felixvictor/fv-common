@@ -1,5 +1,21 @@
 # Changelog
 
+## v5.2.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.1.0...v5.2.0)
+
+### 🚀 Enhancements
+
+- IsValidTimeZone, escapeHtml ([16fcdcf](https://github.com/felixvictor/fv-common/commit/16fcdcf))
+
+### 🩹 Fixes
+
+- **tsdown:** Downgrade typescript to 6 ([1b002fa](https://github.com/felixvictor/fv-common/commit/1b002fa))
+
+### 📦 Build
+
+- Dist ([41453b0](https://github.com/felixvictor/fv-common/commit/41453b0))
+
 ## v5.1.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.0.1...v5.1.0)

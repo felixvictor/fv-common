@@ -1,23 +1,15 @@
-import { i as setLocale, n as onLocaleChange, r as setDateLocale, t as getLocale } from "./locale-B4Vv9qpd.js";
-import { a as err, c as ok, i as andThen, l as unwrapOr, n as Ok, o as isErr, r as Result, s as isOk, t as Err, u as unwrapOrThrow } from "./result-SaC_idVt.js";
+import { a as err, c as ok, i as andThen, l as unwrapOr, n as Ok, o as isErr, r as Result, s as isOk, t as Err, u as unwrapOrThrow } from "./result-CwBp-rM6.js";
 import Color, { Coords } from "colorjs.io";
-//#region src/chunkify.d.ts
 export declare const chunkify: <T>(array: T[], n: number, isBalanced?: boolean) => T[][];
-//#endregion
-//#region src/colour/vision-deficiency.d.ts
 export type VisionDeficiency = "deuteranopia" | "protanopia" | "tritanopia";
 export declare const visionDeficiencies: readonly VisionDeficiency[];
 export declare const simulateVisionDeficiency: (hex: string, deficiency: VisionDeficiency) => string;
-//#endregion
-//#region src/colour/colour-distance.d.ts
 export interface ColourDistance {
   readonly deficiency: undefined | VisionDeficiency;
   readonly distance: number;
 }
 export declare const getColourDistance: (hexA: string, hexB: string, deficiency?: VisionDeficiency) => number;
 export declare const getMinColourDistance: (hexA: string, hexB: string, deficiencies?: readonly VisionDeficiency[]) => ColourDistance;
-//#endregion
-//#region src/colour/okhsl-colour.d.ts
 export declare class okHslColour {
   #private;
   static readonly colorSpace = "okhsl";
@@ -42,8 +34,6 @@ export declare class okHslColour {
   clone(): okHslColour;
   toString(): string;
 }
-//#endregion
-//#region src/colour/colour-scale-generator.d.ts
 export declare class ColourScaleGenerator {
   #private;
   static readonly backgroundLuminanceThreshold = 0.18;
@@ -55,12 +45,8 @@ export declare class ColourScaleGenerator {
   constructor(maxScaleNumber: number, baseHue: number, minChroma: number, maxChroma: number, backgroundY: number);
   computeColour(scaleNumber: number): okHslColour;
 }
-//#endregion
-//#region src/colour/constant.d.ts
 export declare const blackHex = "#000000";
 export declare const whiteHex = "#ffffff";
-//#endregion
-//#region src/colour/contrast.d.ts
 export type ApcaTextRole = "bodyText" | "largeFluentText" | "otherContentText";
 export declare const wcagTextMinRatio = 4.5;
 export declare const wcagUiMinRatio = 3;
@@ -71,8 +57,6 @@ export declare const apcaMinLcByRole: Record<ApcaTextRole, number>;
 export declare const apcaMaxLcLargeFluentText = 90;
 export declare const apcaMinLcUiComponent = 30;
 export declare const isMeetingApcaContrast: (textHex: string, backgroundHex: string, role?: ApcaTextRole) => boolean;
-//#endregion
-//#region src/colour/oklch-colour.d.ts
 export interface Oklch {
   readonly chroma: number;
   readonly hue: number;
@@ -110,8 +94,6 @@ export declare class okLchColour implements Oklch {
   toGamut(): okLchColour;
   toString(): string;
 }
-//#endregion
-//#region src/colour/harmonise.d.ts
 export interface HarmonisationStrength {
   readonly chromaFactor: number;
   readonly hueFactor: number;
@@ -124,8 +106,6 @@ export declare const harmoniseChroma: (chroma: number, targetChroma: number, { c
 export declare const warmPoleHue = 80;
 export declare const warmUpHue: (hue: number, warmth: number) => number;
 export declare const harmoniseOklch: (colour: Oklch, target: Oklch, strength: HarmonisationStrength) => Oklch;
-//#endregion
-//#region src/colour/md3-roles.d.ts
 export type ThemeMode = "dark" | "light";
 export declare const themeModes: readonly ThemeMode[];
 export type AccentKey = "error" | "info" | "primary" | "secondary" | "success" | "tertiary" | "warning";
@@ -274,14 +254,10 @@ export declare const md3SchemeRoles: {
 export type SchemeRole = keyof typeof md3SchemeRoles;
 export declare const md3ScrimHex = "#000000";
 export declare const md3ShadowHex = "#000000";
-//#endregion
-//#region src/colour/palette-range.d.ts
 export declare const paletteRangeTones: readonly [6, 14, 22, 30, 38, 46, 54, 62, 70, 78, 86, 94];
 export type PaletteRange = readonly string[];
 export type PaletteRangeTone = (typeof paletteRangeTones)[number];
 export declare const getRangeColour: (range: PaletteRange, tone: PaletteRangeTone) => string;
-//#endregion
-//#region src/colour/tonal-palette.d.ts
 export interface TonalPaletteOptions {
   readonly chromaFloor?: number;
   readonly hueShift?: number;
@@ -296,8 +272,6 @@ export declare class TonalPalette {
   tone(tone: number): string;
   toneRange(tones?: readonly number[]): PaletteRange;
 }
-//#endregion
-//#region src/colour/md3-theme.d.ts
 export type CustomSeedKey<TSeed extends string> = Exclude<TSeed, AccentKey>;
 export type HarmonisationGroup = "accent" | "custom" | "extended" | "semantic";
 export type SemanticKey = Exclude<AccentKey, BrandKey>;
@@ -375,13 +349,9 @@ export declare const md3VuetifyDefaults: {
   };
 };
 export declare const createMd3Theme: <TExtended extends string = never, TSeed extends string = BrandKey>(config: Md3ThemeConfig<TExtended, TSeed>) => Md3Theme<TExtended, TSeed>;
-//#endregion
-//#region src/colour/tone.d.ts
 export declare const toneMin = 0;
 export declare const toneMax = 100;
 export declare const getTone: (colour: string) => number;
-//#endregion
-//#region src/colour/validation.d.ts
 export declare const seedChromaMin = 0.03;
 export declare const minSeedHueDelta = 5;
 export declare const minSurfaceToneDelta = 1.5;
@@ -397,29 +367,15 @@ export type ThemeTextPair = readonly [foreground: string, background: string, ro
 export declare const getThemeTextPairs: (theme: Readonly<Record<string, string | undefined>>, additionalTextPairs?: readonly ThemeTextPair[]) => ThemeTextPair[];
 export declare const validateTheme: (theme: Readonly<Record<string, string | undefined>>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
-//#endregion
-//#region src/delay.d.ts
 export declare const delay: (ms: number) => Promise<unknown>;
-//#endregion
-//#region src/fetch.d.ts
 export declare const loadFile: <T = unknown>(path: string) => Promise<T>;
-//#endregion
-//#region src/format/cardinal.d.ts
 export declare const getCardinalRules: (locale: string) => Intl.PluralRules;
-//#endregion
-//#region src/format/email.d.ts
 export declare const convertNameForEmail: (name: string) => string;
-//#endregion
-//#region src/format/helpers.d.ts
 export declare const addSpan: (suffix: string, isSvg: boolean) => string;
 export declare const beautifySuffix: (suffix: string, isSvg: boolean) => string;
 export declare const formatUnit: (u: string, isSvg?: boolean) => string;
 export declare const truncate: (string: string, n: number) => string;
-//#endregion
-//#region src/format/intl.d.ts
 export declare const formatWithIntl: (value: number, options: Intl.NumberFormatOptions, isSvg?: boolean) => string;
-//#endregion
-//#region src/format/number.d.ts
 export declare const formatFloat: (value: number, decimals?: number, options?: Intl.NumberFormatOptions, isSvg?: boolean) => string;
 export declare const formatSignFloat: (value: number, decimals?: number) => string;
 export declare const formatSiFloat: (value: number, isSvg?: boolean) => string;
@@ -432,20 +388,13 @@ export declare const roundToThousands: (value: number) => number;
 export declare const formatInt: (value: number, options?: Intl.NumberFormatOptions) => string;
 export declare const formatSignInt: (value: number) => string;
 export declare const formatSiInt: (x: number, max?: number, options?: Intl.NumberFormatOptions) => string;
-//#endregion
-//#region src/format/ordinal.d.ts
 export declare const getOrdinal: (n: number, isSuperscript?: boolean, locale?: string) => string;
-//#endregion
-//#region src/format/percent.d.ts
 export declare const formatPercent: (value: number, decimals?: number, options?: Intl.NumberFormatOptions) => string;
 export declare const formatSignPercent: (value: number, decimals?: number) => string;
 export declare const formatPP: (x: number, f?: number) => string;
-//#endregion
-//#region src/format/text.d.ts
 export declare const capitalizeFirstLetter: (text: string, locale?: string) => string;
 export declare const pluralise: (count: number, wordSingle: string, wordPlural?: string) => string;
-//#endregion
-//#region src/guard.d.ts
+export declare const escapeHtml: (text: string) => string;
 export type NumberLike = number | string;
 export declare const isObject: (value: unknown) => value is Record<PropertyKey, unknown>;
 export declare const isEmpty: (value: unknown) => boolean;
@@ -459,8 +408,6 @@ export declare const clampUnsafe: (value: number, min: number, max: number) => n
 export declare const clamp: (value: NumberLike, min: NumberLike, max: NumberLike) => number;
 export declare const lerpUnsafe: (start: number, end: number, t: number) => number;
 export declare const lerp: (start: NumberLike, end: NumberLike, t: NumberLike) => number;
-//#endregion
-//#region src/html.d.ts
 export declare const getElementRect: (element: HTMLElement | SVGElement) => {
   bottom: number;
   height: number;
@@ -481,11 +428,11 @@ export declare const getElementDimensionsPrecise: (element: HTMLElement | SVGEle
   height: number;
   width: number;
 };
-//#endregion
-//#region src/math/common.d.ts
+export declare const setLocale: (locale: string) => void;
+export declare const getLocale: () => string;
+export declare const onLocaleChange: (callback: () => void) => void;
+export declare const setDateLocale: (locale: string) => void;
 export declare const isBetween: (value: number, a: number, b: number, isInclusive?: boolean) => boolean;
-//#endregion
-//#region src/math/find-segment.d.ts
 export interface CurvePoint {
   tangentIn: number;
   tangentOut: number;
@@ -494,31 +441,21 @@ export interface CurvePoint {
 }
 export declare const getCurveValue: (time: number, points: CurvePoint[]) => number | undefined;
 export declare const getCurveValueClamped: (time: number, points: CurvePoint[]) => number;
-//#endregion
-//#region src/math/power.d.ts
 export declare const nearestPow2: (value: number) => number;
 export declare const nextPow2: (value: number) => number;
-//#endregion
-//#region src/sort.d.ts
 declare const descendingPrefix = "-";
 export type Comparator<T> = (a: T, b: T) => number;
 export type SortArgument<T> = `${typeof descendingPrefix}${keyof T & string}` | keyof T;
 export declare const sortBy: <T extends object>(sortArguments: readonly SortArgument<T>[]) => Comparator<T>;
 export declare const simpleNumberSort: (a: null | number | undefined, b: null | number | undefined, isDescending?: boolean) => number;
 export declare const simpleStringSort: (a: null | string | undefined, b: null | string | undefined, isDescending?: boolean) => number;
-//#endregion
-//#region src/svg/draw.d.ts
 export declare const drawSvgCircle: (x: number, y: number, r: number) => string;
 export declare const drawSvgRect: (x: number, y: number, size: number) => string;
 export declare const drawSvgRectWH: (x: number, y: number, width: number, height: number) => string;
 export declare const drawSvgVLine: (x: number, y: number, length: number) => string;
 export declare const drawSvgHLine: (x: number, y: number, length: number) => string;
 export declare const drawSvgLine: (x1: number, y1: number, x2: number, y2: number) => string;
-//#endregion
-//#region src/svg/optimise.d.ts
 export declare const optimisePath: (path: string) => string;
-//#endregion
-//#region src/temporal/compare.d.ts
 export declare const isTimeBetween: (time: Temporal.PlainTime, start: Temporal.PlainTime, end: Temporal.PlainTime) => boolean;
 export declare const isInstantAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
 export declare const isInstantAtOrAfter: (instant1: Temporal.Instant, instant2: Temporal.Instant) => boolean;
@@ -528,14 +465,10 @@ export declare const isDateInRange: (date: Date, hours: number, now?: Temporal.I
 export declare const isFutureDate: (date: Date | string, now?: Temporal.Instant) => boolean;
 export declare const isPastDate: (time: string, now?: Temporal.Instant) => boolean;
 export declare const isBetweenTime: (time: string | undefined, begin: Temporal.Instant, end: Temporal.Instant) => boolean;
-//#endregion
-//#region src/temporal/constants.d.ts
 export declare const datetimeFormat = "YYYY-MM-DD HH:mm";
 export declare const deDatetimeFormat = "DD.MM.YYYY HH:mm";
 export declare const berlinTimeZone = "Europe/Berlin";
 export declare const utcTimeZone = "UTC";
-//#endregion
-//#region src/temporal/convert.d.ts
 export type DateTimeInput = Date | number | string | Temporal.Instant;
 export interface DateTimeRange {
   begin: Temporal.ZonedDateTime;
@@ -560,8 +493,6 @@ export declare const getLocalHour: (hour: number, timeZone?: string) => number;
 export declare const convertUTCStringToDate: (date: string) => Date;
 export declare const convertBerlinTimeToUTC: (date: string) => Date;
 export declare const convertDate: (date: string, fromFormat: string, toFormat: string, locale?: string) => string | undefined;
-//#endregion
-//#region src/temporal/format.d.ts
 export declare const formatMs: (ms: number, options?: Intl.DurationFormatOptions, locale?: string) => string;
 export declare const formatPlainTime: (time: Temporal.PlainTime, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
 export declare const formatDate: (date: Date, options?: Intl.DateTimeFormatOptions, locale?: string) => string;
@@ -573,18 +504,14 @@ export declare const getFormattedDateShort: (date: number | string, locale?: str
 export declare const getFormattedShortDateFromUTC: (date: Date | string, locale?: string) => string;
 export declare const getFormattedDateShortSeconds: (date: number | string, locale?: string) => string;
 export declare const formatUtcDateTime: (time: string) => string;
-export declare const formatDateViaDayjs: typeof formatUtcDateTime;
+export declare const formatDateViaDayjs: (time: string) => string;
 export declare const formatTime: (time: string) => string;
 export declare const formatLocalDate: (time: string, timeZone?: string) => string;
 export declare const formatLocalTime: (time: string, timeZone?: string) => string;
 export declare const formatFromToTime: (from: number, to: number) => string;
 export declare const formatTimeRange: (from: number, to: number, timeZone?: string) => string;
-//#endregion
-//#region src/temporal/manipulate.d.ts
 export declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
 export declare const subtractFromInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
-//#endregion
-//#region src/temporal/pattern.d.ts
 export interface ParsePatternOptions {
   isStrict?: boolean | undefined;
   locale?: string | undefined;
@@ -592,26 +519,19 @@ export interface ParsePatternOptions {
 export type PatternDateTime = Temporal.PlainDateTime | Temporal.ZonedDateTime;
 export declare const formatPattern: (dateTime: PatternDateTime, pattern: string, locale?: string) => string;
 export declare const parsePattern: (value: string, pattern: string, options?: ParsePatternOptions) => Temporal.PlainDateTime | undefined;
-//#endregion
-//#region src/temporal/query.d.ts
 export declare const daysBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
 export declare const getMidnightUTC: (dateString: string) => Temporal.ZonedDateTime;
 export declare const hoursBetweenInstants: (start: Temporal.Instant, end: Temporal.Instant) => number;
 export declare const closestDateIndex: (datesString: readonly string[], now?: Temporal.Instant) => number | undefined;
-//#endregion
-//#region src/temporal/relative-time.d.ts
 export declare const formatRelativeTime: (target: Temporal.ZonedDateTime, locale?: string, now?: Temporal.Instant) => string;
 export declare const getDateDistance: (date: string, locale?: string, now?: Temporal.Instant) => string;
 export declare const getRelativeTime: (time: string, locale?: string, now?: Temporal.Instant) => string;
-//#endregion
-//#region src/temporal/ticks.d.ts
 export type TicksInput = bigint | number | string;
 export declare const getTimestampFromTicks: (ticks: TicksInput) => number;
 export declare const getInstantFromTicks: (ticks: TicksInput) => Temporal.Instant;
 export declare const getTimeFromTicks: (ticks: TicksInput) => string;
 export declare const getTicksFromDate: (date: Date | number | Temporal.Instant) => bigint;
-//#endregion
-//#region src/unicode.d.ts
+export declare const isValidTimeZone: (timeZone: string) => boolean;
 export declare const cCaretRight: string;
 export declare const cCircleWhite: string;
 export declare const cCombiningDiaeresis: string;
@@ -632,8 +552,6 @@ export declare const cSpacePunctuation: string;
 export declare const cSpaceThin: string;
 export declare const cSpaceZeroWidthBreaking: string;
 export declare const cSpaceZeroWidthNoBreak: string;
-//#endregion
-//#region src/url.d.ts
 export declare const createUrl: (options: {
   host: string;
   password?: string;
@@ -642,6 +560,5 @@ export declare const createUrl: (options: {
   protocol?: string;
   user?: string;
 }, name?: string) => URL;
-//#endregion
-export { Err, Ok, Result, andThen, err, getLocale, isErr, isOk, ok, onLocaleChange, setDateLocale, setLocale, unwrapOr, unwrapOrThrow };
+export { Err, Ok, Result, andThen, err, isErr, isOk, ok, unwrapOr, unwrapOrThrow };
 //# sourceMappingURL=index.d.ts.map

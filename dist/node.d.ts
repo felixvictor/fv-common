@@ -1,8 +1,7 @@
-import { r as Result } from "./result-SaC_idVt.js";
+import { r as Result } from "./result-CwBp-rM6.js";
 import { ExecSyncOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-//#region src/node/command.d.ts
 export interface CommandError {
   readonly cause: unknown;
   readonly command: string;
@@ -13,8 +12,6 @@ export declare const executeCommandString: (command: string, options?: ExecSyncO
 export declare const doesCommandExist: (command: string) => boolean;
 export declare const executeCommandAsync: (command: string, options?: ExecSyncOptions) => Promise<Result<string, CommandError>>;
 export declare const commandExistsAsync: (command: string) => Promise<boolean>;
-//#endregion
-//#region src/node/error.d.ts
 export declare const errorCodes: {
   readonly addressInUse: "EADDRINUSE";
   readonly brokenPipe: "EPIPE";
@@ -45,15 +42,9 @@ export interface JsonParseError {
 }
 export declare const isNodeError: (error: unknown) => error is NodeJS.ErrnoException;
 export declare const toFileSystemError: (error: unknown, path: string) => FileSystemError;
-//#endregion
-//#region src/node/fs/compare.d.ts
 export declare const isFileOlderThan: (filePathA: string, filePathB: string) => boolean;
 export declare const isFileOlderThanAsync: (filePathA: string, filePathB: string) => Promise<boolean>;
-//#endregion
-//#region src/node/fs/constants.d.ts
 export declare const defaultEncoding: "utf8";
-//#endregion
-//#region src/node/fs/directory.d.ts
 export declare const makeDirectorySync: (directory: string) => Result<void, FileSystemError>;
 export declare const makeDirectoryAsync: (directory: string) => Promise<Result<void, FileSystemError>>;
 export declare const readDirectorySync: (directoryPath: string) => Result<string[], FileSystemError>;
@@ -68,8 +59,6 @@ export declare const emptyDirectorySync: (directoryPath: string) => Result<void,
 export declare const emptyDirectoryAsync: (directoryPath: string) => Promise<Result<void, FileSystemError>>;
 export declare const doesDirectoryExist: (directoryPath: string) => boolean;
 export declare const doesDirectoryExistAsync: (directoryPath: string) => Promise<boolean>;
-//#endregion
-//#region src/node/fs/file-io.d.ts
 export declare const readTextFileSync: (fileName: string) => Result<string, FileSystemError>;
 export declare const readTextFileAsync: (fileName: string) => Promise<Result<string, FileSystemError>>;
 export declare const saveTextFileSync: (fileName: string, data: string) => Result<void, FileSystemError>;
@@ -86,16 +75,12 @@ export declare const readImageSync: (fileName: string) => Result<Buffer, FileSys
 export declare const readImageAsync: (fileName: string) => Promise<Result<Buffer, FileSystemError>>;
 export declare const saveImageSync: (fileName: string, data: Buffer) => Result<void, FileSystemError>;
 export declare const saveImageAsync: (fileName: string, data: Buffer) => Promise<Result<void, FileSystemError>>;
-//#endregion
-//#region src/node/fs/file-ops.d.ts
 export declare const removeFileSync: (fileName: string) => Result<void, FileSystemError>;
 export declare const removeFileAsync: (fileName: string) => Promise<Result<void, FileSystemError>>;
 export declare const doesFileExist: (fileName: string) => boolean;
 export declare const isFileEmpty: (fileName: string) => boolean;
 export declare const doesFileExistAsync: (fileName: string) => Promise<boolean>;
 export declare const getFileSize: (fileName: string) => number | undefined;
-//#endregion
-//#region src/node/fs/fs.d.ts
 export declare const getFreeSpace: (directory: string) => number | undefined;
 export declare const getFreeSpaceAsync: (directory: string) => Promise<number | undefined>;
 export declare const getTotalSpace: (directory: string) => number | undefined;
@@ -114,8 +99,6 @@ export declare const getDiskUsageAsync: (directory: string) => Promise<undefined
   total: number;
   used: number;
 }>;
-//#endregion
-//#region src/node/fs/path.d.ts
 export declare const changeExtension: (filePath: string, extension: string) => string;
 export declare const removeExtension: (filePath: string) => string;
 export declare const getExtension: (filePath: string) => string;
@@ -127,11 +110,8 @@ export declare const getFileNameWithExtension: (filePath: string) => string;
 export declare const getFullPath: (parsedPath: path.ParsedPath) => string;
 export declare const getDirectory: (filePath: string) => string;
 export declare const joinPaths: (path1: string, path2: string) => string;
-//#endregion
-//#region src/node/fs/stat.d.ts
 export declare const getStatSync: (path: string) => Result<fs.Stats, FileSystemError>;
 export declare const getStatAsync: (path: string) => Promise<Result<fs.Stats, FileSystemError>>;
 export declare const doesPathExist: (path: string) => boolean;
 export declare const doesPathExistAsync: (path: string) => Promise<boolean>;
-//#endregion
 //# sourceMappingURL=node.d.ts.map

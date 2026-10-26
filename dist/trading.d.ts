@@ -1,4 +1,3 @@
-//#region src/trading/nyse-date.d.ts
 export declare const getNyCalendar: (instant?: Temporal.Instant) => {
   nyDate: Temporal.PlainDate;
   nyDateTime: Temporal.PlainDateTime;
@@ -16,18 +15,12 @@ export declare const isNyseHolidayDataStale: (nyDate: Temporal.PlainDate) => boo
 export declare const isSecHolidayDataStale: (nyDate: Temporal.PlainDate) => boolean;
 export declare const isNyseCalendarDataStale: (nyDate: Temporal.PlainDate) => boolean;
 export declare const toNyInstant: (nyDate: string, nyTime: Temporal.PlainTime) => Temporal.Instant;
-//#endregion
-//#region src/trading/nyse-early-close-dates.d.ts
 export declare const nyseEarlyCloseDates: ReadonlySet<string>;
 export declare const nyseEarlyCloseDataKnownThroughYear = 2028;
 export declare const nyseEarlyCloseTime: Temporal.PlainTime;
 export declare const nyseEarlyCloseAfterHoursEndTime: Temporal.PlainTime;
-//#endregion
-//#region src/trading/nyse-holiday-dates.d.ts
 export declare const nyseHolidayDates: ReadonlySet<string>;
 export declare const nyseHolidayDataKnownThroughYear = 2028;
-//#endregion
-//#region src/trading/nyse-time-windows.interface.d.ts
 export interface EarlyCloseAdjustedTime {
   default: Temporal.PlainTime;
   earlyClose: Temporal.PlainTime;
@@ -42,8 +35,6 @@ export interface TimeWindow {
   text: string;
   window: PlainTimeWindow;
 }
-//#endregion
-//#region src/trading/nyse-time-windows.d.ts
 export type NyseTimeWindowKey = keyof typeof windows;
 export declare const nyseRegularSessionOpenTime: Temporal.PlainTime;
 export declare const nyseRegularSessionDefaultCloseTime: Temporal.PlainTime;
@@ -90,10 +81,7 @@ declare const windows: {
 export declare const nyseTimeWindows: Record<string, TimeWindow>;
 export declare const isEdgarOperating: (instant?: Temporal.Instant) => boolean, isNyseExtendedTradingHours: (instant?: Temporal.Instant) => boolean, isNyseMarketHours: (instant?: Temporal.Instant) => boolean, isNysePreMarket: (instant?: Temporal.Instant) => boolean;
 export declare const nyseStatus: () => Record<NyseTimeWindowKey, boolean>;
-//#endregion
-//#region src/trading/sec-holiday-dates.d.ts
 export declare const secHolidayDates: ReadonlySet<string>;
 export declare const secHolidayDataKnownThroughYear = 2028;
-//#endregion
 export {};
 //# sourceMappingURL=trading.d.ts.map

@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.3.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.2.1...v5.3.0)
+
+### 🚀 Enhancements
+
+- GetTemporalNow ([58db43a](https://github.com/felixvictor/fv-common/commit/58db43a))
+
+### 📦 Build
+
+- Dist ([274e49e](https://github.com/felixvictor/fv-common/commit/274e49e))
+
 ## v5.2.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.2.0...v5.2.1)

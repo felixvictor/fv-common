@@ -512,6 +512,7 @@ export declare const formatFromToTime: (from: number, to: number) => string;
 export declare const formatTimeRange: (from: number, to: number, timeZone?: string) => string;
 export declare const addToInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
 export declare const subtractFromInstant: (instant: Temporal.Instant, duration: Temporal.DurationLike) => Temporal.Instant;
+export declare const getTemporalNow: () => number;
 export interface ParsePatternOptions {
   isStrict?: boolean | undefined;
   locale?: string | undefined;

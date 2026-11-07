@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.3.1
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.0...v5.3.1)
+
+### 📦 Build
+
+- Dist ([4fd89e5](https://github.com/felixvictor/fv-common/commit/4fd89e5))
+
 ## v5.3.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.2.1...v5.3.0)

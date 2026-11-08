@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.3.3
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.2...v5.3.3)
+
+### 🩹 Fixes
+
+- Si suffix ([02e44b6](https://github.com/felixvictor/fv-common/commit/02e44b6))
+
+### 📦 Build
+
+- Dist ([5688195](https://github.com/felixvictor/fv-common/commit/5688195))
+
 ## v5.3.2
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.1...v5.3.2)

@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.3.2
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.1...v5.3.2)
+
+### 🩹 Fixes
+
+- Md3/vuetify colours ([0829b5a](https://github.com/felixvictor/fv-common/commit/0829b5a))
+
+### 📦 Build
+
+- Dist ([bb173d8](https://github.com/felixvictor/fv-common/commit/bb173d8))
+
 ## v5.3.1
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.0...v5.3.1)

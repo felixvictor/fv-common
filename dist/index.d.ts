@@ -251,7 +251,158 @@ export declare const md3SchemeRoles: {
     };
   };
 };
-export type SchemeRole = keyof typeof md3SchemeRoles;
+export declare const vuetifySchemeRoles: {
+  readonly "on-surface-bright": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 10;
+    };
+  };
+  readonly "on-surface-variant": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 95;
+    };
+  };
+  readonly "surface-bright": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 98;
+    };
+  };
+  readonly "surface-variant": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 20;
+    };
+  };
+};
+export declare const schemeRoles: {
+  readonly "on-surface-bright": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 10;
+    };
+  };
+  readonly "on-surface-variant": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 95;
+    };
+  };
+  readonly "surface-bright": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 98;
+    };
+  };
+  readonly "surface-variant": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 20;
+    };
+  };
+  readonly "inverse-primary": {
+    readonly palette: "primary";
+    readonly tones: {
+      readonly dark: 40;
+      readonly light: 80;
+    };
+  };
+  readonly "inverse-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 20;
+    };
+  };
+  readonly "on-inverse-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 20;
+      readonly light: 95;
+    };
+  };
+  readonly "on-surface": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 90;
+      readonly light: 10;
+    };
+  };
+  readonly outline: {
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 60;
+      readonly light: 50;
+    };
+  };
+  readonly "outline-variant": {
+    readonly palette: "neutralVariant";
+    readonly tones: {
+      readonly dark: 30;
+      readonly light: 80;
+    };
+  };
+  readonly surface: {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 6;
+      readonly light: 98;
+    };
+  };
+  readonly "surface-container": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 12;
+      readonly light: 94;
+    };
+  };
+  readonly "surface-container-high": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 17;
+      readonly light: 92;
+    };
+  };
+  readonly "surface-container-highest": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 22;
+      readonly light: 90;
+    };
+  };
+  readonly "surface-container-low": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 10;
+      readonly light: 96;
+    };
+  };
+  readonly "surface-container-lowest": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 4;
+      readonly light: 100;
+    };
+  };
+  readonly "surface-dim": {
+    readonly palette: "neutral";
+    readonly tones: {
+      readonly dark: 6;
+      readonly light: 87;
+    };
+  };
+};
+export type SchemeRole = keyof typeof schemeRoles;
 export declare const md3ScrimHex = "#000000";
 export declare const md3ShadowHex = "#000000";
 export declare const paletteRangeTones: readonly [6, 14, 22, 30, 38, 46, 54, 62, 70, 78, 86, 94];
@@ -340,14 +491,6 @@ export type VuetifyThemeVariables = {
   readonly "theme-on-light": string;
 };
 type VuetifyAliasKey = "background" | "surface-light" | VuetifyDarkenKey;
-export declare const md3VuetifyDefaults: {
-  readonly VSnackbar: {
-    readonly color: "inverse-surface";
-  };
-  readonly VTooltip: {
-    readonly color: "inverse-surface";
-  };
-};
 export declare const createMd3Theme: <TExtended extends string = never, TSeed extends string = BrandKey>(config: Md3ThemeConfig<TExtended, TSeed>) => Md3Theme<TExtended, TSeed>;
 export declare const toneMin = 0;
 export declare const toneMax = 100;

@@ -57,7 +57,7 @@ export type ThemeTextPair = readonly [foreground: string, background: string, ro
 
 /**
  * Backgrounds whose content colour is body text: background and surfaces. Colours, containers and `surface-variant`
- * carry labels and icons (chips, badges, buttons, fields).
+ * (Vuetify: tooltips, snackbars, chips) carry labels and icons.
  */
 const isBodyTextBackground = (key: string): boolean =>
     key === "background" || key === "inverse-surface" || (key.startsWith("surface") && key !== "surface-variant")
@@ -128,10 +128,7 @@ export const validateTheme = (
         }
     }
 
-    const surfaceLevels: [string, string][] = [
-        ["surface", "surface-light"],
-        ["surface-light", "surface-variant"],
-    ]
+    const surfaceLevels: [string, string][] = [["surface", "surface-light"]]
     for (const [a, b] of surfaceLevels) {
         const delta = Math.abs(getTone(theme[a] ?? "") - getTone(theme[b] ?? ""))
         if (delta < minSurfaceToneDelta) {

@@ -64,7 +64,29 @@ export const md3SchemeRoles = {
     "surface-variant": { palette: "neutralVariant", tones: { dark: 30, light: 90 } },
 } as const satisfies Record<string, SchemeRoleSpec>
 
-export type SchemeRole = keyof typeof md3SchemeRoles
+/**
+ * Roles that Vuetify components use with a meaning of their own; they replace the MD3 roles of the same name.
+ *
+ * - `surface-variant` / `on-surface-variant`: tooltips, snackbars, flat and elevated chips, slider tracks, the active
+ *   `VIconBtn`, `VEmptyState`, the date picker selection and calendar highlights. Vuetify's default themes set it in
+ *   strong contrast to the surface (`#424242` light, `#c8c8c8` dark), as MD3 does for `inverse-surface`, so it takes
+ *   the tones of `inverse-surface`. MD3's light tinted `surface-variant` (tone 90 / 30) is superseded in MD3 by
+ *   `surface-container-highest`.
+ * - `surface-bright` / `on-surface-bright`: the `VSwitch` thumb, bright in both modes (Vuetify dark `#ccbfd6`). Light
+ *   keeps the MD3 tone 98, dark takes the tone of `inverse-surface`. The own content colour keeps `on-surface` off the
+ *   bright dark-mode thumb.
+ */
+export const vuetifySchemeRoles = {
+    "on-surface-bright": { palette: "neutral", tones: { dark: 20, light: 10 } },
+    "on-surface-variant": { palette: "neutral", tones: { dark: 20, light: 95 } },
+    "surface-bright": { palette: "neutral", tones: { dark: 90, light: 98 } },
+    "surface-variant": { palette: "neutral", tones: { dark: 90, light: 20 } },
+} as const satisfies Record<string, SchemeRoleSpec>
+
+/** Scheme roles of a Vuetify theme: the MD3 roles, with the Vuetify meaning where the two differ. */
+export const schemeRoles = { ...md3SchemeRoles, ...vuetifySchemeRoles } as const
+
+export type SchemeRole = keyof typeof schemeRoles
 
 /** MD3 spec: scrim and shadow are always pure black in both themes, independent of the rest of the palette. */
 export const md3ScrimHex = "#000000"

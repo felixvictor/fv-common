@@ -41,6 +41,10 @@ describe("createMd3Theme", () => {
 
             expect(colours.background).toBe(colours.surface)
             expect(colours["surface-light"]).toBe(colours["surface-container-high"])
+            expect(colours["surface-variant"]).toBe(colours["inverse-surface"])
+            expect(colours["on-surface-variant"]).toBe(colours["on-inverse-surface"])
+            expect(getTone(colours["surface-bright"])).toBeGreaterThan(getTone(colours["on-surface-bright"]))
+            expect(getTone(colours["surface-bright"])).toBeGreaterThan(80)
             expect(colours["on-inverse-surface"]).toBeDefined()
             expect(Object.keys(colours)).not.toContain("on-surface-container")
             expect([variables["theme-on-dark"], variables["theme-on-light"]].toSorted()).toEqual(

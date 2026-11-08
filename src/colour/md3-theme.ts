@@ -5,13 +5,13 @@ import {
     accentKeys,
     type FamilyRole,
     md3FamilyTones,
-    md3SchemeRoles,
     md3ScrimHex,
     md3ShadowHex,
     type ModeTones,
     type PaletteKey,
     paletteKeys,
     type SchemeRole,
+    schemeRoles,
     type ThemeMode,
     themeModes,
 } from "@/colour/md3-roles"
@@ -53,7 +53,7 @@ export const defaultHarmonisation: Readonly<Record<HarmonisationGroup, Harmonisa
 
 /** OKLCH chroma of the neutral palette (surfaces, `on-surface`): a light tint of the neutral hue. */
 export const defaultNeutralChroma = 0.008
-/** OKLCH chroma of the neutral-variant palette (`surface-variant`, outlines): a little more tint than neutral. */
+/** OKLCH chroma of the neutral-variant palette (outlines, `neutral-variant` family): a little more tint than neutral. */
 export const defaultNeutralVariantChroma = 0.012
 /** Weight of the warm pole in the neutral hue (see {@link warmUpHue}): warm greys that still lean towards primary. */
 export const defaultNeutralWarmth = 2
@@ -90,7 +90,10 @@ export interface Md3ThemeConfig<TExtended extends string = never, TSeed extends 
     readonly neutral?: NeutralConfig
     /** Options of the accent palettes; neutral palettes always keep a constant chroma. */
     readonly palette?: TonalPaletteOptions
-    /** Overrides MD3 tones of surface, outline and inverse roles, e.g. a darker light-theme background. */
+    /**
+     * Overrides the tones of surface, outline and inverse roles, e.g. a darker light-theme background. Roles with a
+     * Vuetify meaning (see `vuetifySchemeRoles` in `md3-roles`) are overridden on their Vuetify tones.
+     */
     readonly schemeTones?: Partial<Readonly<Record<SchemeRole, ModeTones>>>
     /**
      * `primary`, `secondary` and `tertiary` are required, the semantic colours have defaults. Further keys (e.g.
@@ -171,8 +174,9 @@ export type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md
  *
  * Borders use `on-surface` at that opacity. `theme-on-light` and `theme-on-dark` are the dark and the light content
  * colour of the mode (`on-surface` and `on-inverse-surface`). Vuetify gives every colour without an own `on-*` key the
- * one with the higher contrast, so all surface levels, `background` and `surface-light` get `on-surface`, as in MD3,
- * without own keys.
+ * one with the higher contrast, so the surface containers, `surface`, `surface-dim`, `background` and `surface-light`
+ * get `on-surface`, as in MD3, without own keys. `surface-bright` and `surface-variant` have own content colours (see
+ * `vuetifySchemeRoles` in `md3-roles`).
  *
  * A type alias, not an interface, so it is assignable to Vuetify's `Record<string, number | string>`.
  */
@@ -190,15 +194,6 @@ export type VuetifyThemeVariables = {
 
 /** Keys Vuetify uses beyond MD3: `background`, `surface-light` and `*-darken-1`. */
 type VuetifyAliasKey = "background" | "surface-light" | VuetifyDarkenKey
-
-/**
- * Component defaults for an MD3 theme. Vuetify draws tooltips and snackbars in `surface-variant`, which in MD3 is a
- * light tinted surface; MD3 uses `inverse-surface` for both.
- */
-export const md3VuetifyDefaults = {
-    VSnackbar: { color: "inverse-surface" },
-    VTooltip: { color: "inverse-surface" },
-} as const
 
 // ---------------------------------------------------------------------------
 // Generator
@@ -341,7 +336,7 @@ const createColours = (
     }
 
     const scheme = Object.fromEntries(
-        (Object.entries(md3SchemeRoles) as [SchemeRole, (typeof md3SchemeRoles)[SchemeRole]][]).map(([role, spec]) => [
+        (Object.entries(schemeRoles) as [SchemeRole, (typeof schemeRoles)[SchemeRole]][]).map(([role, spec]) => [
             role,
             palettes[spec.palette].tone(config.schemeTones?.[role]?.[mode] ?? spec.tones[mode]),
         ]),
@@ -388,7 +383,8 @@ const createVariables = (mode: ThemeMode, colours: Md3ThemeColours): VuetifyThem
  * - Every colour is pulled towards primary ({@link defaultHarmonisation}) and scaled to pastel chroma
  *   ({@link defaultChromaScale}); the neutral palettes take the hue of primary, pulled towards warm greys.
  * - Core colours get a tonal palette in OKLCH with absolute tones (CIE L*), shared by both modes; the roles take MD3
- *   tones from it ({@link md3FamilyTones}, {@link md3SchemeRoles}).
+ *   tones from it ({@link md3FamilyTones}, {@link schemeRoles}). Where Vuetify components give a role a meaning of
+ *   their own (`surface-variant`, `surface-bright`), the role follows Vuetify (`vuetifySchemeRoles` in `md3-roles`).
  * - Custom seeds (e.g. `gold`) get a palette and the four family roles like the core colours.
  * - Extended colours get the same four family roles, with optional tone overrides, but no exported palette.
  *

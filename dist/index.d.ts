@@ -458,19 +458,7 @@ export interface NeutralConfig {
   readonly variantChroma?: number;
   readonly warmth?: number;
 }
-declare const paletteThemeNames: {
-  readonly error: "error";
-  readonly info: "info";
-  readonly neutral: "neutral";
-  readonly neutralVariant: "neutral-variant";
-  readonly primary: "primary";
-  readonly secondary: "secondary";
-  readonly success: "success";
-  readonly tertiary: "tertiary";
-  readonly warning: "warning";
-};
 export type FamilyThemeKey<TName extends string> = `${TName}-container` | `on-${TName}-container` | `on-${TName}` | TName;
-type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey];
 declare const vuetifyDarkenKeys: readonly ["primary", "secondary"];
 type VuetifyDarkenKey = `${(typeof vuetifyDarkenKeys)[number]}-darken-1`;
 export interface Md3Theme<TExtended extends string = never, TSeed extends string = BrandKey> {
@@ -478,7 +466,7 @@ export interface Md3Theme<TExtended extends string = never, TSeed extends string
   readonly palettes: Readonly<Record<CustomSeedKey<TSeed> | PaletteKey, TonalPalette>>;
   readonly variables: Readonly<Record<ThemeMode, VuetifyThemeVariables>>;
 }
-export type Md3ThemeColourKey<TFamily extends string = never> = "scrim" | "shadow" | FamilyThemeKey<PaletteThemeName | TFamily> | SchemeRole | VuetifyAliasKey;
+export type Md3ThemeColourKey<TFamily extends string = never> = "scrim" | "shadow" | FamilyThemeKey<AccentKey | TFamily> | SchemeRole | VuetifyAliasKey;
 export type Md3ThemeColours<TFamily extends string = never> = Readonly<Record<Md3ThemeColourKey<TFamily>, string>>;
 export type VuetifyThemeVariables = {
   readonly "border-color": string;
@@ -498,6 +486,7 @@ export declare const getTone: (colour: string) => number;
 export declare const seedChromaMin = 0.03;
 export declare const minSeedHueDelta = 5;
 export declare const minSurfaceToneDelta = 1.5;
+export declare const surfaceLadder: readonly string[];
 export declare const validateSeed: (name: string, hex: string) => void;
 export declare const validateHueDelta: (nameA: string, hexA: string, nameB: string, hexB: string, minDelta?: number) => void;
 export interface ColourDistanceRule {
@@ -509,6 +498,7 @@ export interface ColourDistanceRule {
 export type ThemeTextPair = readonly [foreground: string, background: string, role: ApcaTextRole];
 export declare const getThemeTextPairs: (theme: Readonly<Record<string, string | undefined>>, additionalTextPairs?: readonly ThemeTextPair[]) => ThemeTextPair[];
 export declare const validateTheme: (theme: Readonly<Record<string, string | undefined>>, label: string, additionalTextPairs?: readonly ThemeTextPair[]) => void;
+export declare const validateSurfaceLadder: (theme: Readonly<Record<string, string | undefined>>, label: string) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
 export declare const delay: (ms: number) => Promise<unknown>;
 export declare const loadFile: <T = unknown>(path: string) => Promise<T>;

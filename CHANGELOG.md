@@ -1,5 +1,21 @@
 # Changelog
 
+## v6.0.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.3...v6.0.0)
+
+### 🚀 Enhancements
+
+- **colour:** ⚠️  Drop neutral colour families, validate surface ladder ([e290693](https://github.com/felixvictor/fv-common/commit/e290693))
+
+### 📦 Build
+
+- Dist ([f9caee5](https://github.com/felixvictor/fv-common/commit/f9caee5))
+
+#### ⚠️ Breaking Changes
+
+- **colour:** ⚠️  Drop neutral colour families, validate surface ladder ([e290693](https://github.com/felixvictor/fv-common/commit/e290693))
+
 ## v5.3.3
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.2...v5.3.3)

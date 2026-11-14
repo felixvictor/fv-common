@@ -53,9 +53,9 @@
         "changelogen": "^0.6.2",
         "eslint-plugin-perfectionist": "^5.13.0",
         "husky": "^9.1.7",
-        "oxfmt": "^0.77.0",
-        "oxlint": "^1.92.0",
-        "oxlint-tsgolint": "^7.0.2006",
+        "oxfmt": "^0.78.0",
+        "oxlint": "^1.93.0",
+        "oxlint-tsgolint": "^7.0.2007",
         "tsdown": "^0.23.7",
         "typescript": "^6.0.3",
         "vitest": "^5.1.0"

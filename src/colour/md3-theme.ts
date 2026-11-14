@@ -9,7 +9,6 @@ import {
     md3ShadowHex,
     type ModeTones,
     type PaletteKey,
-    paletteKeys,
     type SchemeRole,
     schemeRoles,
     type ThemeMode,
@@ -120,17 +119,12 @@ export interface NeutralConfig {
 // ---------------------------------------------------------------------------
 // Result
 // ---------------------------------------------------------------------------
-const paletteThemeNames = {
-    error: "error",
-    info: "info",
-    neutral: "neutral",
-    neutralVariant: "neutral-variant",
-    primary: "primary",
-    secondary: "secondary",
-    success: "success",
-    tertiary: "tertiary",
-    warning: "warning",
-} as const satisfies Record<PaletteKey, string>
+/**
+ * Palettes that carry a colour family. The neutral palettes carry none, as in MD3: at their low chroma a tone 40 / 80
+ * "colour" is a plain grey, in dark mode 10 tones from `on-surface`. They feed the surface and outline roles only;
+ * neutral fills take `surface-container-highest`, `surface-variant` or `outline`.
+ */
+const familyPaletteKeys: readonly AccentKey[] = accentKeys
 
 /** Theme keys of a colour family. */
 export type FamilyThemeKey<TName extends string> =
@@ -138,8 +132,6 @@ export type FamilyThemeKey<TName extends string> =
     | `on-${TName}-container`
     | `on-${TName}`
     | TName
-
-type PaletteThemeName = (typeof paletteThemeNames)[PaletteKey]
 
 /**
  * Keys of Vuetify's default themes `light` and `dark`, into which Vuetify deep-merges app themes of the same name. They
@@ -161,7 +153,7 @@ export interface Md3Theme<TExtended extends string = never, TSeed extends string
 export type Md3ThemeColourKey<TFamily extends string = never> =
     | "scrim"
     | "shadow"
-    | FamilyThemeKey<PaletteThemeName | TFamily>
+    | FamilyThemeKey<AccentKey | TFamily>
     | SchemeRole
     | VuetifyAliasKey
 
@@ -327,8 +319,8 @@ const createColours = (
 ): Record<string, string> => {
     const colours: Record<string, string> = {}
 
-    for (const key of paletteKeys) {
-        addFamily(colours, paletteThemeNames[key], palettes[key], resolveFamilyTones(palettes[key], mode))
+    for (const key of familyPaletteKeys) {
+        addFamily(colours, key, palettes[key], resolveFamilyTones(palettes[key], mode))
     }
     for (const key of customSeedKeys) {
         const palette = palettes[key]
@@ -385,6 +377,7 @@ const createVariables = (mode: ThemeMode, colours: Md3ThemeColours): VuetifyThem
  * - Core colours get a tonal palette in OKLCH with absolute tones (CIE L*), shared by both modes; the roles take MD3
  *   tones from it ({@link md3FamilyTones}, {@link schemeRoles}). Where Vuetify components give a role a meaning of
  *   their own (`surface-variant`, `surface-bright`), the role follows Vuetify (`vuetifySchemeRoles` in `md3-roles`).
+ * - The neutral palettes feed the surface and outline roles only; they have no colour family of their own.
  * - Custom seeds (e.g. `gold`) get a palette and the four family roles like the core colours.
  * - Extended colours get the same four family roles, with optional tone overrides, but no exported palette.
  *

@@ -17,6 +17,20 @@ export const minSeedHueDelta = 5
 /** Minimum tone difference (CIE L*) between adjacent surface levels; MD3 steps by 2, the rest absorbs hex rounding. */
 export const minSurfaceToneDelta = 1.5
 
+/**
+ * Surface levels in MD3 order, darkest first in dark mode and lightest first in light mode: `surface` sits between the
+ * lowest and the low container in both modes (dark 4 / 6 / 10, light 100 / 98 / 96). An override of one level that
+ * leaves the others untouched breaks this order, so content containers end up on the wrong side of the background.
+ */
+export const surfaceLadder: readonly string[] = [
+    "surface-container-lowest",
+    "surface",
+    "surface-container-low",
+    "surface-container",
+    "surface-container-high",
+    "surface-container-highest",
+]
+
 /** Warns if an accent seed is too grey to carry a colour family. Lightness does not matter: palettes use hue and chroma. */
 export const validateSeed = (name: string, hex: string) => {
     const { chroma } = new okLchColour(hex)
@@ -98,7 +112,8 @@ export const getThemeTextPairs = (
 }
 
 /**
- * Checks the text pairs (see {@link getThemeTextPairs}), the outline and the surface ladder of a theme.
+ * Checks the text pairs (see {@link getThemeTextPairs}), the outline and the surface ladder ({@link
+ * validateSurfaceLadder}) of a theme.
  *
  * @param additionalTextPairs Pairs with a different APCA role (e.g. large labels on `home`) or pairs without `on-` key.
  */
@@ -128,12 +143,33 @@ export const validateTheme = (
         }
     }
 
-    const surfaceLevels: [string, string][] = [["surface", "surface-light"]]
-    for (const [a, b] of surfaceLevels) {
-        const delta = Math.abs(getTone(theme[a] ?? "") - getTone(theme[b] ?? ""))
+    validateSurfaceLadder(theme, label)
+}
+
+/**
+ * Warns if the surface levels ({@link surfaceLadder}) do not step monotonically by at least {@link minSurfaceToneDelta}
+ * in the direction of the mode (lighter per level in dark mode, darker in light mode). Levels missing from the theme
+ * are skipped.
+ */
+export const validateSurfaceLadder = (theme: Readonly<Record<string, string | undefined>>, label: string) => {
+    const levels = surfaceLadder.flatMap((key) => {
+        const hex = theme[key]
+        return hex === undefined ? [] : [{ key, tone: getTone(hex) }]
+    })
+    const first = levels.at(0)
+    const last = levels.at(-1)
+    if (first === undefined || last === undefined || first === last) return
+
+    const direction = Math.sign(last.tone - first.tone)
+    for (let index = 1; index < levels.length; index++) {
+        const lower = levels[index - 1]
+        const upper = levels[index]
+        if (lower === undefined || upper === undefined) continue
+        const delta = (upper.tone - lower.tone) * direction
         if (delta < minSurfaceToneDelta) {
             console.warn(
-                `${label}: ${a} and ${b} are too similar (ΔL* ${round(delta, 1)} < ${minSurfaceToneDelta}) – surfaces may be indistinguishable`,
+                `${label}: ${upper.key} (tone ${round(upper.tone, 1)}) breaks the surface ladder after ${lower.key} (tone ${round(lower.tone, 1)}): ` +
+                    `step ${round(delta, 1)} < ${minSurfaceToneDelta} – override the neighbouring levels too, or keep the MD3 tones`,
             )
         }
     }

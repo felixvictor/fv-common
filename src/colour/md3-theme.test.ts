@@ -52,7 +52,7 @@ describe("createMd3Theme", () => {
             )
             expect(getTone(variables["theme-on-light"])).toBeLessThan(getTone(variables["theme-on-dark"]))
             expect(getTone(colours["primary-darken-1"])).toBeLessThan(getTone(colours.primary))
-            expect(colours["neutral-variant-container"]).toBeDefined()
+            expect(Object.keys(colours).filter((key) => key.includes("neutral"))).toEqual([])
             expect(variables["border-color"]).toBe(colours["on-surface"])
             expect(Object.keys(variables)).not.toContain("border-opacity")
         }
@@ -163,6 +163,12 @@ describe("createMd3Theme", () => {
         expect(() => createMd3Theme({ extended: { surface: { seed: "#ff0000" } }, seeds })).toThrow(/collides/)
     })
 
+    it("keeps the neutral palettes without a colour family", () => {
+        expect(theme.palettes.neutral.toneRange()).toHaveLength(paletteRangeTones.length)
+        expect(theme.palettes.neutralVariant.toneRange()).toHaveLength(paletteRangeTones.length)
+        expect(getTone(theme.colours.dark.outline)).toBeCloseTo(60, 0)
+    })
+
     it("checks every content colour against its background", () => {
         const pairs = getThemeTextPairs(theme.colours.light, [["on-home", "home", "largeFluentText"]])
 
@@ -209,7 +215,7 @@ describe("createMd3Theme with custom seeds", () => {
             seeds: { ...seeds, gold },
         })
 
-        expect(inferred.colours.light.eins).toBe(inferred.colours.light.neutral)
+        expect(inferred.colours.light.eins).toBe(inferred.palettes.neutral.tone(md3FamilyTones.colour.light))
         expect(inferred.colours.light.gold).toBe(theme.colours.light.gold)
     })
 })

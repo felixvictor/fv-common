@@ -43,7 +43,7 @@
     "dependencies": {
         "atomically": "^2.1.1",
         "colorjs.io": "^0.7.1",
-        "svg-path-commander": "^2.3.3"
+        "svg-path-commander": "^2.3.5"
     },
     "devDependencies": {
         "@commitlint/cli": "^21.2.4",
@@ -51,10 +51,10 @@
         "@commitlint/types": "^21.2.3",
         "@types/node": "^26.6.6",
         "changelogen": "^0.6.2",
-        "eslint-plugin-perfectionist": "^5.13.0",
+        "eslint-plugin-perfectionist": "^5.14.0",
         "husky": "^9.1.7",
-        "oxfmt": "^0.78.0",
-        "oxlint": "^1.93.0",
+        "oxfmt": "^0.79.0",
+        "oxlint": "^1.94.0",
         "oxlint-tsgolint": "^7.0.2007",
         "tsdown": "^0.23.7",
         "typescript": "^6.0.3",

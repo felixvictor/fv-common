@@ -501,7 +501,7 @@ export declare const validateTheme: (theme: Readonly<Record<string, string | und
 export declare const validateSurfaceLadder: (theme: Readonly<Record<string, string | undefined>>, label: string) => void;
 export declare const validateColourDistances: (theme: Record<string, string | undefined>, label: string, rules: readonly ColourDistanceRule[]) => void;
 export declare const delay: (ms: number) => Promise<unknown>;
-export declare const loadFile: <T = unknown>(path: string) => Promise<T>;
+export declare const loadFile: <T = unknown>(path: string, init?: RequestInit) => Promise<T>;
 export declare const getCardinalRules: (locale: string) => Intl.PluralRules;
 export declare const convertNameForEmail: (name: string) => string;
 export declare const addSpan: (suffix: string, isSvg: boolean) => string;
@@ -537,6 +537,7 @@ export declare const isNumberLike: (value: unknown) => value is NumberLike;
 export declare const parseNumberLike: (value: NumberLike) => number;
 export declare const toFiniteNumber: (value: unknown) => number | undefined;
 export declare const isNumeric: (value: unknown) => boolean;
+export declare const isPercentage: (value: unknown) => value is number;
 export declare const clampUnsafe: (value: number, min: number, max: number) => number;
 export declare const clamp: (value: NumberLike, min: NumberLike, max: NumberLike) => number;
 export declare const lerpUnsafe: (start: number, end: number, t: number) => number;

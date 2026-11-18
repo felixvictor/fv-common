@@ -57,6 +57,13 @@ export const toFiniteNumber = (value: unknown): number | undefined => {
 export const isNumeric = (value: unknown): boolean => toFiniteNumber(value) !== undefined
 
 /**
+ * Checks if a value is a number on the percentage scale 0–100 (bounds inclusive). Acts as a type guard for `unknown`
+ * input, e.g. parsed JSON; strings are not coerced, NaN and infinite values fail the range check. For values already
+ * typed `number`, or for fractions (0–1) as taken by `formatPercent`, use `isBetween` instead.
+ */
+export const isPercentage = (value: unknown): value is number => typeof value === "number" && value >= 0 && value <= 100
+
+/**
  * A high-performance version of {@link clamp} that assumes valid numeric inputs and `min <= max`. Use in
  * performance-critical loops where inputs are pre-validated.
  */

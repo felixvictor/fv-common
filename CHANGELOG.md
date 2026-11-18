@@ -1,5 +1,18 @@
 # Changelog
 
+## v6.1.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v6.0.0...v6.1.0)
+
+### 🚀 Enhancements
+
+- IsPercentage ([1653033](https://github.com/felixvictor/fv-common/commit/1653033))
+- Fetch json with optional request header ([43921c1](https://github.com/felixvictor/fv-common/commit/43921c1))
+
+### 📦 Build
+
+- Dist ([3715b0d](https://github.com/felixvictor/fv-common/commit/3715b0d))
+
 ## v6.0.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v5.3.3...v6.0.0)

@@ -577,6 +577,25 @@ export declare const getCurveValue: (time: number, points: CurvePoint[]) => numb
 export declare const getCurveValueClamped: (time: number, points: CurvePoint[]) => number;
 export declare const nearestPow2: (value: number) => number;
 export declare const nextPow2: (value: number) => number;
+export interface RetryInfo {
+  readonly attempt: number;
+  readonly delay: number;
+  readonly error: unknown;
+  readonly maxAttempts: number;
+}
+export interface RetryOptions {
+  readonly backoff?: readonly [number, number];
+  readonly maxAttempts?: number;
+  readonly onRetry?: (info: RetryInfo) => void;
+  readonly shouldRetry?: (error: unknown) => boolean;
+  readonly signal?: AbortSignal;
+}
+export declare class RetryError extends Error {
+  readonly attempts: number;
+  constructor(attempts: number, cause: unknown);
+}
+export declare function fibonacciSequence(first: number, second: number): Generator<number, never, undefined>;
+export declare const retry: <T>(operation: (attempt: number) => Promise<T>, options?: RetryOptions) => Promise<T>;
 declare const descendingPrefix = "-";
 export type Comparator<T> = (a: T, b: T) => number;
 export type SortArgument<T> = `${typeof descendingPrefix}${keyof T & string}` | keyof T;

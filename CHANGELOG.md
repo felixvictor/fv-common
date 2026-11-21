@@ -1,5 +1,17 @@
 # Changelog
 
+## v6.2.0
+
+[compare changes](https://github.com/felixvictor/fv-common/compare/v6.1.0...v6.2.0)
+
+### 🚀 Enhancements
+
+- Retry ([13f019a](https://github.com/felixvictor/fv-common/commit/13f019a))
+
+### 📦 Build
+
+- Dist ([f0ce5dc](https://github.com/felixvictor/fv-common/commit/f0ce5dc))
+
 ## v6.1.0
 
 [compare changes](https://github.com/felixvictor/fv-common/compare/v6.0.0...v6.1.0)
